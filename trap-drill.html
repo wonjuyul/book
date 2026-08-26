@@ -73,6 +73,19 @@ body{
 .tag .nm{font-family:"Gowun Batang",serif; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
 .tag .n{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.65rem; color:var(--ink-3); font-variant-numeric:tabular-nums}
 .morebtn{font:inherit; font-size:.75rem; margin-top:.5rem; background:none; border:0; cursor:pointer; color:var(--seal); text-decoration:underline; text-underline-offset:3px; padding:.3rem 0}
+.timers{display:flex; flex-wrap:wrap; gap:.5rem 1.5rem; margin-top:.7rem; align-items:flex-start}
+.timers.off{opacity:.38; pointer-events:none}
+.field{display:flex; flex-direction:column; gap:.28rem}
+.field label{font-size:.75rem; color:var(--ink-2)}
+.field .in{display:flex; align-items:baseline; gap:.34rem}
+.field input{
+  font:inherit; font-family:"IBM Plex Mono",monospace; font-size:.92rem; font-variant-numeric:tabular-nums;
+  width:4.6rem; padding:.34rem .5rem; text-align:right; color:var(--ink);
+  background:var(--paper); border:1px solid var(--rule-2); border-radius:2px;
+}
+.field input:focus{border-color:var(--seal)}
+.field .unit{font-size:.78rem; color:var(--ink-3)}
+.field .note{font-size:.68rem; color:var(--ink-3); line-height:1.5}
 .startbar{margin-top:2.2rem; padding-top:1rem; border-top:1px solid var(--rule); display:flex; align-items:center; gap:.9rem; flex-wrap:wrap}
 .start{font:inherit; font-family:"Gowun Batang",serif; font-weight:700; font-size:1rem; padding:.7rem 1.5rem; cursor:pointer; border-radius:2px; background:var(--ink); color:var(--paper); border:1px solid var(--ink)}
 .start:hover{background:var(--seal); border-color:var(--seal)}
@@ -482,7 +495,9 @@ const state = {
   units: new Set(UNITS.map(u => u.n)),
   tags: new Set(),                       // 비어 있으면 전체
   count: 20,
-  fast: true,                            // 맞히면 자동으로 넘어감
+  auto: store.get('trapdrill.auto', true),        // 자동 넘김 켬/끔
+  waitOk: store.get('trapdrill.waitOk', 1.4),    // 맞혔을 때 대기(초)
+  waitNo: store.get('trapdrill.waitNo', 0),      // 틀렸을 때 대기(초) — 0이면 멈춤
   qs: [], i: 0, log: [], answered: false,
   streak: 0, best: store.get('trapdrill.best', 0)
 };
@@ -498,7 +513,7 @@ function renderSetup() {
   setupEl().innerHTML = `
     <p class="lede">교재의 <b>「⚠ 함정·주의」</b> ${ITEMS.length}개를 선지로 바꿨다.<br>맞는 선지인지 틀린 선지인지, 한 문항에 십여 초.</p>
     <p class="sub">평가원이 어느 선지로 속였는지가 연도별로 적혀 있는 부분이다. 정답률이 낮았던 문항, 최다 반복 함정, 「평가원 입장대로 암기」해야 하는 대목이 모두 여기 있다.
-    맞히면 곧장 다음 문항으로 넘어가고, 틀리면 멈춰서 해설을 보여 준다.</p>
+    채점 후 얼마나 기다렸다가 넘어갈지는 아래에서 초 단위로 직접 정할 수 있다 — 맞혔을 때와 틀렸을 때를 따로 둔다.</p>
 
     <div class="sechead">대단원</div>
     <div class="opts">
@@ -522,10 +537,24 @@ function renderSetup() {
       <button type="button" class="opt" data-c="0" aria-pressed="${state.count===0}">전부<span class="n">${avail}</span></button>
     </div>
 
-    <div class="sechead">넘김</div>
+    <div class="sechead">넘김 <span class="note">대기 시간을 직접 입력할 수 있다</span></div>
     <div class="opts">
-      <button type="button" class="opt" id="fast" aria-pressed="${state.fast}">
-        맞히면 자동으로 넘김<small>틀린 문항에서는 멈춰서 해설을 읽게 한다</small></button>
+      <button type="button" class="opt" id="auto" aria-pressed="${state.auto}">
+        채점 후 자동으로 넘김<small>끄면 항상 직접 넘긴다</small></button>
+    </div>
+    <div class="timers${state.auto ? '' : ' off'}" id="timers">
+      <div class="field">
+        <label for="w-ok">맞혔을 때</label>
+        <div class="in"><input id="w-ok" type="number" min="0.2" max="60" step="0.1" value="${state.waitOk}"
+          inputmode="decimal" aria-describedby="w-ok-note"><span class="unit">초</span></div>
+        <span class="note" id="w-ok-note">0.2 ~ 60</span>
+      </div>
+      <div class="field">
+        <label for="w-no">틀렸을 때</label>
+        <div class="in"><input id="w-no" type="number" min="0" max="60" step="0.5" value="${state.waitNo}"
+          inputmode="decimal" aria-describedby="w-no-note"><span class="unit">초</span></div>
+        <span class="note" id="w-no-note">0이면 멈춤(권장)</span>
+      </div>
     </div>
 
     <div class="startbar">
@@ -551,7 +580,25 @@ function renderSetup() {
     renderSetup();
   });
   setupEl().querySelectorAll('[data-c]').forEach(b => b.onclick = () => { state.count = +b.dataset.c; renderSetup(); });
-  $('fast').onclick = () => { state.fast = !state.fast; renderSetup(); };
+  $('auto').onclick = () => {
+    state.auto = !state.auto; store.set('trapdrill.auto', state.auto);
+    $('timers').classList.toggle('off', !state.auto);
+    $('auto').setAttribute('aria-pressed', String(state.auto));
+  };
+  const bindWait = (id, key, lo, hi, dflt) => {
+    const el = $(id);
+    const commit = () => {
+      let v = parseFloat(el.value);
+      if (!isFinite(v)) v = dflt;
+      v = Math.min(hi, Math.max(lo, Math.round(v * 10) / 10));
+      el.value = v; state[key] = v; store.set('trapdrill.' + key, v);
+    };
+    el.addEventListener('change', commit);
+    el.addEventListener('blur', commit);
+    el.addEventListener('keydown', ev => { if (ev.key === 'Enter') { ev.preventDefault(); commit(); el.blur(); } });
+  };
+  bindWait('w-ok', 'waitOk', 0.2, 60, 1.4);
+  bindWait('w-no', 'waitNo', 0,   60, 0);
   $('go').onclick = start;
 }
 const setupEl = () => $('setup');
@@ -635,17 +682,21 @@ function answer(v) {
   nx.onclick = () => { clearAuto(); state.i++; renderCard(); };
   nx.focus({ preventScroll:true });
 
-  /* 맞힌 문항은 잠깐 보여 주고 자동으로 넘긴다 — 틀린 문항은 멈춘다 */
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (state.fast && ok && !reduce) {
-    const DUR = 1400, t0 = performance.now(), tick = $('tick');
-    const step = now => {
-      const p = Math.min(1, (now - t0) / DUR);
-      tick.style.width = (p * 100) + '%';
-      if (p < 1) autoRaf = requestAnimationFrame(step);
-    };
-    autoRaf = requestAnimationFrame(step);
-    autoTimer = setTimeout(() => { state.i++; renderCard(); }, DUR);
+  /* 설정한 시간만큼 기다렸다가 넘긴다 — 대기 0초는 「멈춤」을 뜻한다 */
+  const wait = ok ? state.waitOk : state.waitNo;
+  if (state.auto && wait > 0) {
+    const DUR = wait * 1000, t0 = performance.now(), tick = $('tick');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const go = () => { state.i++; renderCard(); };
+    if (!reduce) {
+      const step = now => {
+        const p = Math.min(1, (now - t0) / DUR);
+        tick.style.width = (p * 100) + '%';
+        if (p < 1) autoRaf = requestAnimationFrame(step);
+      };
+      autoRaf = requestAnimationFrame(step);
+    }
+    autoTimer = setTimeout(go, DUR);
   }
 }
 
