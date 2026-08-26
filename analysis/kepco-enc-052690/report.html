@@ -1,0 +1,959 @@
+<title>한전기술 급등 해부와 예측</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+:root{
+  color-scheme: light;
+  --paper:#f3f5f8; --card:#ffffff; --card-2:#f8fafc; --line:#dde2e9; --line-2:#eceff4;
+  --ink:#0e141c; --ink-2:#48525f; --muted:#7a838f;
+  --blue:#2a78d6; --blue-soft:#eaf1fc; --red:#e34948; --red-soft:#fdeceb;
+  --grid:#e6eaf0; --plate:#0e141c; --plate-ink:#f3f5f8;
+  --up:#c0392b; --down:#2a78d6;
+  --shadow:0 1px 2px rgba(14,20,28,.05), 0 8px 24px -16px rgba(14,20,28,.28);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --paper:#0e1218; --card:#161b22; --card-2:#1b2129; --line:#28303a; --line-2:#20272f;
+    --ink:#eef1f6; --ink-2:#a9b3bf; --muted:#78828f;
+    --blue:#3987e5; --blue-soft:#16243a; --red:#e66767; --red-soft:#331b1c;
+    --grid:#232b35; --plate:#eef1f6; --plate-ink:#0e1218;
+    --up:#e66767; --down:#3987e5;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --paper:#0e1218; --card:#161b22; --card-2:#1b2129; --line:#28303a; --line-2:#20272f;
+  --ink:#eef1f6; --ink-2:#a9b3bf; --muted:#78828f;
+  --blue:#3987e5; --blue-soft:#16243a; --red:#e66767; --red-soft:#331b1c;
+  --grid:#232b35; --plate:#eef1f6; --plate-ink:#0e1218;
+  --up:#e66767; --down:#3987e5;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-weight:400; font-size:16px; line-height:1.72;
+  -webkit-font-smoothing:antialiased; word-break:keep-all;
+}
+.wrap{max-width:1120px; margin:0 auto; padding:0 24px 96px}
+h1,h2,h3{font-family:Hahmlet,"IBM Plex Sans KR",serif; text-wrap:balance; margin:0}
+.mono{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace; font-variant-numeric:tabular-nums}
+.num{font-family:"IBM Plex Mono","IBM Plex Sans KR",monospace; font-variant-numeric:tabular-nums; font-feature-settings:"tnum"}
+
+/* ---- hero ---- */
+.hero{
+  position:relative; overflow:hidden; margin-bottom:8px;
+  border-bottom:1px solid var(--line);
+  background:
+    linear-gradient(to bottom, var(--card) 0%, var(--paper) 100%),
+    repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 28px);
+  background-blend-mode:normal;
+}
+.hero::before{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 28px),
+             repeating-linear-gradient(90deg, var(--grid) 0 1px, transparent 1px 28px);
+  opacity:.55; pointer-events:none;
+}
+.hero-in{position:relative; max-width:1120px; margin:0 auto; padding:52px 24px 36px}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--muted); display:flex; gap:14px; flex-wrap:wrap; align-items:center;
+}
+.eyebrow b{color:var(--ink-2); font-weight:600}
+h1{font-size:clamp(34px,5.2vw,58px); font-weight:700; line-height:1.12; letter-spacing:-.02em; margin:16px 0 0}
+.deck{max-width:60ch; color:var(--ink-2); font-size:17.5px; font-weight:300; margin-top:16px}
+.deck strong{font-weight:600; color:var(--ink)}
+
+.plates{display:grid; grid-template-columns:repeat(auto-fit,minmax(158px,1fr)); gap:1px; margin-top:34px;
+  background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden}
+.plate{background:var(--card); padding:14px 16px 16px}
+.plate .k{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.11em; text-transform:uppercase; color:var(--muted)}
+.plate .v{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:23px; font-weight:600; letter-spacing:-.02em; margin-top:5px; line-height:1.2}
+.plate .s{font-size:12.5px; color:var(--ink-2); margin-top:2px; font-family:"IBM Plex Mono",monospace}
+.up{color:var(--up)} .down{color:var(--down)}
+
+/* ---- sections ---- */
+section{margin-top:64px; scroll-margin-top:20px}
+.shead{display:flex; align-items:baseline; gap:14px; border-bottom:2px solid var(--ink); padding-bottom:10px; margin-bottom:26px}
+.shead .tag{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em; color:var(--plate-ink);
+  background:var(--plate); padding:3px 8px; border-radius:2px; white-space:nowrap; align-self:center}
+.shead h2{font-size:clamp(22px,3vw,30px); font-weight:700; letter-spacing:-.015em}
+h3{font-size:19px; font-weight:700; margin:34px 0 10px; letter-spacing:-.01em}
+h4{font-size:15px; font-weight:600; margin:24px 0 8px; font-family:"IBM Plex Sans KR",sans-serif}
+p{margin:0 0 14px; max-width:72ch}
+ul{margin:0 0 16px; padding-left:20px; max-width:72ch} li{margin-bottom:7px}
+a{color:var(--blue); text-decoration-thickness:1px; text-underline-offset:2px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--blue); outline-offset:2px}
+
+.card{background:var(--card); border:1px solid var(--line); border-radius:4px; padding:22px 24px; box-shadow:var(--shadow)}
+.card + .card{margin-top:16px}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:16px}
+
+.callout{border-left:3px solid var(--blue); background:var(--blue-soft); padding:14px 18px; border-radius:0 3px 3px 0; margin:18px 0}
+.callout.warn{border-left-color:var(--red); background:var(--red-soft)}
+.callout p:last-child{margin-bottom:0}
+.callout .lbl{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-2); display:block; margin-bottom:4px}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto; margin:18px 0; border:1px solid var(--line); border-radius:4px; background:var(--card)}
+table{border-collapse:collapse; width:100%; font-size:14px; min-width:520px}
+th,td{padding:9px 14px; text-align:right; border-bottom:1px solid var(--line-2); white-space:nowrap}
+th:first-child,td:first-child{text-align:left; white-space:normal}
+thead th{background:var(--card-2); font-weight:600; font-size:11.5px; letter-spacing:.06em; text-transform:uppercase;
+  color:var(--ink-2); border-bottom:1px solid var(--line); position:sticky; top:0}
+tbody tr:last-child td{border-bottom:none}
+tbody tr.hl td{background:var(--blue-soft); font-weight:600}
+td.n,th.n{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+caption{caption-side:bottom; text-align:left; padding:10px 14px; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line-2)}
+
+/* ---- charts ---- */
+.figure{background:var(--card); border:1px solid var(--line); border-radius:4px; padding:20px 20px 12px; margin:22px 0; box-shadow:var(--shadow)}
+.figure h4{margin:0 0 2px; font-size:15.5px; font-weight:600}
+.figure .sub{font-size:13px; color:var(--muted); margin:0 0 14px}
+.chart-host{position:relative; width:100%}
+.chart-host svg{display:block; width:100%; height:auto; overflow:visible}
+.legend{display:flex; flex-wrap:wrap; gap:16px; font-size:12.5px; color:var(--ink-2); margin-top:10px; align-items:center}
+.legend i{width:11px; height:11px; border-radius:2px; display:inline-block; margin-right:6px; vertical-align:-1px}
+.tip{position:absolute; pointer-events:none; opacity:0; transition:opacity .1s; background:var(--plate); color:var(--plate-ink);
+  padding:8px 11px; border-radius:3px; font-size:12px; font-family:"IBM Plex Mono",monospace; white-space:nowrap;
+  transform:translate(-50%,-118%); z-index:5; line-height:1.55; box-shadow:0 4px 14px rgba(0,0,0,.24)}
+.axis text{font-family:"IBM Plex Mono",monospace; font-size:10.5px; fill:var(--muted)}
+.axis line{stroke:var(--grid); stroke-width:1}
+.dl{font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600}
+
+/* ---- misc ---- */
+.kv{display:grid; grid-template-columns:auto 1fr; gap:4px 18px; font-size:14px; margin:12px 0}
+.kv dt{color:var(--muted); font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.04em}
+.kv dd{margin:0; font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+.pill{display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.06em;
+  padding:2px 8px; border-radius:99px; border:1px solid var(--line); color:var(--ink-2); background:var(--card-2)}
+.pill.b{border-color:var(--blue); color:var(--blue); background:var(--blue-soft)}
+.pill.r{border-color:var(--red); color:var(--red); background:var(--red-soft)}
+.foot{margin-top:72px; padding-top:22px; border-top:1px solid var(--line); font-size:13px; color:var(--muted); max-width:74ch}
+.foot p{max-width:none}
+.srcs{font-size:13px; line-height:1.9; color:var(--ink-2)}
+.srcs a{word-break:break-all}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+@media (max-width:640px){
+  .hero-in{padding:36px 20px 28px} .wrap{padding:0 20px 72px}
+  .card{padding:18px 16px} .figure{padding:16px 14px 10px}
+}
+</style>
+
+<div class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">
+      <span>KOSPI <b>052690</b></span><span>한국전력기술</span><span>2026.08.26 종가 기준</span>
+    </div>
+    <h1>한전기술 급등 해부와 예측</h1>
+    <p class="deck">이틀 만에 <strong>+36.7%</strong>. 무엇이 올렸고, 그 상승의 질은 어떠하며,
+      이 종목 자체의 4,110영업일 데이터로 적합시킨 모델들은 앞으로 어디를 가리키는가.</p>
+
+    <div class="plates">
+      <div class="plate"><div class="k">종가</div><div class="v">123,400</div><div class="s up">+14,800 (+13.63%)</div></div>
+      <div class="plate"><div class="k">2일 누적</div><div class="v up">+36.66%</div><div class="s">90,300 → 123,400</div></div>
+      <div class="plate"><div class="k">시가총액</div><div class="v">4.72조</div><div class="s">38,220천주</div></div>
+      <div class="plate"><div class="k">전고점 대비</div><div class="v down">−37.7%</div><div class="s">198,000 (26/4/16)</div></div>
+      <div class="plate"><div class="k">7월 저점 대비</div><div class="v up">+60.1%</div><div class="s">77,100 (26/7/29)</div></div>
+      <div class="plate"><div class="k">거래대금</div><div class="v">2,289억</div><div class="s">평시의 약 25배</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══════════ 1 ═══════════ -->
+<section id="why">
+  <div class="shead"><span class="tag">진단</span><h2>왜 올랐나</h2></div>
+
+  <p>상승은 회사가 아니라 <strong>워싱턴</strong>에서 시작됐다. 8월 24일 한국경제가
+    “미국 정부가 한국에 웨스팅하우스(WEC) 지분 인수를 제안했다”고 단독 보도했고, 8월 25일과 26일
+    이틀 연속으로 국내 원전주 전체가 급등했다. 한전기술은 그 안에서도 가장 크게 올랐다.</p>
+
+  <h3>촉매의 내용</h3>
+  <ul>
+    <li>미국 정부가 웨스팅하우스에 투자하면서 <strong>한국 측(한수원·정부)에 지분 일부 인수를 요청</strong>. 대상은 최대 20% 수준.</li>
+    <li>현 지분 구조는 브룩필드 51% / 카메코 49%, 미국 정부는 최대 20% 취득 권리를 확보한 상태. WEC 기업가치는 2023년 82억달러에서 <strong>최소 100억달러</strong>로 거론.</li>
+    <li>재원으로는 <strong>2,000억달러 규모 한미 전략투자펀드</strong> 활용이 언급됐다.</li>
+    <li>배경은 AI 인프라 전력 수요다. 미국은 <strong>2030년까지 대형원전 10기 착공</strong>을 목표로 하고, 미국 에너지부(DOE)는 5개 프로젝트·AP1000 10기에 <strong>최대 175억달러 조건부 대출</strong>을 걸어놨다.</li>
+    <li>시장이 산 논리는 단순하다. 한국이 WEC 주주가 되면 <strong>수출을 막아온 지식재산권 분쟁이 풀린다</strong>는 것.</li>
+  </ul>
+
+  <h3>왜 한전기술이 동종 중 가장 크게 올랐나</h3>
+  <p>이 부분이 이 종목 고유의 이야기다. 원전 밸류체인에서 <strong>설계(A/E)는 가장 먼저 발주되는 공정</strong>이고,
+    한전기술은 미국 물량을 받을 수 있는 몇 안 되는 후보다.</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>웨스팅하우스의 병목은 인력이다</h4>
+      <p>WEC의 대형원전 설계 인력은 4,000~5,000명 수준으로, 미국과 유럽에서 동시다발 프로젝트를 감당하기엔 부족하다.
+        한전기술은 약 <strong>2,000명으로 최대 8개 프로젝트를 동시 수행한 이력</strong>이 있다.
+        즉 한전기술은 WEC의 경쟁자가 아니라 <em>병목 해소책</em>으로 팔린다.</p>
+    </div>
+    <div class="card">
+      <h4>AP1000과 APR1400 양쪽 인허가 경험</h4>
+      <p>한전기술은 AP1000·APR1400 <strong>미국 표준설계 인허가 경험을 모두 보유</strong>한다.
+        대신증권 추정으로 AP1000 종합설계는 프로젝트당 약 3,000억원,
+        2기 기준 <strong>2,800억~7,000억원</strong>, 한국형 노형을 직접 설계하면 <strong>1조6,200억원</strong>까지 열린다.</p>
+    </div>
+  </div>
+
+  <h3>수익률 귀속 분해</h3>
+  <p>2년 일간 데이터로 추정한 KOSPI 대비 베타는 0.82(상관계수 0.49)다. 이 베타로 이틀치 움직임을 시장요인과 고유요인으로 가르면,
+    상승의 <strong>96%가 종목·테마 고유요인</strong>이다. 지수가 밀어올린 게 아니다.</p>
+  <div class="tw">
+    <table>
+      <caption>출처: 네이버금융 일별 시세(052690·KOSPI·034020) 원본 데이터로 직접 계산. 베타는 2024-08 이후 일간 로그수익률 회귀.</caption>
+      <thead><tr><th>일자</th><th class="n">한전기술</th><th class="n">KOSPI</th><th class="n">두산에너빌리티</th><th class="n">한국전력</th><th class="n">거래량</th></tr></thead>
+      <tbody>
+        <tr><td>2026-08-25</td><td class="n up">+20.27%</td><td class="n">+0.68%</td><td class="n up">+10.55%</td><td class="n up">+3.81%</td><td class="n">1,484,049</td></tr>
+        <tr><td>2026-08-26</td><td class="n up">+13.63%</td><td class="n">+0.97%</td><td class="n up">+6.32%</td><td class="n up">+6.42%</td><td class="n">1,874,268</td></tr>
+        <tr class="hl"><td>2일 누적</td><td class="n up">+36.66%</td><td class="n">+1.66%</td><td class="n up">+17.53%</td><td class="n up">+10.48%</td><td class="n">3,358,317</td></tr>
+        <tr><td>└ 시장요인 (β 0.82)</td><td class="n">+1.4%p</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+        <tr><td>└ 고유요인</td><td class="n up">+35.3%p</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td class="n">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>바닥이 낮았다는 사실이 절반이다</h3>
+  <p>같은 뉴스라도 주가가 198,000원이었으면 이렇게 못 올랐다. 한전기술은 4월 16일 198,000원 고점 이후
+    <strong>7월 29일 77,100원까지 −61%</strong> 빠진 상태였다. 2분기 실적 부진(매출 1,033억 −2.7% YoY, 영업이익 30억),
+    원전 이용률 하락에 따른 한전 어닝쇼크, 지수 조정이 겹친 결과다.
+    <strong>과매도 구간에 강한 촉매가 얹히면 반등 폭이 증폭된다</strong> — 이번 상승의 구조가 정확히 그것이다.</p>
+
+  <div class="figure">
+    <h4>2025년 이후 주가 궤적</h4>
+    <p class="sub">주 2회 표본 · 종가 기준 · 원</p>
+    <div class="chart-host" id="h-price"><div class="tip" id="t-price"></div></div>
+  </div>
+
+  <h3>상승의 질(質): 좋은 신호와 나쁜 신호</h3>
+  <div class="grid2">
+    <div class="card">
+      <h4><span class="pill b">긍정</span></h4>
+      <ul style="margin-bottom:0">
+        <li><strong>거래량이 진짜다.</strong> 1,874,268주 = 20일 평균의 6.9배, 거래대금 2,289억원. 회전율 4.9%.</li>
+        <li><strong>추세 전환 신호가 켜졌다.</strong> MACD가 시그널선을 상향 돌파, 히스토그램 +2,488로 확대.
+          MA5·20·60을 모두 회복하고 MA200(126,716)을 장중 돌파.</li>
+        <li><strong>펀더멘털이 따라올 여지가 있다.</strong> 체코 두코바니 5·6호기 설계 매출이 2025년 200억에서
+          2026년 1,000억원 이상으로 확대되는 구간.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4><span class="pill r">경계</span></h4>
+      <ul style="margin-bottom:0">
+        <li><strong>외국인은 팔았다.</strong> 외국인 소진율 15.13%(8/24) → 14.39%(8/26).
+          약 <strong>28.3만주 순매도</strong>로 추정된다. 급등을 만든 건 외국인이 아니다.</li>
+        <li><strong>종가 관여 이력.</strong> 6월 12일 종가가 하루에 +29.98% 뛰며 투자주의종목으로 지정됐다(종가 거래량 비중 41.08%). 이 종목은 종가 왜곡이 실제로 일어났던 종목이다.</li>
+        <li><strong>유통물량이 얇다.</strong> 한전 외 1인 53.06% + 국민연금 10.43% + Van Eck 5.01% = 68.5%가 고정.
+          같은 자금이 더 큰 폭을 만든다 — 위로도, 아래로도.</li>
+        <li><strong>아직 “제안설”이다.</strong> 한수원·산업부의 공식 확정 발표는 없다.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ 2 ═══════════ -->
+<section id="snapshot">
+  <div class="shead"><span class="tag">기초자료</span><h2>데이터 스냅샷</h2></div>
+  <p>이하의 모든 예측은 이 표의 숫자에서 출발한다. 가격·거래량 원본은 네이버금융 일별 시세 API에서 직접 받아
+    2009년 상장일부터 2026-08-26까지 4,110영업일을 사용했다.</p>
+
+  <div class="grid2">
+    <div class="tw" style="margin-top:0">
+      <table><caption>기술적 지표 · 2026-08-26 종가 기준</caption>
+        <thead><tr><th>지표</th><th class="n">값</th><th class="n">해석</th></tr></thead>
+        <tbody>
+          <tr><td>MA5</td><td class="n">101,600</td><td class="n">+21.5%</td></tr>
+          <tr><td>MA20</td><td class="n">97,305</td><td class="n">+26.8%</td></tr>
+          <tr><td>MA60</td><td class="n">106,048</td><td class="n">+16.4%</td></tr>
+          <tr><td>MA120</td><td class="n">135,509</td><td class="n">−8.9%</td></tr>
+          <tr><td>MA200</td><td class="n">126,716</td><td class="n">−2.6%</td></tr>
+          <tr class="hl"><td>RSI(14)</td><td class="n">68.8</td><td class="n">5일 전 43.4</td></tr>
+          <tr><td>MACD / 시그널</td><td class="n">1,210 / −1,278</td><td class="n">히스토그램 +2,488</td></tr>
+          <tr><td>볼린저(20,2) 상단</td><td class="n">115,583</td><td class="n">%B 121 · 상단 이탈</td></tr>
+          <tr><td>ATR(14)</td><td class="n">8,593</td><td class="n">주가의 7.0%</td></tr>
+          <tr class="hl"><td>20일 이격도</td><td class="n">126.8%</td><td class="n">과열권</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tw" style="margin-top:0">
+      <table><caption>밸류에이션·수급 · EPS/BPS는 FnGuide 컨센서스, TTM은 1H26 실적 반영 추정</caption>
+        <thead><tr><th>지표</th><th class="n">값</th><th class="n">비고</th></tr></thead>
+        <tbody>
+          <tr><td>시가총액</td><td class="n">4.716조</td><td class="n">38,220천주</td></tr>
+          <tr><td>PER (2025A · EPS 2,234)</td><td class="n">55.2배</td><td class="n">확정</td></tr>
+          <tr class="hl"><td>PER (TTM · EPS 942)</td><td class="n">131배</td><td class="n">1H26 순이익 급감</td></tr>
+          <tr><td>PER (2026E · EPS 1,514)</td><td class="n">81.5배</td><td class="n">컨센서스</td></tr>
+          <tr><td>PBR (2026E · BPS 16,549)</td><td class="n">7.46배</td><td class="n">—</td></tr>
+          <tr><td>시총 / 수주잔고</td><td class="n">약 2.4배</td><td class="n">피어 3~5배</td></tr>
+          <tr><td>외국인 소진율</td><td class="n">14.39%</td><td class="n">8/24 15.13%</td></tr>
+          <tr><td>최대주주 등 고정지분</td><td class="n">68.5%</td><td class="n">한전+연금+VanEck</td></tr>
+          <tr><td>부채비율</td><td class="n">25.1%</td><td class="n">순현금 구조</td></tr>
+          <tr><td>YTD / 1년</td><td class="n">+37.4% / +30.7%</td><td class="n">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>실적: 컨센서스가 요구하는 하반기</h3>
+  <p>상반기 누적 매출 2,166억원(+5.1% YoY), 영업이익 170.6억원(+300.4% YoY), 순이익 168.3억원(−74.6% YoY, 2025년 일회성 이익 소멸 영향).
+    2026년 컨센서스 영업이익이 <strong>744~819억원</strong>이므로 <strong>하반기에만 573~648억원</strong>을 내야 한다.
+    2025년 4분기 영업이익이 392억원이었던 계절성(4분기 원가정산 집중)을 감안하면 불가능하지 않지만, 여유는 없다.</p>
+  <div class="tw">
+    <table><caption>단위: 억원 · 2026E는 증권사 추정치 범위(대신 5,917/756, LS 6,183/748, FnGuide 컨센서스 EPS 1,514)</caption>
+      <thead><tr><th>구분</th><th class="n">매출액</th><th class="n">영업이익</th><th class="n">OPM</th><th class="n">순이익</th></tr></thead>
+      <tbody>
+        <tr><td>2024A</td><td class="n">5,534</td><td class="n">548</td><td class="n">9.9%</td><td class="n">585</td></tr>
+        <tr><td>2025A</td><td class="n">5,188</td><td class="n">355</td><td class="n">6.8%</td><td class="n">854</td></tr>
+        <tr><td>1Q26</td><td class="n">1,133</td><td class="n">141</td><td class="n">12.4%</td><td class="n">141</td></tr>
+        <tr class="hl"><td>2Q26</td><td class="n">1,033</td><td class="n">30</td><td class="n">2.9%</td><td class="n">27</td></tr>
+        <tr><td>1H26 누적</td><td class="n">2,166</td><td class="n">171</td><td class="n">7.9%</td><td class="n">168</td></tr>
+        <tr><td>2026E 컨센서스</td><td class="n">5,917~6,183</td><td class="n">744~819</td><td class="n">12.1~13.2%</td><td class="n">약 580</td></tr>
+        <tr><td>└ 하반기 필요분</td><td class="n">3,751~4,017</td><td class="n">573~648</td><td class="n">15.3~16.1%</td><td class="n">약 412</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 3 ═══════════ -->
+<section id="models">
+  <div class="shead"><span class="tag">방법론</span><h2>이 종목에 맞춘 네 개의 엔진</h2></div>
+  <p>범용 예측식을 그대로 쓰지 않았다. 네 모델 모두 <strong>한전기술 자신의 데이터로 파라미터를 적합</strong>시켰고,
+    맞지 않는 모델은 맞지 않는다고 적었다.</p>
+
+  <h3><span class="pill">엔진 1</span> 조건부 이벤트 스터디 — “이 종목은 이런 급등 뒤에 어떻게 됐나”</h3>
+  <p>4,110영업일 전체에서 <strong>오늘과 같은 조건</strong>이 성립했던 날을 모두 찾아, 그 이후의 실제 경로를 집계했다.
+    조건은 두 가지로 걸었다. 두 번째 조건이 오늘의 상황과 가장 가깝다 —
+    <em>52주 고점 대비 −30% 이상 눌린 상태에서 이틀 만에 +15% 이상 튄 날</em>.</p>
+  <div class="tw">
+    <table><caption>수치는 해당 시점 종가 대비 단순수익률. 표본이 작으므로 중앙값과 승률을 함께 볼 것.</caption>
+      <thead><tr><th>조건 / 구간</th><th class="n">+5일</th><th class="n">+20일</th><th class="n">+60일</th><th class="n">+120일</th><th class="n">+250일</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A. 2일 +15%↑ & 거래량 2.5배↑</strong> (18건) — 중앙값</td><td class="n">+0.8%</td><td class="n down">−3.8%</td><td class="n down">−1.1%</td><td class="n down">−15.4%</td><td class="n down">−9.6%</td></tr>
+        <tr><td style="padding-left:26px">평균</td><td class="n">+3.0%</td><td class="n">+7.0%</td><td class="n">+6.5%</td><td class="n">−0.5%</td><td class="n">+11.6%</td></tr>
+        <tr><td style="padding-left:26px">승률</td><td class="n">65%</td><td class="n">47%</td><td class="n">41%</td><td class="n">35%</td><td class="n">38%</td></tr>
+        <tr class="hl"><td><strong>B. 52주 고점 −30%↓에서 2일 +15%↑</strong> (11건) — 중앙값</td><td class="n">+0.9%</td><td class="n down">−5.4%</td><td class="n">0.0%</td><td class="n down">−12.2%</td><td class="n">+2.5%</td></tr>
+        <tr><td style="padding-left:26px">승률</td><td class="n">60%</td><td class="n">30%</td><td class="n">44%</td><td class="n">33%</td><td class="n">56%</td></tr>
+        <tr><td>기준선 (무조건부 전 구간) — 중앙값</td><td class="n">−0.2%</td><td class="n">−0.7%</td><td class="n">−2.0%</td><td class="n">−5.2%</td><td class="n">−6.4%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn">
+    <span class="lbl">엔진 1의 결론</span>
+    <p>이 종목의 과거는 <strong>“급등 직후 5일은 관성, 그 다음 1~6개월은 되돌림”</strong>을 말한다.
+      20일 승률 30~47%, 120일 중앙값 −12~−15%. 평균이 플러스인 것은 소수의 대박 사례가 끌어올린 것이지 중심 경향이 아니다.
+      다만 250일 구간에서는 B조건 중앙값이 +2.5%, 승률 56%로 <strong>기준선(−6.4%, 41%)을 상회</strong>한다 —
+      길게 보면 이런 자리는 나쁘지 않았다.</p>
+  </div>
+
+  <h3><span class="pill">엔진 2</span> GARCH(1,1) + 부트스트랩 몬테카를로 — 분포의 폭</h3>
+  <p>최근 5년(1,250영업일) 로그수익률에 GARCH(1,1)을 최대우도로 적합했다.
+    한전기술 수익률은 정규분포가 아니다(1년 초과첨도 +4.14, 표준화잔차 초과첨도 +6.59)
+    — 그래서 정규난수 대신 <strong>실제 표준화잔차를 부트스트랩</strong>해 꼬리를 살렸다.</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>적합 결과</h4>
+      <dl class="kv">
+        <dt>ω</dt><dd>1.000 × 10⁻⁴</dd>
+        <dt>α</dt><dd>0.1472</dd>
+        <dt>β</dt><dd>0.8010</dd>
+        <dt>α+β</dt><dd>0.9483 (지속성)</dd>
+        <dt>반감기</dt><dd>13.0 영업일</dd>
+        <dt>장기평균</dt><dd>연 69.8%</dd>
+        <dt>현재 조건부</dt><dd>연 <strong>135.0%</strong></dd>
+      </dl>
+      <p style="font-size:13.5px; color:var(--ink-2); margin-bottom:0">α+β = 0.948은 <strong>변동성이 매우 끈적하다</strong>는 뜻이다.
+        오늘 튄 변동성이 절반으로 가라앉는 데 13영업일, 장기평균에 근접하는 데 두 달 이상 걸린다.</p>
+    </div>
+    <div class="card">
+      <h4>변동성 기간구조 (연율)</h4>
+      <div class="tw" style="margin:8px 0 0; border:none">
+        <table style="min-width:0">
+          <thead><tr><th>구간</th><th class="n">연율 변동성</th><th class="n">누적 σ</th></tr></thead>
+          <tbody>
+            <tr><td>1주</td><td class="n">130.0%</td><td class="n">18.3%</td></tr>
+            <tr><td>1개월</td><td class="n">115.4%</td><td class="n">32.5%</td></tr>
+            <tr><td>3개월</td><td class="n">94.8%</td><td class="n">46.3%</td></tr>
+            <tr><td>6개월</td><td class="n">83.3%</td><td class="n">58.6%</td></tr>
+            <tr><td>12개월</td><td class="n">76.8%</td><td class="n">76.5%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:13.5px; color:var(--ink-2); margin:12px 0 0">참고로 실현변동성은 20일 98.5%, 60일 104.7%, 252일 77.2%다.
+        <strong>1년 누적 σ가 76.5%</strong>라는 것은 정직하게 말해 12개월 뒤 주가를 “한 숫자”로 찍는 게 무의미하다는 뜻이다.</p>
+    </div>
+  </div>
+
+  <h3><span class="pill">엔진 3</span> 다요인 회귀 — 그리고 그 실패의 기록</h3>
+  <p>이격도·낙폭·거래량·RSI 5개 팩터로 미래 수익률을 회귀했다(2010~2026 전 구간 적합, 2022년 이후 표본외 검증).
+    결과를 있는 그대로 적는다.</p>
+  <div class="tw">
+    <table><caption>중복 구간(overlapping windows) 회귀이므로 통계적 유의성은 과대평가돼 있다. IC는 표본외 예측치-실현치 상관.</caption>
+      <thead><tr><th>예측구간</th><th class="n">R² (적합)</th><th class="n">R² (표본외)</th><th class="n">IC (표본외)</th><th class="n">현재 예측</th><th class="n">잔차 σ</th></tr></thead>
+      <tbody>
+        <tr><td>+5일</td><td class="n">0.010</td><td class="n">+0.001</td><td class="n">+0.05</td><td class="n">+0.4%</td><td class="n">7.1%</td></tr>
+        <tr><td>+20일</td><td class="n">0.020</td><td class="n">−0.009</td><td class="n">+0.05</td><td class="n">+1.7%</td><td class="n">14.7%</td></tr>
+        <tr><td>+60일</td><td class="n">0.032</td><td class="n">+0.015</td><td class="n">+0.16</td><td class="n">+0.1%</td><td class="n">24.8%</td></tr>
+        <tr class="hl"><td>+120일</td><td class="n">0.063</td><td class="n">+0.047</td><td class="n">+0.30</td><td class="n down">−10.2%</td><td class="n">31.7%</td></tr>
+        <tr><td>+250일</td><td class="n">0.005</td><td class="n">+0.009</td><td class="n">+0.24</td><td class="n">+3.2%</td><td class="n">46.5%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <span class="lbl">엔진 3의 결론</span>
+    <p><strong>단기(1주·1개월)에는 기술적 팩터에 예측력이 사실상 없다.</strong> 표본외 R²가 0 또는 음수다.
+      “RSI 68이니 곧 조정”류의 문장은 이 종목 데이터로는 뒷받침되지 않는다.
+      의미 있는 신호는 <strong>120일 구간에서만</strong> 나온다(표본외 R² 0.047, IC 0.30). 그 신호가 지금 가리키는 값이 <strong>−10.2%</strong>이며,
+      계수를 보면 그 힘의 대부분은 <em>52주 고점 대비 낙폭이 클수록 6개월 뒤 수익률이 낮다</em>는 관계에서 나온다.
+      엔진 1의 120일 중앙값(−12.2%)과 방향이 일치한다.</p>
+  </div>
+
+  <h3><span class="pill">엔진 4</span> 밸류에이션 — 이 가격이 요구하는 미래</h3>
+  <h4>(a) 리버스 DCF: 지금 가격에 무엇이 들어있나</h4>
+  <p>할인율 9.5%, 영구성장 2.0%, 2026E 순이익 580억원을 잉여현금흐름 대용치로 두고 10년 명시적 예측을 돌려
+    현재 시가총액 4.716조원을 정당화하는 성장률을 역산했다.</p>
+  <div class="tw">
+    <table><caption>가정: r=9.5%, g∞=2.0%, FCF≈순이익. 한전기술은 순현금·저capex 구조라 이 근사가 크게 왜곡되지 않는다.</caption>
+      <thead><tr><th>10년 순이익 CAGR 가정</th><th class="n">적정 시총</th><th class="n">적정주가</th><th class="n">현재가 대비</th></tr></thead>
+      <tbody>
+        <tr><td>10%</td><td class="n">1.42조</td><td class="n">37,162</td><td class="n down">−70%</td></tr>
+        <tr><td>15%</td><td class="n">2.05조</td><td class="n">53,758</td><td class="n down">−56%</td></tr>
+        <tr><td>20%</td><td class="n">2.96조</td><td class="n">77,552</td><td class="n down">−37%</td></tr>
+        <tr><td>25%</td><td class="n">4.25조</td><td class="n">111,313</td><td class="n down">−10%</td></tr>
+        <tr class="hl"><td><strong>26.4% ← 현재가가 요구하는 값</strong></td><td class="n">4.72조</td><td class="n">123,400</td><td class="n">0%</td></tr>
+        <tr><td>30%</td><td class="n">6.07조</td><td class="n">158,716</td><td class="n up">+29%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>즉 <strong>10년 연속 연 26.4% 이익 성장 = 10년 뒤 순이익 6,058억원(현재의 10.4배)</strong>이 이미 가격에 들어있다.
+    체코 + 미국 + 국내 신규 원전이 <em>전부</em> 성사돼야 닿는 숫자다. 이 종목은 싸지 않다. 다만 원전 설계는
+    <strong>한 프로젝트가 10년 이상 매출로 깔리는</strong> 사업이라 성사만 되면 성장의 지속성은 높다는 점도 함께 봐야 한다.</p>
+
+  <h4>(b) 수주잔고 배수</h4>
+  <p>대신증권이 8월 10일자로 제시한 “시총/수주잔고 약 1.9배”(당시 주가 100,900원)를 역산하면 잔고는 약 2.0조원이다.
+    현재가 기준 배수는 <strong>2.36배</strong>로 국내 원전·전력 피어(3~5배) 대비 아직 낮다.
+    완도금일 해상풍력 본계약(약 1조원)이 들어오면 잔고가 3.0조로 늘어 배수는 1.57배로 <em>떨어진다</em> — 밸류 여력이 오히려 커진다.</p>
+  <div class="tw">
+    <table><caption>잔고 2.0조 가정. 신규 수주가 반영되면 같은 배수에서 주가 상단이 올라간다.</caption>
+      <thead><tr><th>적용 배수</th><th class="n">시가총액</th><th class="n">주가</th><th class="n">현재가 대비</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td>2.36배 (현재)</td><td class="n">4.72조</td><td class="n">123,400</td><td class="n">—</td></tr>
+        <tr><td>3.0배</td><td class="n">6.00조</td><td class="n">156,986</td><td class="n up">+27%</td></tr>
+        <tr><td>4.0배</td><td class="n">8.00조</td><td class="n">209,314</td><td class="n up">+70%</td></tr>
+        <tr><td>5.0배</td><td class="n">10.00조</td><td class="n">261,643</td><td class="n up">+112%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 4 ═══════════ -->
+<section id="short">
+  <div class="shead"><span class="tag">단기</span><h2>1주 · 1개월 · 3개월</h2></div>
+
+  <p>네 엔진을 합쳐 30,000개 경로를 시뮬레이션했다. 변동성은 엔진 2의 GARCH 경로,
+    꼬리는 실제 표준화잔차 부트스트랩, 드리프트는 5장의 시나리오 확률가중 기대값(로그 기준 연 +19.5%)에서 가져왔다.</p>
+
+  <div class="figure">
+    <h4>확률 분포 예측 (팬 차트)</h4>
+    <p class="sub">2026-08-26 종가 123,400원 기준 · 30,000경로 · GARCH(1,1)+부트스트랩 잔차</p>
+    <div class="chart-host" id="h-fan"><div class="tip" id="t-fan"></div></div>
+    <div class="legend">
+      <span><i style="background:var(--blue); opacity:.42"></i>25~75% 구간</span>
+      <span><i style="background:var(--blue); opacity:.16"></i>5~95% 구간</span>
+      <span><i style="background:var(--blue); height:3px; border-radius:1px"></i>중앙값 경로</span>
+      <span><i style="background:var(--muted); height:2px; border-radius:1px"></i>현재가 123,400</span>
+    </div>
+  </div>
+
+  <div class="tw">
+    <table><caption>단위: 원. P(상승)은 해당 시점 종가가 123,400원을 넘을 확률. 기대값 &gt; 중앙값인 것은 로그정규 분포의 우측 꼬리 때문이다.</caption>
+      <thead><tr><th>구간</th><th class="n">하위 5%</th><th class="n">하위 25%</th><th class="n">중앙값</th><th class="n">상위 75%</th><th class="n">상위 95%</th><th class="n">기대값</th><th class="n">P(상승)</th></tr></thead>
+      <tbody>
+        <tr class="hl"><td><strong>1주</strong> (5영업일)</td><td class="n">93,200</td><td class="n">110,100</td><td class="n">121,000</td><td class="n">133,900</td><td class="n">162,300</td><td class="n">124,100</td><td class="n">44%</td></tr>
+        <tr class="hl"><td><strong>1개월</strong> (20영업일)</td><td class="n">74,400</td><td class="n">100,400</td><td class="n">118,500</td><td class="n">139,900</td><td class="n">192,700</td><td class="n">125,300</td><td class="n">43%</td></tr>
+        <tr class="hl"><td><strong>3개월</strong> (60영업일)</td><td class="n">59,300</td><td class="n">91,900</td><td class="n">116,600</td><td class="n">147,800</td><td class="n">227,500</td><td class="n">129,300</td><td class="n">43%</td></tr>
+        <tr><td>6개월 (125영업일)</td><td class="n">48,100</td><td class="n">83,800</td><td class="n">115,200</td><td class="n">158,700</td><td class="n">276,000</td><td class="n">135,900</td><td class="n">44%</td></tr>
+        <tr><td>12개월 (250영업일)</td><td class="n">34,900</td><td class="n">72,200</td><td class="n">112,700</td><td class="n">176,300</td><td class="n">360,300</td><td class="n">149,000</td><td class="n">45%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <span class="lbl">이 표에서 가장 중요한 한 줄</span>
+    <p><strong>모든 구간에서 P(상승)이 45% 이하다.</strong> 기대수익률이 플러스인데도 그렇다.
+      연 76%가 넘는 변동성에서는 <em>중앙값이 기대값보다 한참 아래</em>에 놓이기 때문이다(변동성 드래그).
+      실무적 의미는 명확하다 — <strong>“오를 확률”보다 “올랐을 때 크게 오른다”에 베팅하는 자리</strong>이지,
+      확률 자체가 유리한 자리가 아니다. 분할·소액·손절선이 이 분포에 맞는 대응 방식이다.</p>
+  </div>
+
+  <h3>주요 가격대 도달 확률</h3>
+  <p>“기간 내에 한 번이라도 닿을 확률”이다(종가 기준이 아니라 경로 기준).</p>
+  <div class="tw">
+    <table><caption>30,000경로 시뮬레이션. 하단 레벨은 최저가 경로, 상단 레벨은 최고가 경로로 판정.</caption>
+      <thead><tr><th>가격대</th><th class="n">1주</th><th class="n">1개월</th><th class="n">3개월</th><th class="n">6개월</th><th class="n">12개월</th></tr></thead>
+      <tbody>
+        <tr><td class="down">77,100 <span class="pill">7월 저점</span></td><td class="n">1%</td><td class="n">9%</td><td class="n">21%</td><td class="n">34%</td><td class="n">49%</td></tr>
+        <tr><td class="down">90,000</td><td class="n">4%</td><td class="n">21%</td><td class="n">38%</td><td class="n">52%</td><td class="n">64%</td></tr>
+        <tr><td class="down">100,000</td><td class="n">13%</td><td class="n">38%</td><td class="n">55%</td><td class="n">66%</td><td class="n">75%</td></tr>
+        <tr class="hl"><td class="up">135,400 <span class="pill">8/26 장중고가</span></td><td class="n">33%</td><td class="n">54%</td><td class="n">66%</td><td class="n">74%</td><td class="n">81%</td></tr>
+        <tr><td class="up">151,816 <span class="pill">61.8% 되돌림</span></td><td class="n">12%</td><td class="n">31%</td><td class="n">45%</td><td class="n">57%</td><td class="n">68%</td></tr>
+        <tr><td class="up">198,000 <span class="pill">4월 전고점</span></td><td class="n">2%</td><td class="n">8%</td><td class="n">17%</td><td class="n">28%</td><td class="n">41%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>기술적 레벨 — 어디서 막히고 어디서 받치나</h3>
+  <p>오늘 종가 123,400원은 4월 고점(198,000)→7월 저점(77,100) 하락의 <strong>38.2% 되돌림(123,284원)에 정확히 멈춰섰다.</strong>
+    우연이라 보기 어려운 위치다. 그리고 그 바로 위가 이 종목의 <strong>최대 매물대</strong>다.</p>
+
+  <div class="figure">
+    <h4>최근 1년 매물대</h4>
+    <p class="sub">250영업일 · 5,000원 구간별 거래량 비중 · 대표가격(고가+저가+종가)/3 기준</p>
+    <div class="chart-host" id="h-vol"><div class="tip" id="t-vol"></div></div>
+    <div class="legend">
+      <span><i style="background:var(--red)"></i>현재가 위 — 저항 (누적 44%)</span>
+      <span><i style="background:var(--blue)"></i>현재가 아래 — 지지 (누적 56%)</span>
+    </div>
+  </div>
+
+  <div class="tw">
+    <table><caption>피보나치는 198,000 → 77,100 하락분 120,900원 기준.</caption>
+      <thead><tr><th>구분</th><th class="n">가격</th><th class="n">현재가 대비</th><th>성격</th></tr></thead>
+      <tbody>
+        <tr><td>피보나치 78.6%</td><td class="n">172,127</td><td class="n up">+39.5%</td><td>강세 시나리오 1차 목표</td></tr>
+        <tr><td>피보나치 61.8%</td><td class="n">151,816</td><td class="n up">+23.0%</td><td>매물대 145,000~150,000과 중첩 — 1차 관문</td></tr>
+        <tr><td>MA120 / 피보나치 50%</td><td class="n">135,509 / 137,550</td><td class="n up">+9.8~11.5%</td><td><strong>즉각 저항</strong> · 135,000~140,000 매물 6.0%</td></tr>
+        <tr class="hl"><td><strong>현재가 / 피보나치 38.2%</strong></td><td class="n">123,400 / 123,284</td><td class="n">—</td><td>정확히 되돌림 지점에서 마감</td></tr>
+        <tr><td>MA200</td><td class="n">126,716</td><td class="n up">+2.7%</td><td>장중 돌파 후 아래로 마감 — 재돌파 여부가 관건</td></tr>
+        <tr><td>−1 ATR</td><td class="n">114,807</td><td class="n down">−7.0%</td><td>정상 변동 범위 하단</td></tr>
+        <tr><td>볼린저 상단</td><td class="n">115,583</td><td class="n down">−6.3%</td><td>과열 해소 시 1차 회귀선</td></tr>
+        <tr><td>매물대 중심</td><td class="n">95,000~110,000</td><td class="n down">−11~−23%</td><td><strong>최대 지지</strong> · 이 구간에 1년 거래량의 26.5%</td></tr>
+        <tr><td>−2 ATR / MA20</td><td class="n">106,214 / 97,305</td><td class="n down">−13.9~−21.1%</td><td>추세 훼손 판정선</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <span class="lbl">단기 종합</span>
+    <p><strong>1주:</strong> 중앙값 121,000원. 급등 직후 5일은 이 종목 이력상 관성이 남는 구간이다(A조건 승률 65%).
+      다만 135,000~140,000 매물대가 바로 위에 있어 <strong>135,400원 재돌파 확률은 33%</strong>.
+      110,000~135,000원 사이의 넓은 진폭을 기본으로 본다.</p>
+    <p><strong>1개월:</strong> 중앙값 118,500원 — 즉 <strong>소폭 하락</strong>이 중심 시나리오다.
+      엔진 1의 20일 중앙값(−3.8%/−5.4%, 승률 30~47%)과 방향이 일치한다.
+      상단 139,900원 / 하단 100,400원(25~75% 구간). 100,000원 이탈 확률 38%.</p>
+    <p><strong>3개월(11월 말):</strong> 중앙값 116,600원. 이 구간에는 <strong>3분기 실적(10월 말)</strong>이 들어온다.
+      2분기처럼 부진하면 매물대 하단(95,000~105,000)까지 되돌릴 위험이 실질적이다.
+      반대로 웨스팅하우스 협상이 공식화되면 25~75% 구간 상단(147,800원)을 넘어설 수 있다. 25~75% 폭이 91,900~147,800원 —
+      <strong>이 시점에 한 숫자를 고집하는 건 통계적으로 무의미하다.</strong></p>
+  </div>
+</section>
+
+<!-- ═══════════ 5 ═══════════ -->
+<section id="long">
+  <div class="shead"><span class="tag">장기</span><h2>12개월 · 2~3년</h2></div>
+
+  <p>장기는 통계가 아니라 <strong>사건</strong>이 결정한다. 그래서 촉매를 확률로 분해하고,
+    각 경우의 이익 추정치에 배수를 적용해 목표주가를 만든 뒤 확률가중했다.</p>
+
+  <h3>촉매 확률 트리 (12개월 시계)</h3>
+  <div class="tw">
+    <table><caption>확률은 보도된 사실관계·규제 절차·과거 유사 딜의 성사율을 참조한 저자 추정치다. 컨센서스가 아니다.</caption>
+      <thead><tr><th>촉매</th><th class="n">확률</th><th>확인 시점</th></tr></thead>
+      <tbody>
+        <tr><td>웨스팅하우스 한국 지분참여 최종 성사 (가격 협상 + CFIUS 통과)</td><td class="n">40%</td><td>2026 4Q ~ 2027</td></tr>
+        <tr><td>└ 성사 시 한전기술의 <em>실질</em> 설계·용역 수주로 연결</td><td class="n">50%</td><td>2027 이후</td></tr>
+        <tr><td>12차 전력수급기본계획에 신규 대형원전 2기 이상 반영</td><td class="n">70%</td><td><strong>2026년 12월</strong></td></tr>
+        <tr><td>완도금일 해상풍력 본계약 (약 1조원)</td><td class="n">60%</td><td>2026 4Q ~ 2027 상반기</td></tr>
+        <tr><td>체코 두코바니 매출 계획대로 인식 (2026년 1,000억원+)</td><td class="n">75%</td><td>분기 실적</td></tr>
+        <tr><td>체코 테멜린 3·4 또는 베트남 닌투언 추가 수주 가시화</td><td class="n">35%</td><td>2027</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>시나리오별 이익 빌드업과 목표주가</h3>
+  <div class="tw">
+    <table><caption>단위: 억원. 2026E는 컨센서스 범위에 맞췄고, 2027~2028E는 위 촉매 조합에 따른 저자 추정이다.</caption>
+      <thead><tr><th>시나리오</th><th class="n">확률</th><th class="n">2027E 매출</th><th class="n">2027E 영업이익</th><th class="n">2027E EPS</th><th class="n">적용 PER</th><th class="n">12개월 목표주가</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Bear</strong><br><span style="font-size:13px;color:var(--muted)">체코만 진행 · 미국 무산 · 신규 대형수주 공백</span></td>
+            <td class="n">22%</td><td class="n">6,200</td><td class="n">780</td><td class="n">1,727</td><td class="n">40배</td><td class="n down"><strong>69,000</strong><br><span style="font-size:12px">−44%</span></td></tr>
+        <tr class="hl"><td><strong>Base</strong><br><span style="font-size:13px;color:var(--ink-2)">체코 정상화 + 완도금일 본계약 + 국내 신규 2기 설계</span></td>
+            <td class="n">59%</td><td class="n">7,300</td><td class="n">1,100</td><td class="n">2,433</td><td class="n">60배</td><td class="n"><strong>146,000</strong><br><span style="font-size:12px">+18%</span></td></tr>
+        <tr><td><strong>Bull</strong><br><span style="font-size:13px;color:var(--muted)">+ 웨스팅하우스 협업으로 미국 AP1000 설계 실수주</span></td>
+            <td class="n">19%</td><td class="n">8,200</td><td class="n">1,350</td><td class="n">3,009</td><td class="n">85배</td><td class="n up"><strong>256,000</strong><br><span style="font-size:12px">+107%</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="figure">
+    <h4>12개월 목표주가 · 시나리오별</h4>
+    <p class="sub">막대 = 목표주가 · 괄호 = 시나리오 확률 · 점선 = 현재가 123,400원</p>
+    <div class="chart-host" id="h-sc"><div class="tip" id="t-sc"></div></div>
+  </div>
+
+  <div class="callout">
+    <span class="lbl">12개월 확률가중 결론</span>
+    <p style="font-size:17px"><strong>기대주가 149,900원 (+21.5%)</strong> · 중앙값 경로 112,700원 (−8.7%) ·
+      25~75% 구간 <strong>72,200 ~ 176,300원</strong></p>
+    <p>참고로 증권사 목표주가는 160,000원(대신, 8/10)에서 230,000원(LS, 5/11) 사이에 분포한다.
+      다만 <strong>200,000원 이상 목표가는 대부분 2분기 실적 발표 전인 5월 리포트</strong>이고,
+      2분기 부진을 반영한 8월 리포트는 160,000원이다. 본 모델의 기대값 149,900원은 그보다도 보수적이며,
+      이는 <strong>Bear 시나리오에 22% 확률을 실질적으로 배분했기 때문</strong>이다.</p>
+  </div>
+
+  <h3>2~3년 (2028~2029)</h3>
+  <p>3년 시계에서는 단일 값 대신 <strong>조건부 경로</strong>로 본다.</p>
+  <div class="tw">
+    <table><caption>PER 배수는 수주 가시성이 확보될수록 낮아지는 것이 정상이다(현재 배수는 “미래 수주 기대”를 이미 반영 중).</caption>
+      <thead><tr><th>경로</th><th class="n">2028E EPS</th><th class="n">적용 PER</th><th class="n">주가</th><th class="n">3년 CAGR</th><th>성립 조건</th></tr></thead>
+      <tbody>
+        <tr><td>Bear 지속</td><td class="n">1,570</td><td class="n">30배</td><td class="n down">47,000</td><td class="n down">−27%/년</td><td>미국·국내 신규 모두 무산, 체코 이후 잔고 소진</td></tr>
+        <tr class="hl"><td>Base</td><td class="n">2,852</td><td class="n">45배</td><td class="n">128,000</td><td class="n">+1%/년</td><td>국내 2기 + 완도금일 + 체코 정상 — <em>지금 가격이 이미 이 정도를 반영</em></td></tr>
+        <tr><td>Bull</td><td class="n">4,317</td><td class="n">60배</td><td class="n up">259,000</td><td class="n up">+28%/년</td><td>미국 AP1000 설계 실수주 + 체코/베트남 후속</td></tr>
+        <tr><td>Super Bull</td><td class="n">4,317</td><td class="n">90배</td><td class="n up">389,000</td><td class="n up">+46%/년</td><td>위 + 미국 물량이 “반복 수주”로 확인되며 멀티플 재평가</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>핵심은 <strong>Base 경로의 3년 CAGR이 +1%</strong>라는 점이다.
+    지금 가격은 “좋은 일이 상당히 일어난다”를 이미 지불한 가격이고,
+    <strong>초과수익은 오직 미국 시장 진입이 실제 수주로 확인될 때만</strong> 나온다.
+    반대로 그 기대가 꺾이면 리버스 DCF가 보여준 대로 하방은 −40~−70%까지 열려 있다.
+    이 종목은 <strong>비대칭이지만 확률이 유리하진 않은</strong> 자산이다.</p>
+</section>
+
+<!-- ═══════════ 6 ═══════════ -->
+<section id="risk">
+  <div class="shead"><span class="tag">반증</span><h2>이 예측이 틀리는 경로</h2></div>
+  <div class="grid2">
+    <div class="card">
+      <h4>상승 논리가 깨지는 지점</h4>
+      <ul style="margin-bottom:0">
+        <li><strong>딜은 아직 “제안설”이다.</strong> 한수원·산업부의 공식 확정이 없고, CFIUS 심사·가격 협상이 남았다. 무산되면 이틀 상승분이 그대로 반납될 수 있다.</li>
+        <li><strong>도시바 선례.</strong> 도시바는 54억달러에 WEC 지분 87%를 샀지만, 원천설계·인허가·핵연료 공급·제3국 수출통제는 끝까지 미국 규제당국에 있었고 2017년 파산보호로 끝났다. <em>지분율은 기술주권을 사주지 않는다.</em></li>
+        <li><strong>지분투자 ≠ 수주보장.</strong> 업계에서 나오는 우려 그대로다. 한국이 자본과 시공을 대고 의사결정권은 못 갖는 구조라면, AP1000 하청이 될 뿐이다. 손실분담 조항도 미확정이다.</li>
+        <li><strong>Vogtle·V.C. Summer의 그림자.</strong> 서머 프로젝트는 90억달러를 쓰고 2017년 취소됐다. 미국 원전 건설은 지연·초과비용의 역사다.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>실적·수급이 깨지는 지점</h4>
+      <ul style="margin-bottom:0">
+        <li><strong>하반기 영업이익 573억원</strong>을 못 채우면 2026E PER 81.5배의 근거가 사라진다. 2분기 OPM은 2.9%였다.</li>
+        <li><strong>TTM PER 131배.</strong> 지금 주가는 실적이 아니라 기대 위에 서 있다.</li>
+        <li><strong>외국인이 급등 이틀간 순매도</strong>(소진율 −0.74%p)했다. 기관·외국인이 동참하지 않는 상승은 되돌림이 빠르다.</li>
+        <li><strong>12차 전기본이 12월로 미뤄졌다.</strong> 발표가 또 밀리거나 신규 원전이 빠지면 국내 모멘텀 축이 통째로 흔들린다.</li>
+        <li><strong>이 종목은 종가 왜곡 이력이 있다</strong>(6/12 +29.98%, 투자주의종목 지정). 얇은 유통물량이 양방향으로 작동한다.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>확인해야 할 체크포인트</h3>
+  <div class="tw">
+    <table><caption>이 표의 항목이 뒤집히면 위 시나리오 확률을 다시 계산해야 한다.</caption>
+      <thead><tr><th>시점</th><th>이벤트</th><th>보는 것</th></tr></thead>
+      <tbody>
+        <tr><td class="n">즉시</td><td>한수원·산업부 공식 입장</td><td>“검토 중” 이상의 문구가 나오는가</td></tr>
+        <tr><td class="n">9~10월</td><td>완도금일 해상풍력 본계약</td><td>1조원 규모 공시 여부 → 수주잔고 3.0조</td></tr>
+        <tr><td class="n">10월 말</td><td><strong>3분기 실적</strong></td><td>영업이익 250억 이상 / OPM 두 자릿수 회복 여부</td></tr>
+        <tr><td class="n">12월</td><td><strong>12차 전력수급기본계획 확정</strong></td><td>신규 대형원전 기수, 영덕 부지 반영 여부</td></tr>
+        <tr><td class="n">2026 4Q~</td><td>웨스팅하우스 지분 구조 발표</td><td>SPV 구조·지분율·손실분담 조항</td></tr>
+        <tr><td class="n">2027</td><td>미국 AP1000 첫 설계 발주</td><td>한전기술 참여 지분과 금액 — <strong>Bull 시나리오의 유일한 관문</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ 7 ═══════════ -->
+<section id="bottom">
+  <div class="shead"><span class="tag">요약</span><h2>세 문장</h2></div>
+  <div class="card" style="border-left:3px solid var(--blue)">
+    <p style="font-size:17px"><strong>1. 왜 올랐나 —</strong> 미국의 웨스팅하우스 지분 인수 제안(8/24 보도)이 촉매이고,
+      한전기술이 동종 중 가장 크게 오른 이유는 <strong>원전 설계 인력 병목의 해소책</strong>이자
+      AP1000·APR1400 양쪽 미국 인허가 경험을 가진 <strong>거의 유일한 대안</strong>이기 때문이다.
+      상승의 96%가 고유요인이며, 7월까지 −61% 눌려 있던 낮은 바닥이 폭을 증폭시켰다.</p>
+    <p style="font-size:17px"><strong>2. 단기 —</strong> 중앙값 기준 1주 121,000 · 1개월 118,500 · 3개월 116,600원.
+      즉 <strong>모델의 중심 시나리오는 소폭 되돌림</strong>이다.
+      이 종목 자체 이력에서 유사 급등 뒤 20일 승률은 30~47%에 불과했다.
+      바로 위 135,000~150,000원이 최대 매물대이고, 95,000~110,000원이 최대 지지대다.</p>
+    <p style="font-size:17px; margin-bottom:0"><strong>3. 장기 —</strong> 12개월 확률가중 기대주가 <strong>149,900원(+21.5%)</strong>,
+      단 25~75% 구간은 72,200~176,300원으로 벌어진다.
+      현재가는 이미 <strong>10년 연 26.4% 이익성장</strong>을 요구한다.
+      Base 경로의 3년 CAGR은 +1%에 불과하고, <strong>초과수익은 미국 실수주가 확인될 때만</strong> 나온다.
+      비대칭은 크지만 확률은 유리하지 않다 — 그에 맞는 사이징이 이 종목의 핵심이다.</p>
+  </div>
+</section>
+
+<section id="src">
+  <div class="shead"><span class="tag">출처</span><h2>데이터와 참고자료</h2></div>
+  <p><strong>가격·거래량 원본:</strong> 네이버금융 일별 시세 API(052690 / KOSPI / 034020 / 015760), 2009-12-14 ~ 2026-08-26, 4,110영업일.
+    모든 기술적 지표·변동성·GARCH·회귀·몬테카를로는 이 원본으로 직접 계산했다.</p>
+  <p class="srcs">
+    · <a href="https://www.hankyung.com/article/2026082496041">한국경제 — 美 “웨스팅하우스 지분 인수” 韓에 제안 (2026-08-24)</a><br>
+    · <a href="https://www.hankyung.com/article/2026082631506">한국경제 — 웨스팅하우스 지분 인수 제안설에 한전 이틀째 급등 (2026-08-26)</a><br>
+    · <a href="https://www.hankyung.com/article/2026082522021">한국경제 — 원전주 일제히 강세 (2026-08-25)</a><br>
+    · <a href="https://www.newsprime.co.kr/news/article/?no=722955">프라임경제 — 한전기술, 원전 설계 ‘양쪽 운동장’ 열린다</a><br>
+    · <a href="https://www.biztribune.co.kr/news/articleView.html?idxno=349383">비즈트리뷴 — 대신증권, 한전기술 원전설계 50년 노하우</a><br>
+    · <a href="https://www.edaily.co.kr/News/Read?newsId=04431286645550928">이데일리 — 美 원전에 돈·시공력 대고 주도권 내주나 (2026-08-25)</a><br>
+    · <a href="https://www.skenews.kr/news/articleView.html?idxno=52874">산경e뉴스 — ‘웨스팅하우스 지분 인수설’의 허상, 도시바 몰락 잊었나</a><br>
+    · <a href="https://www.cbci.co.kr/news/articleView.html?idxno=595800">CBC뉴스 — 한전기술 2분기 영업이익 30억원</a><br>
+    · <a href="https://www.cbci.co.kr/news/articleView.html?idxno=600947">CBC뉴스 — 대신증권 목표주가 16만원 (2026-08-10)</a><br>
+    · <a href="https://www.cbci.co.kr/news/articleView.html?idxno=581853">CBC뉴스 — 종가 급변 투자주의종목 지정 (2026-06)</a><br>
+    · <a href="https://news.nate.com/view/20260511n21562">LS증권 리포트 브리핑 — 목표가 230,000원</a><br>
+    · <a href="https://comp.wisereport.co.kr/company/c1010001.aspx?cmp_cd=052690">와이즈리포트 — 한전기술 기업현황(주주구성·컨센서스)</a><br>
+    · <a href="https://biz.newdaily.co.kr/site/data/html/2026/07/09/2026070900082.html">뉴데일리 — 12차 전기본 12월 발표</a>
+  </p>
+</section>
+
+<div class="foot">
+  <p><strong>면책.</strong> 이 문서는 공개된 시세·공시·언론 보도를 바탕으로 한 정량 분석 자료이며, 투자권유나 매매 추천이 아니다.
+    시나리오 확률, 2027~2028년 이익 추정, 적용 PER은 저자의 가정이며 컨센서스가 아니다.
+    몬테카를로 결과는 과거 변동성 구조가 유지된다는 가정에 의존하고, 회귀모형의 표본외 설명력은 대부분의 구간에서 0에 가깝다 —
+    본문에 그대로 적어두었다. 투자 판단과 그 결과는 투자자 본인의 책임이다.</p>
+  <p style="margin-top:10px">분석 기준일 2026-08-26 종가 · 모든 계산 코드와 원본 데이터는 저장소에 함께 커밋되어 있다.</p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var HIST = "250102:53700,250106:56100,250108:56900,250110:58900,250114:61300,250116:62300,250120:64600,250122:67900,250124:68200,250203:66500,250205:67600,250207:66800,250211:69400,250213:69800,250217:69400,250219:69900,250221:68700,250225:67400,250227:66600,250304:64100,250306:66000,250310:65500,250312:63800,250314:64000,250318:62200,250320:61000,250324:60700,250326:60300,250328:58900,250401:56900,250403:57200,250407:52400,250409:49950,250411:55600,250415:57200,250417:57300,250421:64400,250423:63100,250425:64500,250429:66700,250502:66000,250508:62600,250512:61600,250514:61700,250516:65100,250520:63000,250522:61000,250526:64700,250528:61700,250530:62800,250604:61100,250609:73400,250611:71400,250613:104100,250617:100500,250619:114000,250623:111700,250625:114900,250627:105400,250701:99400,250703:93300,250707:89500,250709:92100,250711:90900,250715:90500,250717:89500,250721:89400,250723:86700,250725:86700,250729:95100,250731:92300,250804:90000,250806:96300,250808:95700,250812:94600,250814:98100,250819:90300,250821:100300,250825:101200,250827:92700,250829:92400,250902:90400,250904:93400,250908:91400,250910:92600,250912:89700,250916:90100,250918:87100,250922:86300,250924:87800,250926:85000,250930:83800,251002:85900,251013:90200,251015:96700,251017:97700,251021:106000,251023:104300,251027:109200,251029:112900,251031:102200,251104:100600,251106:94300,251110:94300,251112:94600,251114:92000,251118:88600,251120:91500,251124:87300,251126:94400,251128:92000,251202:90100,251204:95100,251208:95900,251210:96200,251212:103900,251216:92800,251218:89200,251222:92700,251224:91000,251229:90300,260102:89800,260106:95800,260108:96600,260112:102500,260114:116800,260116:126700,260120:144700,260122:136700,260126:134100,260128:133900,260130:131400,260203:132100,260205:144100,260209:151700,260211:145000,260213:147800,260220:163300,260224:160500,260226:170100,260303:159600,260305:146200,260309:147700,260311:157400,260313:177700,260317:170600,260319:168000,260323:161100,260325:168800,260327:157000,260331:151300,260402:156200,260406:161200,260408:172800,260410:166000,260414:173000,260416:189100,260420:179000,260422:180400,260424:194800,260428:191900,260430:188600,260506:182000,260508:173600,260512:163500,260514:154900,260518:144700,260520:135500,260522:146500,260527:141800,260529:134300,260602:127600,260605:127300,260609:120300,260611:116400,260615:135000,260617:135300,260619:123700,260623:105000,260625:106600,260629:110700,260701:113900,260703:106200,260707:101700,260709:95900,260713:97600,260715:95000,260720:87000,260722:90400,260724:99100,260728:88800,260730:79900,260803:90700,260805:102500,260807:101900,260811:99600,260813:99800,260818:96500,260820:94200,260824:90300,260826:123400";
+  var FAN = "0:123400,123400,123400,123400,123400;5:92770,109936,120993,133887,162230;10:83959,105164,119500,136763,177681;15:78240,102323,118621,138455,185947;20:74237,100394,118417,139788,192314;25:71342,98933,117839,140675,196489;30:69167,97476,117650,141533,203667;35:66914,96278,117144,142727,207736;40:65530,95373,116935,143540,211311;45:63686,94419,116981,144874,215681;50:62019,93754,116944,145765,219931;55:60655,92871,116563,146422,222513;60:59423,91851,116639,147438,225459;65:58446,90905,116457,148508,228525;70:57196,90112,116039,149096,232625;75:56477,89519,116195,150218,235773;80:55128,89039,115857,151251,239792;85:54403,88418,115668,152524,242576;90:53372,87504,115611,153243,246098;95:52607,86741,115511,153814,250212;100:51876,86050,115329,154563,254783;105:50621,85444,115013,155027,258399;110:50279,84974,115003,156174,263792;115:49524,84570,114913,156112,265841;120:48692,84286,114979,157003,269329;125:47776,83535,114386,157458,271787;130:46891,83103,114322,157997,276215;135:46562,82294,114373,158323,280189;140:45930,81721,114239,158621,282554;145:45241,81313,114204,160291,287515;150:44749,80739,113928,161304,289693;155:43923,80288,113604,161871,292102;160:43336,79585,113345,162947,296170;165:42437,79221,113728,163603,298391;170:42222,78674,113827,164750,301493;175:41775,78388,113583,166185,305371;180:41378,78013,113734,166367,307342;185:40852,77297,113601,167066,311763;190:40377,76880,113518,167980,313150;195:40221,76279,113172,167973,322491;200:39309,76066,112920,168200,324804;205:38985,75708,113216,168816,324690;210:38618,74868,113175,169976,327387;215:37968,74597,113171,170739,331310;220:37075,73972,113119,171272,334123;225:36441,73953,112781,171849,338060;230:36248,73452,112715,172769,343217;235:35490,72851,112865,173781,344171;240:35432,72361,112917,174270,347802;245:35180,71958,112374,174338,353634;250:34652,71773,112309,175132,355037";
+  var VP = [[80000,0.7],[85000,7.9],[90000,10.5],[95000,10.9],[100000,8.7],[105000,6.9],[110000,4.3],[115000,0.7],[120000,5.1],[125000,1.3],[130000,2.2],[135000,6.0],[140000,6.3],[145000,7.4],[150000,1.8],[155000,2.2],[160000,4.1],[165000,2.7],[170000,4.4],[175000,0.7],[180000,2.0],[185000,2.2],[190000,0.9]];
+  var P0 = 123400;
+  var NS = "http://www.w3.org/2000/svg";
+  function el(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);return e;}
+  function cs(n){return "" + Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+  function css(v){return getComputedStyle(document.body).getPropertyValue(v).trim();}
+
+  var hist = HIST.split(",").map(function(s){var p=s.split(":");return {d:p[0], c:+p[1]};});
+  var fan  = FAN.split(";").map(function(s){var p=s.split(":");return {t:+p[0], q:p[1].split(",").map(Number)};});
+
+  function fmtD(d){ return "20"+d.slice(0,2)+"."+d.slice(2,4)+"."+d.slice(4,6); }
+
+  /* ---------- 1. price line ---------- */
+  function drawPrice(){
+    var host=document.getElementById("h-price"), tip=document.getElementById("t-price");
+    host.querySelectorAll("svg").forEach(function(s){s.remove();});
+    var W=host.clientWidth||900, H=Math.max(280, Math.min(400, W*0.42));
+    var m={t:18,r:16,b:28,l:56};
+    var iw=W-m.l-m.r, ih=H-m.t-m.b;
+    var ys=hist.map(function(p){return p.c;});
+    var lo=0, hi=Math.ceil(Math.max.apply(null,ys)/20000)*20000;
+    var X=function(i){return m.l + i/(hist.length-1)*iw;};
+    var Y=function(v){return m.t + (1-(v-lo)/(hi-lo))*ih;};
+    var svg=el("svg",{viewBox:"0 0 "+W+" "+H,role:"img","aria-label":"한전기술 2025년 이후 주가 추이"});
+    var g=el("g",{"class":"axis"});
+    for(var v=lo; v<=hi; v+=40000){
+      g.appendChild(el("line",{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v)}));
+      var tx=el("text",{x:m.l-8,y:Y(v)+3.5,"text-anchor":"end"}); tx.textContent=cs(v); g.appendChild(tx);
+    }
+    for(var i=0;i<hist.length;i+=24){
+      var t2=el("text",{x:X(i),y:H-8,"text-anchor":"middle"}); t2.textContent=fmtD(hist[i].d).slice(2,10); g.appendChild(t2);
+    }
+    svg.appendChild(g);
+    // area
+    var dA="M"+X(0)+","+Y(hist[0].c);
+    for(var k=1;k<hist.length;k++) dA+="L"+X(k)+","+Y(hist[k].c);
+    var dFill=dA+"L"+X(hist.length-1)+","+Y(lo)+"L"+X(0)+","+Y(lo)+"Z";
+    var grad=el("linearGradient",{id:"pg",x1:"0",y1:"0",x2:"0",y2:"1"});
+    var s1=el("stop",{offset:"0%","stop-color":css("--blue"),"stop-opacity":".22"});
+    var s2=el("stop",{offset:"100%","stop-color":css("--blue"),"stop-opacity":"0"});
+    grad.appendChild(s1);grad.appendChild(s2);
+    var defs=el("defs",{}); defs.appendChild(grad); svg.appendChild(defs);
+    svg.appendChild(el("path",{d:dFill,fill:"url(#pg)"}));
+    svg.appendChild(el("path",{d:dA,fill:"none",stroke:css("--blue"),"stroke-width":"2","stroke-linejoin":"round","stroke-linecap":"round"}));
+    // annotations
+    var marks=[{d:"260416",lbl:"장중 고점 198,000",dy:-13,anc:"middle"},{d:"260730",lbl:"종가 저점 79,900",dy:23,anc:"middle"},{d:"260826",lbl:"123,400",dy:-12,anc:"end"}];
+    marks.forEach(function(mk){
+      var idx=-1; for(var q=0;q<hist.length;q++) if(hist[q].d===mk.d) idx=q;
+      if(idx<0) return;
+      svg.appendChild(el("circle",{cx:X(idx),cy:Y(hist[idx].c),r:"4.5",fill:css("--card"),stroke:css("--blue"),"stroke-width":"2"}));
+      var t3=el("text",{x:X(idx),y:Y(hist[idx].c)+mk.dy,"text-anchor":mk.anc,"class":"dl",fill:css("--ink")});
+      t3.textContent=mk.lbl; svg.appendChild(t3);
+    });
+    var hover=el("line",{x1:0,x2:0,y1:m.t,y2:m.t+ih,stroke:css("--muted"),"stroke-width":"1","stroke-dasharray":"3 3",opacity:"0"});
+    svg.appendChild(hover);
+    var rect=el("rect",{x:m.l,y:m.t,width:iw,height:ih,fill:"transparent"});
+    svg.appendChild(rect);
+    host.appendChild(svg);
+    function move(ev){
+      var r=svg.getBoundingClientRect();
+      var px=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;
+      var sx=px*(W/r.width);
+      var i=Math.round((sx-m.l)/iw*(hist.length-1));
+      if(i<0)i=0; if(i>hist.length-1)i=hist.length-1;
+      hover.setAttribute("x1",X(i)); hover.setAttribute("x2",X(i)); hover.setAttribute("opacity","1");
+      tip.style.opacity="1";
+      tip.style.left=(X(i)/W*r.width)+"px";
+      tip.style.top=(Y(hist[i].c)/H*r.height)+"px";
+      tip.innerHTML=fmtD(hist[i].d)+"<br><b>"+cs(hist[i].c)+"원</b>";
+    }
+    rect.addEventListener("mousemove",move);
+    rect.addEventListener("touchmove",function(e){move(e);},{passive:true});
+    rect.addEventListener("mouseleave",function(){hover.setAttribute("opacity","0");tip.style.opacity="0";});
+  }
+
+  /* ---------- 2. fan chart ---------- */
+  function drawFan(){
+    var host=document.getElementById("h-fan"), tip=document.getElementById("t-fan");
+    host.querySelectorAll("svg").forEach(function(s){s.remove();});
+    var W=host.clientWidth||900, H=Math.max(300,Math.min(420,W*0.46));
+    var m={t:18,r:74,b:30,l:56}, iw=W-m.l-m.r, ih=H-m.t-m.b;
+    var lo=0, hi=380000;
+    var X=function(t){return m.l + t/250*iw;};
+    var Y=function(v){return m.t + (1-(v-lo)/(hi-lo))*ih;};
+    var svg=el("svg",{viewBox:"0 0 "+W+" "+H,role:"img","aria-label":"몬테카를로 예측 분포 팬 차트"});
+    var g=el("g",{"class":"axis"});
+    for(var v=lo; v<=hi; v+=80000){
+      g.appendChild(el("line",{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v)}));
+      var tx=el("text",{x:m.l-8,y:Y(v)+3.5,"text-anchor":"end"}); tx.textContent=cs(v); g.appendChild(tx);
+    }
+    [[0,"오늘"],[20,"1개월"],[60,"3개월"],[125,"6개월"],[250,"12개월"]].forEach(function(p){
+      g.appendChild(el("line",{x1:X(p[0]),x2:X(p[0]),y1:m.t,y2:m.t+ih,stroke:css("--grid")}));
+      var t2=el("text",{x:X(p[0]),y:H-9,"text-anchor":p[0]===0?"start":(p[0]===250?"end":"middle")}); t2.textContent=p[1]; g.appendChild(t2);
+    });
+    svg.appendChild(g);
+    function band(a,b,op){
+      var d="M"+X(fan[0].t)+","+Y(fan[0].q[a]);
+      fan.forEach(function(f){d+="L"+X(f.t)+","+Y(f.q[a]);});
+      for(var i=fan.length-1;i>=0;i--) d+="L"+X(fan[i].t)+","+Y(fan[i].q[b]);
+      d+="Z";
+      svg.appendChild(el("path",{d:d,fill:css("--blue"),opacity:op}));
+    }
+    band(0,4,.16); band(1,3,.42);
+    var dm="M"+X(fan[0].t)+","+Y(fan[0].q[2]);
+    fan.forEach(function(f){dm+="L"+X(f.t)+","+Y(f.q[2]);});
+    svg.appendChild(el("path",{d:dm,fill:"none",stroke:css("--card"),"stroke-width":"5.5","stroke-linecap":"round"}));
+    svg.appendChild(el("path",{d:dm,fill:"none",stroke:css("--blue"),"stroke-width":"2.5","stroke-linecap":"round"}));
+    svg.appendChild(el("line",{x1:m.l,x2:W-m.r,y1:Y(P0),y2:Y(P0),stroke:css("--muted"),"stroke-width":"2","stroke-dasharray":"5 4"}));
+    // end labels
+    var last=fan[fan.length-1];
+    [[4,"355,000",".16"],[3,"175,100",".42"],[2,"112,300","1"],[1,"71,800",".42"],[0,"34,700",".16"]].forEach(function(p){
+      var t3=el("text",{x:W-m.r+7,y:Y(last.q[p[0]])+3.5,"class":"dl",fill:p[0]===2?css("--blue"):css("--ink-2")});
+      t3.textContent=p[1]; svg.appendChild(t3);
+    });
+    var hover=el("line",{x1:0,x2:0,y1:m.t,y2:m.t+ih,stroke:css("--muted"),"stroke-width":"1","stroke-dasharray":"3 3",opacity:"0"});
+    svg.appendChild(hover);
+    var rect=el("rect",{x:m.l,y:m.t,width:iw,height:ih,fill:"transparent"});
+    svg.appendChild(rect); host.appendChild(svg);
+    function move(ev){
+      var r=svg.getBoundingClientRect();
+      var px=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;
+      var t=Math.round((px*(W/r.width)-m.l)/iw*250/5)*5;
+      if(t<0)t=0; if(t>250)t=250;
+      var f=null; for(var i=0;i<fan.length;i++) if(fan[i].t===t) f=fan[i];
+      if(!f) return;
+      hover.setAttribute("x1",X(t)); hover.setAttribute("x2",X(t)); hover.setAttribute("opacity","1");
+      tip.style.opacity="1";
+      tip.style.left=(X(t)/W*r.width)+"px";
+      tip.style.top=(Y(f.q[2])/H*r.height)+"px";
+      tip.innerHTML="+"+t+"영업일<br>95% "+cs(f.q[4])+"<br>75% "+cs(f.q[3])+"<br><b>50% "+cs(f.q[2])+"</b><br>25% "+cs(f.q[1])+"<br>&nbsp;5% "+cs(f.q[0]);
+    }
+    rect.addEventListener("mousemove",move);
+    rect.addEventListener("touchmove",function(e){move(e);},{passive:true});
+    rect.addEventListener("mouseleave",function(){hover.setAttribute("opacity","0");tip.style.opacity="0";});
+  }
+
+  /* ---------- 3. volume profile ---------- */
+  function drawVP(){
+    var host=document.getElementById("h-vol"), tip=document.getElementById("t-vol");
+    host.querySelectorAll("svg").forEach(function(s){s.remove();});
+    var W=host.clientWidth||900, rowH=17, H=VP.length*rowH+40;
+    var m={t:8,r:56,b:26,l:96}, iw=W-m.l-m.r;
+    var mx=11;
+    var svg=el("svg",{viewBox:"0 0 "+W+" "+H,role:"img","aria-label":"최근 1년 가격대별 거래량 매물대"});
+    var g=el("g",{"class":"axis"});
+    for(var p=0;p<=10;p+=5){
+      var gx=m.l+p/mx*iw;
+      g.appendChild(el("line",{x1:gx,x2:gx,y1:m.t,y2:m.t+VP.length*rowH}));
+      var tt=el("text",{x:gx,y:H-8,"text-anchor":"middle"}); tt.textContent=p+"%"; g.appendChild(tt);
+    }
+    svg.appendChild(g);
+    VP.forEach(function(row,i){
+      var y=m.t+(VP.length-1-i)*rowH;
+      var above=row[0]>=125000;
+      var col=above?css("--red"):css("--blue");
+      var w=Math.max(2,row[1]/mx*iw);
+      var bar=el("rect",{x:m.l,y:y+2.5,width:w,height:rowH-5,fill:col,rx:"2.5",opacity:".9"});
+      bar.style.cursor="crosshair";
+      svg.appendChild(bar);
+      var lt=el("text",{x:m.l-8,y:y+rowH/2+3.5,"text-anchor":"end","class":"axis"});
+      lt.setAttribute("fill",css("--ink-2"));
+      lt.setAttribute("style","font-family:'IBM Plex Mono',monospace;font-size:10.5px");
+      lt.textContent=cs(row[0])+"~"; svg.appendChild(lt);
+      var vt=el("text",{x:m.l+w+7,y:y+rowH/2+3.5,"class":"dl",fill:css("--ink-2")});
+      vt.textContent=row[1].toFixed(1)+"%"; svg.appendChild(vt);
+      bar.addEventListener("mouseenter",function(){
+        var r=svg.getBoundingClientRect();
+        tip.style.opacity="1";
+        tip.style.left=((m.l+w)/W*r.width)+"px";
+        tip.style.top=((y+rowH/2)/H*r.height)+"px";
+        tip.innerHTML=cs(row[0])+"~"+cs(row[0]+5000)+"원<br><b>"+row[1].toFixed(1)+"%</b> · "+(above?"저항":"지지");
+      });
+      bar.addEventListener("mouseleave",function(){tip.style.opacity="0";});
+    });
+    var i120=0; VP.forEach(function(r,ix){if(r[0]===120000) i120=ix;});
+    var cy=m.t+(VP.length-1-i120)*rowH + rowH*(1-(P0-120000)/5000);
+    svg.appendChild(el("line",{x1:m.l-4,x2:W-m.r,y1:cy,y2:cy,stroke:css("--muted"),"stroke-width":"1.5","stroke-dasharray":"4 3"}));
+    var cl=el("text",{x:W-m.r+4,y:cy+3.5,"class":"dl",fill:css("--muted")});
+    cl.textContent="현재가"; svg.appendChild(cl);
+    host.appendChild(svg);
+  }
+
+  /* ---------- 4. scenario bars ---------- */
+  function drawSC(){
+    var host=document.getElementById("h-sc"), tip=document.getElementById("t-sc");
+    host.querySelectorAll("svg").forEach(function(s){s.remove();});
+    var data=[{n:"Bull",v:255756,p:19,c:"--blue"},{n:"Base",v:145997,p:59,c:"--blue"},{n:"Bear",v:69074,p:22,c:"--red"}];
+    var W=host.clientWidth||900, rowH=64, H=data.length*rowH+52;
+    var m={t:10,r:96,b:30,l:64}, iw=W-m.l-m.r, mx=280000;
+    var svg=el("svg",{viewBox:"0 0 "+W+" "+H,role:"img","aria-label":"시나리오별 12개월 목표주가"});
+    var g=el("g",{"class":"axis"});
+    for(var v=0;v<=280000;v+=70000){
+      var gx=m.l+v/mx*iw;
+      g.appendChild(el("line",{x1:gx,x2:gx,y1:m.t,y2:m.t+data.length*rowH}));
+      var tt=el("text",{x:gx,y:H-8,"text-anchor":"middle"}); tt.textContent=cs(v); g.appendChild(tt);
+    }
+    svg.appendChild(g);
+    data.forEach(function(d,i){
+      var y=m.t+i*rowH, w=d.v/mx*iw;
+      var bar=el("rect",{x:m.l,y:y+14,width:w,height:rowH-30,fill:css(d.c),rx:"3",opacity:(d.n==="Base"?".95":".62")});
+      bar.style.cursor="crosshair"; svg.appendChild(bar);
+      var nt=el("text",{x:m.l-8,y:y+rowH/2+4,"text-anchor":"end","class":"dl",fill:css("--ink")});
+      nt.setAttribute("style","font-size:13px;font-weight:600"); nt.textContent=d.n; svg.appendChild(nt);
+      var vt=el("text",{x:m.l+w+9,y:y+rowH/2,"class":"dl",fill:css("--ink")});
+      vt.setAttribute("style","font-size:14px;font-weight:600"); vt.textContent=cs(d.v); svg.appendChild(vt);
+      var pt=el("text",{x:m.l+w+9,y:y+rowH/2+15,"class":"dl",fill:css("--muted")});
+      pt.textContent="확률 "+d.p+"%"; svg.appendChild(pt);
+      bar.addEventListener("mouseenter",function(){
+        var r=svg.getBoundingClientRect();
+        tip.style.opacity="1";
+        tip.style.left=((m.l+w/2)/W*r.width)+"px";
+        tip.style.top=((y+16)/H*r.height)+"px";
+        tip.innerHTML=d.n+" 시나리오<br><b>"+cs(d.v)+"원</b> ("+(d.v>P0?"+":"")+Math.round((d.v/P0-1)*100)+"%)<br>확률 "+d.p+"%";
+      });
+      bar.addEventListener("mouseleave",function(){tip.style.opacity="0";});
+    });
+    var cx=m.l+P0/mx*iw;
+    svg.appendChild(el("line",{x1:cx,x2:cx,y1:m.t,y2:m.t+data.length*rowH,stroke:css("--muted"),"stroke-width":"1.5","stroke-dasharray":"5 4"}));
+    var cl=el("text",{x:cx,y:m.t-1,"class":"dl","text-anchor":"middle",fill:css("--muted")});
+    cl.textContent="현재 123,400"; svg.appendChild(cl);
+    host.appendChild(svg);
+  }
+
+  function drawAll(){ drawPrice(); drawFan(); drawVP(); drawSC(); }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",drawAll);
+  else drawAll();
+  var rt; window.addEventListener("resize",function(){clearTimeout(rt); rt=setTimeout(drawAll,180);});
+  if(window.matchMedia) window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawAll);
+  new MutationObserver(drawAll).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+})();
+</script>
