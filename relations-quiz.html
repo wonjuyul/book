@@ -1,0 +1,867 @@
+<title>사상가 관계 퀴즈</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* ══ 토큰 — 관계도와 같은 종이·먹, 채점은 빨간 펜 ══════════════════ */
+:root{
+  --paper:#EFEEE9; --surface:#F8F7F3; --surface-2:#E8E6DF;
+  --ink:#1B1A17; --ink-2:#54514A; --ink-3:#8A8578;
+  --rule:#D8D5CB; --rule-2:#C4C0B3;
+  --seal:#A8382C; --seal-soft:rgba(168,56,44,.09); --seal-line:rgba(168,56,44,.36);
+  --right:#3A6E4B; --right-soft:rgba(58,110,75,.10); --right-line:rgba(58,110,75,.36);
+  --grid:rgba(27,26,23,.05);
+  --shadow:0 1px 2px rgba(27,26,23,.05), 0 10px 28px rgba(27,26,23,.07);
+  --g-ru:#A6402F;  --g-dao:#3F7A63; --g-mofa:#6B5844; --g-bud:#7A4370;
+  --g-anc:#2F5590;  --g-mod:#4E7580; --g-norm:#2E2D28; --g-just:#5A4E9C;
+  --g-envi:#5A7A2E; --g-cult:#C2661A; --g-care:#B04A6B;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#171612; --surface:#201E19; --surface-2:#2A2822;
+  --ink:#EDEAE1; --ink-2:#B4AFA2; --ink-3:#847F72;
+  --rule:#35322A; --rule-2:#474338;
+  --seal:#DF7A63; --seal-soft:rgba(223,122,99,.13); --seal-line:rgba(223,122,99,.42);
+  --right:#7DBE92; --right-soft:rgba(125,190,146,.13); --right-line:rgba(125,190,146,.42);
+  --grid:rgba(237,234,225,.05);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.45);
+  --g-ru:#E0745C;  --g-dao:#6FB795; --g-mofa:#BFA588; --g-bud:#C288B4;
+  --g-anc:#7FA6E0;  --g-mod:#8FBBC6; --g-norm:#D8D3C4; --g-just:#A197E6;
+  --g-envi:#A2C75B; --g-cult:#E9A05A; --g-care:#E68CA8;
+}}
+:root[data-theme="dark"]{
+  --paper:#171612; --surface:#201E19; --surface-2:#2A2822;
+  --ink:#EDEAE1; --ink-2:#B4AFA2; --ink-3:#847F72;
+  --rule:#35322A; --rule-2:#474338;
+  --seal:#DF7A63; --seal-soft:rgba(223,122,99,.13); --seal-line:rgba(223,122,99,.42);
+  --right:#7DBE92; --right-soft:rgba(125,190,146,.13); --right-line:rgba(125,190,146,.42);
+  --grid:rgba(237,234,225,.05);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.45);
+  --g-ru:#E0745C;  --g-dao:#6FB795; --g-mofa:#BFA588; --g-bud:#C288B4;
+  --g-anc:#7FA6E0;  --g-mod:#8FBBC6; --g-norm:#D8D3C4; --g-just:#A197E6;
+  --g-envi:#A2C75B; --g-cult:#E9A05A; --g-care:#E68CA8;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100dvh; color:var(--ink);
+  background:
+    repeating-linear-gradient(0deg, var(--grid) 0 1px, transparent 1px 30px),
+    var(--paper);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+:focus-visible{outline:2px solid var(--seal); outline-offset:3px; border-radius:3px}
+.wrap{max-width:46rem; margin:0 auto; padding:0 1.15rem 5rem}
+#play,#result,#setup{scroll-margin-top:4.6rem}
+
+/* ══ 머리 ══════════════════════════════════════════════════════════ */
+.top{
+  position:sticky; top:0; z-index:20; background:var(--paper);
+  border-bottom:1px solid var(--rule); margin-bottom:1.6rem;
+}
+.top .bar{height:2px; background:var(--rule); position:relative}
+.top .bar i{position:absolute; inset:0 auto 0 0; background:var(--seal); width:0; transition:width .3s}
+.top .row{
+  max-width:46rem; margin:0 auto; padding:.7rem 1.15rem;
+  display:flex; align-items:baseline; gap:.8rem;
+}
+.top h1{
+  margin:0; font-family:"Gowun Batang",serif; font-weight:700; font-size:1.08rem;
+  letter-spacing:-.01em; white-space:nowrap;
+}
+.top h1 .seal{
+  display:inline-block; margin-right:.45rem; padding:.1em .32em .16em;
+  background:var(--seal); color:var(--paper); border-radius:2px; font-size:.78em; vertical-align:.08em;
+}
+.counter{
+  font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-3);
+  font-variant-numeric:tabular-nums; letter-spacing:.02em;
+}
+.counter b{color:var(--ink-2); font-weight:500}
+.score{margin-left:auto; display:flex; gap:.55rem; font-family:"IBM Plex Mono",monospace; font-size:.74rem; font-variant-numeric:tabular-nums}
+.score .o{color:var(--right)} .score .x{color:var(--seal)}
+.quit{
+  font:inherit; font-size:.72rem; background:none; border:1px solid var(--rule-2); color:var(--ink-3);
+  padding:.24rem .46rem; border-radius:2px; cursor:pointer;
+}
+.quit:hover{border-color:var(--seal-line); color:var(--seal)}
+
+/* ══ 시작 화면 ═════════════════════════════════════════════════════ */
+.lede{
+  font-family:"Gowun Batang",serif; font-size:1.28rem; line-height:1.62; text-wrap:pretty;
+  margin:2.4rem 0 .6rem;
+}
+.sub{font-size:.87rem; line-height:1.72; color:var(--ink-2); margin:0 0 2rem; text-wrap:pretty}
+.sechead{
+  display:flex; align-items:baseline; gap:.6rem; margin:2rem 0 .75rem;
+  font-family:"IBM Plex Mono",monospace; font-size:.65rem; letter-spacing:.15em;
+  text-transform:uppercase; color:var(--ink-3);
+}
+.sechead::after{content:""; flex:1; height:1px; background:var(--rule)}
+.sechead .note{text-transform:none; letter-spacing:.02em; font-family:inherit; color:var(--ink-3); font-size:.7rem}
+
+.opts{display:flex; flex-wrap:wrap; gap:.4rem}
+.opt{
+  font:inherit; font-size:.8rem; padding:.46rem .68rem; cursor:pointer; border-radius:2px;
+  background:var(--surface); border:1px solid var(--rule-2); color:var(--ink-2); text-align:left;
+  transition:background .12s, border-color .12s, color .12s;
+}
+.opt:hover{border-color:var(--ink-3); color:var(--ink)}
+.opt[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--paper)}
+.opt .n{font-family:"IBM Plex Mono",monospace; font-size:.68rem; opacity:.72; margin-left:.42rem}
+.opt small{display:block; font-size:.68rem; opacity:.72; margin-top:.16rem; font-weight:400}
+
+.people{display:grid; grid-template-columns:repeat(auto-fill,minmax(8.2rem,1fr)); gap:.3rem}
+.person{
+  font:inherit; font-size:.79rem; padding:.42rem .55rem; cursor:pointer; border-radius:2px;
+  display:flex; align-items:center; gap:.42rem; text-align:left;
+  background:var(--surface); border:1px solid var(--rule); color:var(--ink-2);
+}
+.person:hover{border-color:var(--rule-2); color:var(--ink)}
+.person[aria-pressed="true"]{background:var(--seal-soft); border-color:var(--seal-line); color:var(--ink)}
+.person .k{width:.52rem; height:.52rem; border-radius:50%; flex:0 0 auto}
+.person .nm{font-family:"Gowun Batang",serif; font-weight:700}
+.person .n{margin-left:auto; font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.morebtn{
+  font:inherit; font-size:.75rem; margin-top:.5rem; background:none; border:0; cursor:pointer;
+  color:var(--seal); text-decoration:underline; text-underline-offset:3px; padding:.3rem 0;
+}
+.startbar{
+  position:sticky; bottom:0; margin-top:2.4rem; padding:1rem 0 1.15rem;
+  background:var(--paper); border-top:1px solid var(--rule);
+  display:flex; align-items:center; gap:.9rem; flex-wrap:wrap;
+}
+.start{
+  font:inherit; font-family:"Gowun Batang",serif; font-weight:700; font-size:1rem;
+  padding:.72rem 1.5rem; cursor:pointer; border-radius:2px;
+  background:var(--ink); color:var(--paper); border:1px solid var(--ink);
+}
+.start:hover{background:var(--seal); border-color:var(--seal)}
+.start:disabled{opacity:.34; cursor:not-allowed}
+.startbar .tally{font-size:.79rem; color:var(--ink-2)}
+.startbar .tally b{font-family:"IBM Plex Mono",monospace; color:var(--ink); font-weight:500}
+</style>
+<style>
+/* ══ 문제 ══════════════════════════════════════════════════════════ */
+.qhead{display:flex; align-items:center; gap:.5rem; margin:1.8rem 0 .9rem; flex-wrap:wrap}
+.qno{
+  font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--seal);
+  letter-spacing:.06em; font-variant-numeric:tabular-nums;
+}
+.qkind{
+  font-family:"IBM Plex Mono",monospace; font-size:.62rem; letter-spacing:.1em;
+  padding:.2rem .38rem; border:1px solid var(--rule-2); color:var(--ink-3); border-radius:2px;
+}
+.qkind.trap{border-color:var(--seal-line); color:var(--seal)}
+.badge-infer{
+  font-family:"IBM Plex Mono",monospace; font-size:.58rem; letter-spacing:.06em;
+  padding:.12rem .3rem; border:1px dashed var(--rule-2); color:var(--ink-3); border-radius:2px;
+}
+.pair{
+  display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; margin-bottom:.85rem;
+  font-family:"Gowun Batang",serif; font-weight:700; font-size:1.28rem;
+}
+.pair .dash{color:var(--ink-3); font-weight:400; font-size:1rem}
+.stem{
+  font-family:"Gowun Batang",serif; font-size:1.14rem; line-height:1.74; text-wrap:pretty;
+  padding:1rem 1.1rem; background:var(--surface); border-left:2px solid var(--ink);
+  margin:0 0 1.3rem;
+}
+.stem .mask{
+  display:inline-block; min-width:2.6em; text-align:center; color:var(--seal);
+  border-bottom:1.5px solid var(--seal-line); font-weight:700;
+}
+.ask{font-size:.95rem; line-height:1.6; color:var(--ink); margin:0 0 1rem; font-weight:500; text-wrap:pretty}
+
+.choices{display:flex; flex-direction:column; gap:.45rem}
+.choice{
+  position:relative; font:inherit; font-size:.94rem; line-height:1.55; text-align:left; cursor:pointer;
+  padding:.78rem 3rem .78rem .95rem; border-radius:2px;
+  background:var(--surface); border:1px solid var(--rule-2); color:var(--ink);
+  transition:border-color .12s, background .12s;
+}
+.choice:hover:not(:disabled){border-color:var(--ink-3)}
+.choice:disabled{cursor:default}
+.choice .lead{
+  font-family:"IBM Plex Mono",monospace; font-size:.7rem; color:var(--ink-3); margin-right:.6rem;
+}
+.choice small{display:block; font-size:.74rem; color:var(--ink-3); margin-top:.2rem}
+.choice.right{border-color:var(--right-line); background:var(--right-soft)}
+.choice.wrong{border-color:var(--seal-line); background:var(--seal-soft)}
+.choice .mark{position:absolute; right:.7rem; top:50%; transform:translateY(-50%); width:1.9rem; height:1.9rem}
+.choice .mark path,.choice .mark circle{fill:none; stroke-width:2.1; stroke-linecap:round}
+.choice.right .mark circle{stroke:var(--right)}
+.choice.wrong .mark path{stroke:var(--seal)}
+@media (prefers-reduced-motion:no-preference){
+  .choice .mark circle,.choice .mark path{stroke-dasharray:90; stroke-dashoffset:90; animation:ink .42s ease-out forwards}
+  .choice .mark path:nth-child(2){animation-delay:.16s}
+}
+@keyframes ink{to{stroke-dashoffset:0}}
+
+/* ══ 해설 ══════════════════════════════════════════════════════════ */
+.feedback{margin-top:1.3rem; border-top:2px solid var(--ink); padding-top:.95rem}
+.verdict{
+  display:flex; align-items:center; gap:.5rem; font-family:"Gowun Batang",serif;
+  font-weight:700; font-size:1.02rem; margin-bottom:.6rem;
+}
+.verdict.o{color:var(--right)} .verdict.x{color:var(--seal)}
+.truth{
+  font-family:"Gowun Batang",serif; font-size:1rem; line-height:1.6; color:var(--ink);
+  margin:0 0 .55rem; text-wrap:pretty;
+}
+.why{font-size:.86rem; line-height:1.72; color:var(--ink-2); margin:0; text-wrap:pretty}
+.why .src{
+  display:block; margin-top:.5rem; font-family:"IBM Plex Mono",monospace;
+  font-size:.66rem; color:var(--ink-3); letter-spacing:.02em;
+}
+.next{
+  font:inherit; font-family:"Gowun Batang",serif; font-weight:700; font-size:.94rem;
+  margin-top:1.15rem; padding:.62rem 1.3rem; cursor:pointer; border-radius:2px;
+  background:var(--ink); color:var(--paper); border:1px solid var(--ink);
+}
+.next:hover{background:var(--seal); border-color:var(--seal)}
+
+/* ══ 결과 ══════════════════════════════════════════════════════════ */
+.result-top{display:flex; align-items:center; gap:1.6rem; margin:2.4rem 0 .5rem; flex-wrap:wrap}
+.ring{position:relative; width:7.5rem; height:7.5rem; flex:0 0 auto}
+.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none; stroke-width:6}
+.ring .bg{stroke:var(--rule)}
+.ring .fg{stroke:var(--seal); stroke-linecap:round; transition:stroke-dashoffset .8s ease-out}
+.ring .num{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;
+}
+.ring .num b{font-size:1.85rem; font-weight:500; line-height:1}
+.ring .num span{font-size:.66rem; color:var(--ink-3); margin-top:.25rem; letter-spacing:.08em}
+.result-top .said{font-family:"Gowun Batang",serif; font-size:1.22rem; line-height:1.58; flex:1 1 14rem; text-wrap:pretty}
+.bykind{display:flex; flex-direction:column; gap:.45rem; margin-top:.4rem}
+.bykind .row{display:flex; align-items:center; gap:.6rem; font-size:.8rem}
+.bykind .nm{width:7.5rem; flex:0 0 auto; color:var(--ink-2)}
+.bykind .track{flex:1; height:.4rem; background:var(--rule); border-radius:2px; overflow:hidden}
+.bykind .track i{display:block; height:100%; background:var(--right)}
+.bykind .val{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--ink-3); font-variant-numeric:tabular-nums; width:3.4rem; text-align:right}
+
+.misses{display:flex; flex-direction:column; gap:.5rem}
+.miss{padding:.7rem .85rem; background:var(--surface); border:1px solid var(--rule); border-left:2px solid var(--seal); border-radius:2px}
+.miss .q{font-family:"Gowun Batang",serif; font-weight:700; font-size:.92rem; margin-bottom:.28rem; text-wrap:pretty}
+.miss .kindtag{
+  display:inline-block; margin-right:.45rem; font-family:"IBM Plex Mono",monospace; font-weight:400;
+  font-size:.58rem; letter-spacing:.06em; color:var(--ink-3); border:1px solid var(--rule-2);
+  border-radius:2px; padding:.1rem .28rem; vertical-align:.14em;
+}
+.miss .a{font-size:.78rem; line-height:1.62; color:var(--ink-2)}
+.miss .a b{color:var(--right); font-weight:500}
+.miss .a s{color:var(--seal); text-decoration-color:var(--seal-line)}
+.again{display:flex; gap:.55rem; flex-wrap:wrap; margin-top:1.6rem}
+.again button{
+  font:inherit; font-size:.88rem; font-family:"Gowun Batang",serif; font-weight:700;
+  padding:.6rem 1.15rem; cursor:pointer; border-radius:2px;
+  background:var(--surface); border:1px solid var(--rule-2); color:var(--ink);
+}
+.again button.primary{background:var(--ink); border-color:var(--ink); color:var(--paper)}
+.again button:hover{border-color:var(--seal); color:var(--seal)}
+.again button.primary:hover{background:var(--seal); color:var(--paper)}
+.footnote{margin-top:2.6rem; padding-top:1rem; border-top:1px solid var(--rule); font-size:.75rem; line-height:1.7; color:var(--ink-3)}
+.footnote a{color:var(--seal)}
+.hidden{display:none !important}
+@media (max-width:560px){
+  .lede{font-size:1.14rem} .stem{font-size:1.05rem; padding:.85rem .9rem}
+  .pair{font-size:1.12rem} .choice{font-size:.9rem; padding:.7rem 2.7rem .7rem .8rem}
+  .people{grid-template-columns:repeat(auto-fill,minmax(7.2rem,1fr))}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms !important; animation-duration:.01ms !important}}
+</style>
+
+<header class="top">
+  <div class="bar"><i id="bar"></i></div>
+  <div class="row">
+    <h1><span class="seal">問</span>관계 퀴즈</h1>
+    <span class="counter" id="counter"></span>
+    <span class="score" id="score"></span>
+    <button type="button" class="quit hidden" id="quit">그만두기</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="setup"></section>
+  <section id="play" class="hidden"></section>
+  <section id="result" class="hidden"></section>
+</main>
+
+<script>
+const GROUPS = [{"id":"ru","label":"유가"},{"id":"dao","label":"도가"},{"id":"mofa","label":"묵가·법가"},{"id":"bud","label":"불교"},{"id":"anc","label":"서양 고전·중세"},{"id":"mod","label":"근대"},{"id":"norm","label":"근대 규범윤리"},{"id":"just","label":"사회·정의·담론"},{"id":"envi","label":"생명·환경·기술"},{"id":"cult","label":"문화·종교·소비"},{"id":"care","label":"사랑·배려·평화"}];
+
+const NODES = [
+  {"id":"confucius","name":"공자","sub":"孔子","group":"ru","school":"유가","units":[1,2,3,5,6]},
+  {"id":"mencius","name":"맹자","sub":"孟子","group":"ru","school":"유가","units":[1,2,3]},
+  {"id":"xunzi","name":"순자","sub":"荀子","group":"ru","school":"유가","units":[1,3,5]},
+  {"id":"jeong","name":"정약용","sub":"丁若鏞","group":"ru","school":"유가(실학)","units":[3]},
+  {"id":"laozi","name":"노자","sub":"老子","group":"dao","school":"도가","units":[1,4]},
+  {"id":"zhuangzi","name":"장자","sub":"莊子","group":"dao","school":"도가","units":[1,2,4,5,6]},
+  {"id":"mozi","name":"묵자","sub":"墨子","group":"mofa","school":"묵가","units":[1,3,5]},
+  {"id":"hanfeizi","name":"한비자","sub":"韓非子","group":"mofa","school":"법가","units":[1,3]},
+  {"id":"buddhism","name":"불교","sub":"석가모니 · 연기설","group":"bud","school":"불교","units":[1,2,4,5]},
+  {"id":"wonhyo","name":"원효","sub":"元曉","group":"bud","school":"불교(화쟁)","units":[6]},
+  {"id":"socrates","name":"소크라테스","sub":"Socrates","group":"anc","school":"고대 그리스","units":[3]},
+  {"id":"plato","name":"플라톤","sub":"Platon","group":"anc","school":"이데아론","units":[2,3,5,6]},
+  {"id":"aristotle","name":"아리스토텔레스","sub":"Aristoteles","group":"anc","school":"덕윤리·목적론","units":[1,2,3,4,5]},
+  {"id":"epicurus","name":"에피쿠로스","sub":"Epikouros","group":"anc","school":"원자론·쾌락주의","units":[2]},
+  {"id":"stoics","name":"스토아학파","sub":"Stoicism","group":"anc","school":"자연법·세계시민주의","units":[1,6]},
+  {"id":"aquinas","name":"아퀴나스","sub":"Thomas Aquinas","group":"anc","school":"스콜라·자연법","units":[1,2,3,4]},
+  {"id":"descartes","name":"데카르트","sub":"René Descartes","group":"mod","school":"기계론","units":[2,4]},
+  {"id":"bacon","name":"베이컨","sub":"Francis Bacon","group":"mod","school":"경험론","units":[2,4]},
+  {"id":"luther","name":"루터","sub":"Martin Luther","group":"mod","school":"종교개혁","units":[3]},
+  {"id":"calvin","name":"칼뱅","sub":"Jean Calvin","group":"mod","school":"예정설","units":[3]},
+  {"id":"hobbes","name":"홉스","sub":"Thomas Hobbes","group":"mod","school":"사회계약","units":[3,4,6]},
+  {"id":"locke","name":"로크","sub":"John Locke","group":"mod","school":"사회계약","units":[3,5]},
+  {"id":"rousseau","name":"루소","sub":"Jean-Jacques Rousseau","group":"mod","school":"사회계약","units":[3]},
+  {"id":"hume","name":"흄","sub":"David Hume","group":"mod","school":"도덕감정론","units":[1]},
+  {"id":"marx","name":"마르크스","sub":"Karl Marx","group":"mod","school":"유물론","units":[3,4,5]},
+  {"id":"weber","name":"베버","sub":"Max Weber","group":"mod","school":"사회학","units":[3,4]},
+  {"id":"schopenhauer","name":"쇼펜하우어","sub":"Arthur Schopenhauer","group":"mod","school":"의지의 철학","units":[2]},
+  {"id":"beccaria","name":"베카리아","sub":"Cesare Beccaria","group":"mod","school":"형법개혁","units":[3]},
+  {"id":"kant","name":"칸트","sub":"Immanuel Kant","group":"norm","school":"의무론","units":[1,2,3,4,5,6]},
+  {"id":"bentham","name":"벤담","sub":"Jeremy Bentham","group":"norm","school":"양적 공리주의","units":[1,2,3,4]},
+  {"id":"mill","name":"밀","sub":"John Stuart Mill","group":"norm","school":"질적 공리주의","units":[1,2,5,6]},
+  {"id":"macintyre","name":"매킨타이어","sub":"Alasdair MacIntyre","group":"norm","school":"공동체주의 덕윤리","units":[1,3,4]},
+  {"id":"niebuhr","name":"니부어","sub":"Reinhold Niebuhr","group":"just","school":"사회윤리·현실주의","units":[3,6]},
+  {"id":"morgenthau","name":"모겐소","sub":"Hans Morgenthau","group":"just","school":"고전적 현실주의","units":[6]},
+  {"id":"rawls","name":"롤스","sub":"John Rawls","group":"just","school":"공정으로서의 정의","units":[2,3,5,6]},
+  {"id":"nozick","name":"노직","sub":"Robert Nozick","group":"just","school":"소유권리론","units":[1,3,6]},
+  {"id":"walzer","name":"왈처","sub":"Michael Walzer","group":"just","school":"복합적 평등","units":[3]},
+  {"id":"dworkin","name":"드워킨","sub":"Ronald Dworkin","group":"just","school":"법철학","units":[3]},
+  {"id":"habermas","name":"하버마스","sub":"Jürgen Habermas","group":"just","school":"담론윤리","units":[2,6]},
+  {"id":"apel","name":"아펠","sub":"Karl-Otto Apel","group":"just","school":"담론윤리","units":[6]},
+  {"id":"singer","name":"싱어","sub":"Peter Singer","group":"envi","school":"동물해방론(공리주의)","units":[2,3,4,6]},
+  {"id":"regan","name":"레건","sub":"Tom Regan","group":"envi","school":"동물권리론","units":[2,4]},
+  {"id":"schweitzer","name":"슈바이처","sub":"Albert Schweitzer","group":"envi","school":"생명중심주의","units":[2,4]},
+  {"id":"taylor","name":"테일러","sub":"Paul Taylor","group":"envi","school":"생명중심주의","units":[4]},
+  {"id":"leopold","name":"레오폴드","sub":"Aldo Leopold","group":"envi","school":"대지윤리(전체론)","units":[4]},
+  {"id":"naess","name":"네스","sub":"Arne Naess","group":"envi","school":"심층생태학","units":[4]},
+  {"id":"jonas","name":"요나스","sub":"Hans Jonas","group":"envi","school":"책임 윤리","units":[1,4]},
+  {"id":"norton","name":"노턴","sub":"Bryan Norton","group":"envi","school":"온건한 인간중심주의","units":[4]},
+  {"id":"passmore","name":"패스모어","sub":"John Passmore","group":"envi","school":"온건한 인간중심주의","units":[4]},
+  {"id":"popper","name":"포퍼","sub":"Karl Popper","group":"envi","school":"반증주의","units":[4,5]},
+  {"id":"heidegger","name":"하이데거","sub":"Martin Heidegger","group":"envi","school":"실존주의·기술철학","units":[2,4,5]},
+  {"id":"jaspers","name":"야스퍼스","sub":"Karl Jaspers","group":"envi","school":"기술철학","units":[4]},
+  {"id":"heisenberg","name":"하이젠베르크","sub":"Werner Heisenberg","group":"envi","school":"과학자의 책임","units":[4]},
+  {"id":"oppenheimer","name":"오펜하이머","sub":"J. Robert Oppenheimer","group":"envi","school":"과학자의 책임","units":[4]},
+  {"id":"tolstoy","name":"톨스토이","sub":"Lev Tolstoy","group":"cult","school":"예술론(도덕주의)","units":[5]},
+  {"id":"adorno","name":"아도르노","sub":"Theodor Adorno","group":"cult","school":"프랑크푸르트학파","units":[5]},
+  {"id":"benjamin","name":"벤야민","sub":"Walter Benjamin","group":"cult","school":"프랑크푸르트학파","units":[5]},
+  {"id":"baudrillard","name":"보드리야르","sub":"Jean Baudrillard","group":"cult","school":"소비사회론","units":[5]},
+  {"id":"veblen","name":"베블런","sub":"Thorstein Veblen","group":"cult","school":"유한계급론","units":[5]},
+  {"id":"simmel","name":"짐멜","sub":"Georg Simmel","group":"cult","school":"유행론","units":[5]},
+  {"id":"eliade","name":"엘리아데","sub":"Mircea Eliade","group":"cult","school":"종교학","units":[5]},
+  {"id":"durkheim","name":"뒤르켐","sub":"Émile Durkheim","group":"cult","school":"종교사회학","units":[5]},
+  {"id":"freud","name":"프로이트","sub":"Sigmund Freud","group":"cult","school":"정신분석","units":[5]},
+  {"id":"kung","name":"퀭","sub":"Hans Küng","group":"cult","school":"종교 간 대화","units":[5]},
+  {"id":"otto","name":"오토","sub":"Rudolf Otto","group":"cult","school":"종교현상학","units":[5]},
+  {"id":"tillich","name":"틸리히","sub":"Paul Tillich","group":"cult","school":"조직신학","units":[5]},
+  {"id":"fromm","name":"프롬","sub":"Erich Fromm","group":"care","school":"사랑론","units":[2]},
+  {"id":"gilligan","name":"길리건","sub":"Carol Gilligan","group":"care","school":"배려윤리","units":[2]},
+  {"id":"noddings","name":"나딩스","sub":"Nel Noddings","group":"care","school":"배려윤리","units":[2]},
+  {"id":"beauvoir","name":"보부아르","sub":"Simone de Beauvoir","group":"care","school":"여성주의","units":[2]},
+  {"id":"galtung","name":"갈퉁","sub":"Johan Galtung","group":"care","school":"평화학","units":[6]},
+  {"id":"thoreau","name":"소로","sub":"Henry David Thoreau","group":"care","school":"시민불복종","units":[3,6]},
+  {"id":"gandhi","name":"간디","sub":"Mahatma Gandhi","group":"care","school":"시민불복종","units":[3]},
+  {"id":"king","name":"마틴 루터 킹","sub":"Martin Luther King Jr.","group":"care","school":"시민불복종","units":[3]},
+  {"id":"beitz","name":"베이츠","sub":"Charles Beitz","group":"care","school":"세계시민주의","units":[6]},
+  {"id":"pogge","name":"포기","sub":"Thomas Pogge","group":"care","school":"세계시민주의","units":[6]}
+];
+
+const RELS = [
+  {"s":"confucius","t":"mencius","type":"계승","label":"인(仁)의 계승 — 공자의 \"성상근 습상원\"을 이어 성선설로 인성론을 처음 제기하고 사단을 사덕으로 확충한다."},
+  {"s":"confucius","t":"xunzi","type":"계승","label":"예(禮)의 계승 — 공자의 예를 이어받되 그것을 타고난 도덕성이 아니라 본성을 다스리는 인위(僞)로 본다."},
+  {"s":"mencius","t":"xunzi","type":"대립","label":"악의 기원 — 맹자는 환경·외물에서, 순자는 본성 그 자체에서 찾는다. 다만 맹자도 악행 가능성을, 순자도 선행 가능성을 부정하지는 않는다."},
+  {"s":"xunzi","t":"hanfeizi","type":"계승","label":"둘 다 인성을 \"이익을 좋아하고 손해를 싫어하는 것\"으로 파악하지만, 순자는 인성이 예로써 교화 가능하다고 보고 한비자는 변화 불가능하므로 법으로 통제해야 한다고 본다."},
+  {"s":"mozi","t":"confucius","type":"비판","label":"유교의 인(仁)은 차등적 사랑이라 자기 가족·나라를 우선하는 편애로 귀결된다 — 겸상애 교상리로 대체해야 한다."},
+  {"s":"mozi","t":"mencius","type":"대립","label":"의(義)와 이(利) — 묵자는 \"의로움 = 천하의 이익을 도모하는 능력\"이라 하여 둘의 우열을 두지 않지만, 맹자는 의를 이에 우선시한다."},
+  {"s":"laozi","t":"confucius","type":"비판","label":"인위적 도덕·예가 오히려 혼란의 원인이다 — 도(道)는 인간 사회의 규범이 아니라 우주 만물의 근원이며, 무위야말로 최상의 다스림이다."},
+  {"s":"laozi","t":"zhuangzi","type":"계승","label":"도를 우주의 객관적 법칙으로 삼은 노자를 이어받되, 노자가 자주 말한 \"이김\"과 \"다스림\"은 사라지고 시비선악의 상대성과 좌망·심재의 정신적 회귀만 남는다."},
+  {"s":"zhuangzi","t":"confucius","type":"비판","label":"인의(仁義) 같은 도덕규범 자체에 부정적이다 — 문명사회의 시비선악 관념은 모두 상대적 인식에 불과하다."},
+  {"s":"hanfeizi","t":"confucius","type":"비판","label":"인치(人治)·덕치로는 다스릴 수 없다 — 인간은 믿을 수 없으므로 오직 상과 벌(법)로써만 다스릴 수 있다. 현인 숭상도 군주 권력에 대한 위협이다."},
+  {"s":"mencius","t":"jeong","type":"계승","label":"항산(恒産)이 있어야 항심(恒心)이 있다는 논리를 이어, 생업에 의한 물질적 풍요를 도덕적 생활의 기초로 삼는다."},
+  {"s":"buddhism","t":"wonhyo","type":"계승","label":"연기설과 일심(一心)을 이어받아, 종파 간 대립을 더 높은 차원에서 종합하는 화쟁(和諍)으로 전개한다."},
+  {"s":"mozi","t":"xunzi","type":"대립","label":"예악(禮樂) — 순자는 음악을 인격 도야와 교화의 수단으로 보지만, 묵자는 악기 제작·연주가 백성에게 무익하고 해롭다고 본다."},
+  {"s":"socrates","t":"plato","type":"계승","label":"질서 잡힌 영혼의 본성이라는 정의관을, 지혜·용기·절제의 조화라는 세 계급의 덕으로 체계화한다."},
+  {"s":"aristotle","t":"plato","type":"비판","label":"진리(형상)는 이데아계가 아니라 현실 속에 존재한다 — 같은 모방론에 서면서도 예술이 진리를 재현할 수 있다고 보아 예술에 긍정적이다."},
+  {"s":"aristotle","t":"aquinas","type":"계승","label":"영혼론과 목적론적 자연관을 이어받아 자연법을 정밀하게 체계화한다."},
+  {"s":"stoics","t":"aquinas","type":"계승","label":"우주의 로고스가 자연법으로 드러난다는 자연법 사상을 이어받아 \"선을 추구하고 악을 피하라\"는 제1원리로 정식화한다."},
+  {"s":"plato","t":"epicurus","type":"대립","label":"죽음관 — 플라톤은 영혼이 육체에서 해방되어 이데아계로 귀환하는 행복으로 보고, 에피쿠로스는 원자의 해체일 뿐 사후세계는 없다고 본다."},
+  {"s":"aristotle","t":"macintyre","type":"계승","label":"덕윤리의 부활 — 덕이 공동체 내 사회적 지위·역할을 잘 수행하는 성품이라는 관념을 이어받아, 관행에 내재하는 선을 이루는 성품으로 재정의한다."},
+  {"s":"aristotle","t":"kant","type":"대립","label":"덕윤리는 \"어떤 사람이 되어야 하는가\"를 묻는 행위자 윤리이고, 의무론·공리주의는 \"어떤 행위를 해야 하는가\"를 묻는 행위 윤리다."},
+  {"s":"aquinas","t":"luther","type":"계승","label":"직업소명설의 계보 — 중세의 소명 관념이 루터에게서 세속 직업으로 확장된다."},
+  {"s":"descartes","t":"aristotle","type":"비판","label":"목적론적 자연관을 거부하고 기계론적 자연관을 세운다 — 자연에서 목적이 사라지자 목적 달성을 위해 요구되던 도덕 규칙만 남아 근대 윤리의 혼란이 시작된다."},
+  {"s":"descartes","t":"leopold","type":"대립","label":"자연을 정신 없는 기계로 보는가, 인간이 그 일부인 생명공동체로 보는가 — 인간중심주의와 생태중심주의의 대척점.","infer":1},
+  {"s":"hobbes","t":"locke","type":"대립","label":"자연 상태는 전쟁 상태인가 평화인가, 자연권을 대부분 양도하는가 집행권·처벌권만 양도하는가, 저항권은 없는가 있는가."},
+  {"s":"locke","t":"nozick","type":"계승","label":"노동이 투입된 대상물에 소유권이 발생한다는 노동가치설과 \"로크적 단서\"(타인의 처지를 악화시키지 않는 한)를 그대로 이어받는다."},
+  {"s":"locke","t":"marx","type":"계승","label":"노동가치설을 공유하지만 용도가 정반대다 — 로크는 사유재산 정당화의 논거로, 마르크스는 사유재산 부정의 논거로 쓴다."},
+  {"s":"luther","t":"calvin","type":"계승","label":"노동의 신성화·직업 평등 위에 예정설과 \"신앙의 객관적 증명(증표)\"을 더해 직업소명설을 완성한다."},
+  {"s":"calvin","t":"weber","type":"계승","label":"프로테스탄트 윤리에서 종교적 요소(구원)가 빠진 것이 자본주의 정신이고, 거기서 금욕주의마저 빠진 것이 천민자본주의다."},
+  {"s":"hobbes","t":"kant","type":"계승","label":"국제관계가 무정부 상태라는 홉스적 전제를 받아들이되, 평화 상태는 저절로 오지 않으며 공법에 의해 인위적으로 이룩되어야 한다고 본다."},
+  {"s":"bentham","t":"hume","type":"비판","label":"도덕 판단의 기준을 감정에 두는 주장을 격렬히 비판한다 — 쾌락의 계산은 철저히 이성의 기능이다."},
+  {"s":"beccaria","t":"kant","type":"대립","label":"사형 — 칸트는 살인에 대해 사형 외에는 동종성이 인정되지 않는다고 보고, 베카리아는 계약 시 생명을 양도하지 않았으므로 반대하며 종신노역형을 주장한다."},
+  {"s":"beccaria","t":"rousseau","type":"대립","label":"같은 사회계약설에서 정반대 결론 — 루소는 계약 시 생명을 양도했으므로 사형에 찬성하고, 베카리아는 양도하지 않았으므로 반대한다."},
+  {"s":"kant","t":"bentham","type":"대립","label":"의무론 vs 목적론 — 행위의 근본 원칙(동기·형식)에 주목하는가, 궁극적 목적(결과·유용성)에서 출발하는가. 비판은 서로를 향한다: 내면적 동기 소홀·약자 희생 가능성 vs 형식적이고 비현실적으로 엄격함."},
+  {"s":"bentham","t":"mill","type":"계승","label":"최대 다수의 최대 행복이라는 기준은 그대로 두고 쾌락의 질적 차이를 도입한다 — 교육과정상 벤담은 질적 차이를 인정하지 않는 것으로 간주한다."},
+  {"s":"bentham","t":"singer","type":"계승","label":"\"고려해야 하는 것은 이성이 아니라 고통을 느낄 수 있는가이다\" — 쾌고감수능력을 도덕적 지위의 기준으로 삼는 동물해방론의 직접적 근거."},
+  {"s":"macintyre","t":"kant","type":"비판","label":"사회적·역사적 맥락을 간과했다 — 근대 계몽주의에서 덕은 공동체적 역할 수행이 아니라 도덕규범을 잘 지키는 상태로 축소되었다."},
+  {"s":"macintyre","t":"bentham","type":"비판","label":"공동체는 개인의 단순한 집합이 아니다 — 물에 빠진 아내와 타인 중 아내를 구해야 한다는 결론은 공리주의로는 도출되지 않고 공동체주의로만 도출된다."},
+  {"s":"kant","t":"rawls","type":"계승","label":"칸트적 인간관(절대적 가치를 지닌 자율적·존엄한 존재로서 도덕적으로 평등)이 무지의 베일이라는 장치로 구체화된다. 칸트의 역지사지를 롤스는 무지의 베일(호혜성)로 대체한다."},
+  {"s":"kant","t":"nozick","type":"계승","label":"정언명령(인간을 목적으로 대우)에서 출발해 자기소유권 → 측면제약(인간의 불가침성) → 취득·양도에 의한 소유권으로 이어진다."},
+  {"s":"nozick","t":"rawls","type":"비판","label":"차등 원칙은 결과의 구조를 정해 놓는 정형적 원리다 — 분배의 정의로움은 취득·양도·교정의 역사적 과정에 달렸고, 복지를 위한 재분배는 강제노동이다."},
+  {"s":"walzer","t":"rawls","type":"비판","label":"사회적 가치는 특수하고 다원적이다 — 사회적 기본가치에서 단일 분배원칙을 끌어내는 단순평등 이론은 오히려 전제(專制)를 초래한다."},
+  {"s":"macintyre","t":"rawls","type":"대립","label":"국가의 역할 — 롤스는 인생계획·도덕교육에 대해 가치중립을 지키지만, 매킨타이어는 국가가 좋은 삶의 구상과 도덕교육에 관여해야 한다고 본다."},
+  {"s":"macintyre","t":"nozick","type":"대립","label":"국가의 역할 — 노직은 자원 배분에도 인생계획에도 개입하지 않는 최소국가를 말하지만, 매킨타이어는 공동체의 도덕교육을 국가의 기능으로 인정한다."},
+  {"s":"aristotle","t":"nozick","type":"비판","label":"\"덕(공동체에 대한 기여)에 따른 분배\"가 곧 노직이 부정하는 도덕적 응분(moral desert)에 따른 분배 — 정형적 원리다."},
+  {"s":"niebuhr","t":"plato","type":"대립","label":"국제정치의 두 원형 — 플라톤이 이상주의의 원형이라면 니부어는 \"국가들은 모두 위선적\"이라 보는 현실주의의 대표다."},
+  {"s":"niebuhr","t":"kant","type":"대립","label":"국제평화의 길 — 집단 간 힘의 균형(세력균형)인가, 공화적 체제와 평화연맹이라는 제도(집단안보)인가."},
+  {"s":"habermas","t":"kant","type":"비판","label":"출발점은 홀로 사유하는 \"나\"가 아니라 대화하는 \"우리\"다 — 독백적 이성에서 의사소통적 합리성으로."},
+  {"s":"kant","t":"habermas","type":"계승","label":"유전자 조작 — 부모의 프로그래밍대로 태어나는 자는 부모의 목적을 위한 단순한 수단이 된다는 논증은 칸트의 목적 정식을 그대로 적용한 것이다."},
+  {"s":"gilligan","t":"kant","type":"비판","label":"배려윤리의 정의윤리 비판 — 보편적 도덕 원리(정언명령)에 기댄 남성중심적 도덕은 사회적 관계·배려·공감·동정심을 간과했다."},
+  {"s":"gilligan","t":"rawls","type":"비판","label":"배려윤리의 정의윤리 비판 — 객관적·합리적 이성과 보편적 정의 원칙만으로는 구체적 관계 속의 도덕을 담아내지 못한다."},
+  {"s":"kant","t":"regan","type":"계승","label":"권리와 목적 대우라는 틀을 이어받아, 삶의 주체가 되는 인간과 동물은 단순한 수단이 아니라 목적으로 대우해야 한다고 본다."},
+  {"s":"regan","t":"kant","type":"비판","label":"이성만을 기준으로 삼으면 어린아이·정신적 무능력자 같은 \"가장자리 인간\"에게 권리를 인정할 수 없다 — 기준은 삶의 주체여야 한다."},
+  {"s":"singer","t":"kant","type":"비판","label":"이성을 기준으로 도덕적 지위를 나누는 것은 종차별주의다 — 기준은 쾌고감수능력이며, 같은 양의 고통은 동일한 비중으로 계산되어야 한다."},
+  {"s":"naess","t":"norton","type":"비판","label":"피상적 생태주의 비판 — 인간중심적 자연보호론은 환경위기의 근본 원인인 세계관 자체를 건드리지 못한다."},
+  {"s":"naess","t":"passmore","type":"비판","label":"피상적 생태주의 비판 — 인간의 이익을 위한 환경보호로는 부족하며 세계관과 생활양식의 전환이 필요하다."},
+  {"s":"regan","t":"leopold","type":"비판","label":"환경파시즘 — 전체의 안정을 위해 개체를 희생하는 것을 용인한다. 개체론(개별 동물의 권리)과 전체론(생태계 자체의 도덕적 지위)의 정면 충돌."},
+  {"s":"taylor","t":"leopold","type":"대립","label":"도덕적 지위의 담지자 — 개별 생명체인가(개체론), 생명공동체·생태계 자체인가(전체론). 동물 \"종\"에 대한 직접적 의무는 레오폴드만 인정한다."},
+  {"s":"jonas","t":"kant","type":"비판","label":"칸트의 정언명령은 동시대의 인간에 국한된다 — 미래세대와 자연까지 포괄하는 새로운 정언명법이 필요하다. 책임은 상호적·계약적이 아니라 일방적이다."},
+  {"s":"jonas","t":"bacon","type":"비판","label":"기술 낙관주의 비판 — \"아는 것이 힘\"이라는 자연 정복의 이상이 인류 존속 자체를 위협하게 되었다. 공포의 발견술로 나쁜 예측에 우선권을 준다."},
+  {"s":"jaspers","t":"heidegger","type":"대립","label":"기술의 가치중립성 — 야스퍼스는 긍정하며 인간이 기술의 지도자가 되어야 한다 하고, 하이데거는 부정하며 기술의 본질을 탈은폐로 본다. 야스퍼스는 하이데거가 \"기술이 수단임을 간과\"했다고 비판한다."},
+  {"s":"heisenberg","t":"oppenheimer","type":"대립","label":"과학자의 사회적 책임 — 연구 과정 단계부터 책임이 있다고 보아 원자폭탄 개발에 불참한 하이젠베르크와, 진리를 공표할 책임만 인정한 오펜하이머."},
+  {"s":"popper","t":"bacon","type":"비판","label":"귀납주의 비판 — 반증을 견뎌낸 이론도 참이 아니라 잠재적으로 참일 뿐이며, 반증 가능성이 없는 이론은 애초에 과학이 아니다.","infer":1},
+  {"s":"adorno","t":"benjamin","type":"대립","label":"대중문화의 평가 — 대중의 획일적 사고를 유도해 지배체제를 정당화하는 문화산업인가(아도르노), 아우라의 상실과 전시가치를 통해 대중의 각성을 가능하게 하는가(벤야민). 참여예술에 대한 태도도 정반대다."},
+  {"s":"mozi","t":"confucius","type":"대립","label":"예악 — 유교는 음악을 감정의 조화와 백성 교화의 수단으로 보지만, 묵자는 공리성이 없다며 비악(非樂)을 주장한다."},
+  {"s":"marx","t":"adorno","type":"계승","label":"자본이 주체가 되어 대중의 욕망을 획일화한다는 문화산업 분석은 마르크스의 자본주의 비판을 문화의 영역으로 확장한 것이다.","infer":1},
+  {"s":"eliade","t":"durkheim","type":"대립","label":"성과 속의 관계 — 성은 반드시 속을 통해 드러나므로 분리·단절되지 않는다(엘리아데) vs 성과 속은 뚜렷이 구분되며 상호배타적이다(뒤르켐)."},
+  {"s":"rawls","t":"singer","type":"대립","label":"해외원조 — 질서 정연한 사회가 고통받는 \"사회\"를 원조할 의무(국제주의, 차단점 있음) vs 절대 빈곤한 \"개인\"에 대한 원조 의무(세계시민주의, 이익 평등 고려)."},
+  {"s":"nozick","t":"singer","type":"대립","label":"해외원조 — 정당하게 취득한 재산의 처분은 개인의 자유이므로 자선은 선택이다(노직) vs 이익이 비용보다 크면 공동체 소속과 무관하게 원조해야 한다(싱어)."},
+  {"s":"nozick","t":"kant","type":"대립","label":"해외원조 — 원조의 도덕적 의무는 없고 자발적 자선만 가능하다(노직) vs 어려운 처지를 돕는 것은 사람을 목적으로 대우하는 보편적 의무다(칸트)."},
+  {"s":"beitz","t":"rawls","type":"비판","label":"차등 원칙을 국내에 가두어 둘 이유가 없다 — 국가 간 협력 체제가 형성되어 있으므로 국제사회에도 적용해야 한다."},
+  {"s":"pogge","t":"rawls","type":"비판","label":"원조의 목적은 질서 정연한 사회의 달성이 아니라 최소수혜자의 복지 향상과 국가 간 불평등의 완화여야 한다."},
+  {"s":"stoics","t":"kant","type":"계승","label":"세계시민주의 — 이성을 지닌 모든 인간이 평등하다는 전제가 세계시민법(방문권·환대권)으로 제도화된다.","infer":1}
+];
+
+/* ══════════════════════════════════════════════════════════════════
+   문항 생성 — 계승·비판·대립 관계에서 네 가지 유형을 만든다
+   ══════════════════════════════════════════════════════════════════ */
+const N = Object.fromEntries(NODES.map(n => [n.id, n]));
+const GROUP_LABEL = Object.fromEntries(GROUPS.map(g => [g.id, g.label]));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const gcolor = g => css('--g-' + g);
+
+const TYPE_DESC = {
+  '계승':'앞선 사상을 이어받아 발전시킴',
+  '비판':'상대의 핵심 주장을 겨냥해 반박함',
+  '대립':'같은 물음에 정반대로 답함'
+};
+/* 한글 받침에 맞는 조사 — 흄이/맹자가, 벤담을/공자를 */
+function hasBatchim(w) {
+  const c = w.charCodeAt(w.length - 1);
+  if (c < 0xAC00 || c > 0xD7A3) return false;
+  return (c - 0xAC00) % 28 !== 0;
+}
+const josa = (w, withB, withoutB) => w + (hasBatchim(w) ? withB : withoutB);
+const ga = w => josa(w, '이', '가');
+const reul = w => josa(w, '을', '를');
+const wa = w => josa(w, '과', '와');
+const neun = w => josa(w, '은', '는');
+
+/* 계승은 s = 원류, t = 계승자 / 비판은 s = 비판하는 쪽, t = 비판받는 쪽 */
+const sentence = (type, s, t) => type === '계승'
+  ? `${ga(t)} ${reul(s)} 이어받았다`
+  : `${ga(s)} ${reul(t)} 비판했다`;
+const askOf = type => type === '계승' ? '누가 누구를 이어받았나?' : '누가 누구를 비판했나?';
+/* 정답은 언제나 방향이 드러나는 한 문장으로 적는다 */
+const truthOf = (r, A, B) => r.type === '대립'
+  ? `${wa(A)} ${neun(B)} 같은 물음에 정반대로 답한다 — 대립`
+  : sentence(r.type, A, B);
+
+const KINDS = [
+  { id:'type', label:'관계 유형 맞히기', desc:'계승·비판·대립 중 무엇인가' },
+  { id:'dir',  label:'방향 맞히기',      desc:'누가 누구를 — 기출 최다 함정', trap:true },
+  { id:'who',  label:'상대 찾기',        desc:'4지선다로 상대 사상가를 고른다' },
+  { id:'ox',   label:'OX 진위 판단',     desc:'명제의 참·거짓을 판단한다' }
+];
+
+const shuffle = a => { for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+const pick = a => a[Math.floor(Math.random()*a.length)];
+
+/* 이름과 유형어를 가려 정답이 새지 않게 한다 */
+function maskNames(text, names) {
+  let out = text;
+  names.forEach(nm => { out = out.split(nm).join('◯'); });
+  return out.replace(/◯(?:이|가|는|은|를|을|와|과|의|도|에게|에|로|으로)?/g, m => `<span class="mask">◯</span>${m.slice(1)}`);
+}
+const maskType = text => text.replace(/계승|비판|대립/g, '<span class="mask">◯◯</span>');
+
+/* 오답 후보 — 같은 학파 → 같은 대단원 → 아무나 */
+function distractors(answerId, n, pool) {
+  const a = N[answerId];
+  const rank = id => {
+    if (id === answerId) return -1;
+    const b = N[id];
+    let s = 0;
+    if (b.group === a.group) s += 3;
+    if (b.units.some(u => a.units.includes(u))) s += 2;
+    if (pool.has(id)) s += 1;
+    return s;
+  };
+  const cands = NODES.map(x => x.id).filter(id => id !== answerId);
+  const scored = shuffle(cands).map(id => ({ id, s: rank(id) })).sort((x,y) => y.s - x.s);
+  return scored.slice(0, n).map(x => x.id);
+}
+
+function buildQuestions(rels, kinds, pool) {
+  const out = [];
+  rels.forEach(r => {
+    const A = N[r.s].name, B = N[r.t].name;
+    const names = [A, B];
+
+    if (kinds.has('type')) out.push({
+      kind:'type', rel:r,
+      pair:[A, B],
+      stem: maskType(esc(r.label)),
+      ask:'이 둘의 관계는 어떤 유형인가?',
+      choices: shuffle(['계승','비판','대립']).map(t => ({ text:t, sub:TYPE_DESC[t], ok:t === r.type })),
+      truth: truthOf(r, A, B)
+    });
+
+    if (kinds.has('dir') && r.type !== '대립') {
+      const right = sentence(r.type, A, B), wrong = sentence(r.type, B, A);
+      out.push({
+        kind:'dir', rel:r,
+        pair:[A, B],
+        stem: maskNames(esc(r.label), names),
+        ask:`「${r.type}」 관계다. ${askOf(r.type)}`,
+        choices: shuffle([{ text:right, ok:true }, { text:wrong, ok:false }]),
+        truth: right
+      });
+    }
+
+    if (kinds.has('who')) {
+      /* 설명에 이름이 있으면 그쪽을 정답으로, 없으면 t를 정답으로 삼는다 */
+      const answer = r.label.includes(B) || !r.label.includes(A) ? r.t : r.s;
+      const given  = answer === r.t ? r.s : r.t;
+      const wrongs = distractors(answer, 3, pool);
+      out.push({
+        kind:'who', rel:r,
+        pair:null,
+        stem: maskNames(esc(r.label), [N[answer].name]),
+        ask:`${wa(N[given].name)} 「${r.type}」 관계인 <span class="mask">◯</span>은 누구인가?`,
+        choices: shuffle([answer, ...wrongs]).map(id => ({ text:N[id].name, sub:N[id].school, ok:id === answer })),
+        truth: truthOf(r, A, B)
+      });
+    }
+
+    if (kinds.has('ox')) {
+      const flip = Math.random() < 0.5;
+      let claim, ok;
+      if (r.type === '대립') {
+        const other = pick(['계승','비판']);
+        claim = flip ? `${wa(A)} ${neun(B)} 같은 물음에 정반대로 답하는 대립 관계다.`
+                     : (other === '계승' ? sentence('계승', A, B) + '.' : sentence('비판', A, B) + '.');
+        ok = flip;
+      } else {
+        claim = flip ? sentence(r.type, A, B) + '.' : sentence(r.type, B, A) + '.';
+        ok = flip;
+      }
+      out.push({
+        kind:'ox', rel:r, pair:null, stem:null,
+        ask: claim,
+        choices: [{ text:'O', sub:'맞다', ok }, { text:'X', sub:'아니다', ok: !ok }],
+        truth: truthOf(r, A, B)
+      });
+    }
+  });
+  return out;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   상태와 화면
+   ══════════════════════════════════════════════════════════════════ */
+const state = {
+  people: new Set(),                                    // 비어 있으면 전체
+  kinds: new Set(KINDS.map(k => k.id)),
+  count: 20,
+  includeInfer: false,
+  qs: [], i: 0, log: [], answered: false
+};
+const $ = id => document.getElementById(id);
+const setupEl = $('setup'), playEl = $('play'), resultEl = $('result');
+
+/* 사상가별 문항 수 */
+function relsFor(peopleSet, includeInfer) {
+  return RELS.filter(r => (includeInfer || !r.infer) &&
+    (peopleSet.size === 0 || peopleSet.has(r.s) || peopleSet.has(r.t)));
+}
+function countByPerson(includeInfer) {
+  const c = {};
+  RELS.filter(r => includeInfer || !r.infer).forEach(r => { c[r.s] = (c[r.s]||0)+1; c[r.t] = (c[r.t]||0)+1; });
+  return c;
+}
+const poolIds = () => new Set(relsFor(state.people, state.includeInfer).flatMap(r => [r.s, r.t]));
+
+function availableCount() {
+  const rels = relsFor(state.people, state.includeInfer);
+  let n = 0;
+  rels.forEach(r => {
+    if (state.kinds.has('type')) n++;
+    if (state.kinds.has('dir') && r.type !== '대립') n++;
+    if (state.kinds.has('who')) n++;
+    if (state.kinds.has('ox')) n++;
+  });
+  return n;
+}
+
+/* ── 시작 화면 ───────────────────────────────────────────────────── */
+let showAllPeople = false;
+function renderSetup() {
+  const counts = countByPerson(state.includeInfer);
+  const ranked = NODES.filter(n => counts[n.id]).sort((a,b) => counts[b.id]-counts[a.id] || a.name.localeCompare(b.name,'ko'));
+  const shown = showAllPeople ? ranked : ranked.slice(0, 24);
+  const total = relsFor(new Set(), state.includeInfer).length;
+
+  setupEl.innerHTML = `
+    <p class="lede">관계도의 <b>계승·비판·대립</b> ${total}건을 문제로 바꿨다.<br>누가 누구를 이어받고 누구를 겨냥했는지 — 방향까지 묻는다.</p>
+    <p class="sub">교재가 <b>「비판의 방향 바꾸기」를 최다 출제 유형</b>이라고 짚은 지점이다. 비판의 주체와 대상을 뒤집은 선지가 단골이므로, 이 퀴즈는 방향을 따로 물어본다.</p>
+
+    <div class="sechead">범위 <span class="note">고르지 않으면 전체</span></div>
+    <div class="opts" style="margin-bottom:.7rem">
+      <button type="button" class="opt" id="pick-all" aria-pressed="${state.people.size === 0}">사상가 전체<span class="n">${ranked.length}명</span></button>
+      ${state.people.size ? `<button type="button" class="opt" id="pick-clear">선택 해제<span class="n">${state.people.size}</span></button>` : ''}
+    </div>
+    <div class="people">
+      ${shown.map(n => `<button type="button" class="person" data-p="${n.id}" aria-pressed="${state.people.has(n.id)}">
+        <span class="k" style="background:${gcolor(n.group)}"></span>
+        <span class="nm">${esc(n.name)}</span><span class="n">${counts[n.id]}</span></button>`).join('')}
+    </div>
+    ${ranked.length > 24 ? `<button type="button" class="morebtn" id="more">${showAllPeople ? '접기' : `나머지 ${ranked.length-24}명 더 보기`}</button>` : ''}
+
+    <div class="sechead">문제 유형</div>
+    <div class="opts">
+      ${KINDS.map(k => `<button type="button" class="opt" data-k="${k.id}" aria-pressed="${state.kinds.has(k.id)}">
+        ${esc(k.label)}<small>${esc(k.desc)}</small></button>`).join('')}
+    </div>
+
+    <div class="sechead">문항 수</div>
+    <div class="opts">
+      ${[10,20,40].map(c => `<button type="button" class="opt" data-c="${c}" aria-pressed="${state.count === c}">${c}문</button>`).join('')}
+      <button type="button" class="opt" data-c="0" aria-pressed="${state.count === 0}">전부<span class="n">${availableCount()}</span></button>
+    </div>
+
+    <div class="sechead">그 밖에</div>
+    <div class="opts">
+      <button type="button" class="opt" id="infer" aria-pressed="${state.includeInfer}">
+        「엮음」 관계도 포함<small>교재가 두 사람을 직접 잇지는 않은 4건 — 시험 대비라면 끄는 쪽을 권한다</small></button>
+    </div>
+
+    <div class="startbar">
+      <button type="button" class="start" id="go">시작하기</button>
+      <span class="tally"><b id="avail">0</b>문항 중 <b id="willdo">0</b>문항을 뽑는다</span>
+    </div>
+
+    <p class="footnote">『생활과 윤리 전 범위 압축 요약본』(2027학년도 코드원 개념서)의 사상가 관계에서 뽑았다.
+    관계 전체를 그림으로 보려면 <a href="https://claude.ai/code/artifact/88e5e342-abe1-44ac-90d0-96bb2d87583d">사상가 관계도</a>로.</p>`;
+
+  const avail = availableCount();
+  $('avail').textContent = avail;
+  $('willdo').textContent = state.count === 0 ? avail : Math.min(state.count, avail);
+  $('go').disabled = avail === 0 || state.kinds.size === 0;
+
+  $('pick-all').onclick = () => { state.people.clear(); renderSetup(); };
+  if ($('pick-clear')) $('pick-clear').onclick = () => { state.people.clear(); renderSetup(); };
+  if ($('more')) $('more').onclick = () => { showAllPeople = !showAllPeople; renderSetup(); };
+  setupEl.querySelectorAll('[data-p]').forEach(b => b.onclick = () => {
+    const id = b.dataset.p;
+    state.people.has(id) ? state.people.delete(id) : state.people.add(id);
+    renderSetup();
+  });
+  setupEl.querySelectorAll('[data-k]').forEach(b => b.onclick = () => {
+    const id = b.dataset.k;
+    if (state.kinds.has(id)) { if (state.kinds.size > 1) state.kinds.delete(id); }
+    else state.kinds.add(id);
+    renderSetup();
+  });
+  setupEl.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { state.count = +b.dataset.c; renderSetup(); });
+  $('infer').onclick = () => { state.includeInfer = !state.includeInfer; renderSetup(); };
+  $('go').onclick = start;
+}
+
+/* ── 진행 ────────────────────────────────────────────────────────── */
+function start() {
+  const rels = relsFor(state.people, state.includeInfer);
+  const all = shuffle(buildQuestions(rels, state.kinds, poolIds()));
+  state.qs = state.count === 0 ? all : all.slice(0, state.count);
+  state.i = 0; state.log = []; state.answered = false;
+  setupEl.classList.add('hidden'); resultEl.classList.add('hidden');
+  playEl.classList.remove('hidden'); $('quit').classList.remove('hidden');
+  renderQuestion();
+}
+
+function updateChrome() {
+  const n = state.qs.length, i = state.i;
+  $('counter').innerHTML = n ? `<b>${Math.min(i+1,n)}</b> / ${n}` : '';
+  const o = state.log.filter(l => l.ok).length, x = state.log.length - o;
+  $('score').innerHTML = state.log.length ? `<span class="o">○ ${o}</span><span class="x">✗ ${x}</span>` : '';
+  $('bar').style.width = n ? `${(state.log.length / n) * 100}%` : '0';
+}
+
+const MARK_O = `<svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="11"/></svg>`;
+const MARK_X = `<svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 8 L24 24"/><path d="M24 8 L8 24"/></svg>`;
+
+function renderQuestion() {
+  updateChrome();
+  const q = state.qs[state.i];
+  if (!q) return finish();
+  const kind = KINDS.find(k => k.id === q.kind);
+  state.answered = false;
+
+  playEl.innerHTML = `
+    <div class="qhead">
+      <span class="qno">문 ${String(state.i+1).padStart(2,'0')}</span>
+      <span class="qkind${kind.trap ? ' trap' : ''}">${esc(kind.label)}</span>
+      ${q.rel.infer ? '<span class="badge-infer" title="교재가 두 사람을 직접 잇지는 않은 연결">엮음</span>' : ''}
+    </div>
+    ${q.pair ? `<div class="pair">${esc(q.pair[0])}<span class="dash">—</span>${esc(q.pair[1])}</div>` : ''}
+    ${q.stem ? `<p class="stem">${q.stem}</p>` : ''}
+    <p class="ask">${q.ask}</p>
+    <div class="choices" id="choices">
+      ${q.choices.map((c,idx) => `<button type="button" class="choice" data-i="${idx}">
+        <span class="lead">${'①②③④'[idx]}</span>${esc(c.text)}${c.sub ? `<small>${esc(c.sub)}</small>` : ''}</button>`).join('')}
+    </div>
+    <div id="fb"></div>`;
+
+  playEl.querySelectorAll('.choice').forEach(b => b.onclick = () => answer(+b.dataset.i));
+  playEl.scrollIntoView({ block:'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+}
+
+function answer(idx) {
+  if (state.answered) return;
+  state.answered = true;
+  const q = state.qs[state.i];
+  const ok = q.choices[idx].ok;
+  state.log.push({ q, idx, ok });
+
+  playEl.querySelectorAll('.choice').forEach((b, i) => {
+    b.disabled = true;
+    if (i === idx) { b.classList.add(ok ? 'right' : 'wrong'); b.insertAdjacentHTML('beforeend', ok ? MARK_O : MARK_X); }
+    else if (q.choices[i].ok) { b.classList.add('right'); b.insertAdjacentHTML('beforeend', MARK_O); }
+  });
+
+  const last = state.i === state.qs.length - 1;
+  $('fb').innerHTML = `
+    <div class="feedback">
+      <div class="verdict ${ok ? 'o' : 'x'}">${ok ? '○ 맞다' : '✗ 틀렸다'}</div>
+      <p class="truth">${esc(q.truth)}</p>
+      <p class="why">${esc(q.rel.label)}
+        <span class="src">${esc(N[q.rel.s].name)} ${q.rel.type === '대립' ? '↔' : '→'} ${esc(N[q.rel.t].name)} · ${esc(q.rel.type)}${q.rel.infer ? ' · 교재 밖 연결' : ''}</span></p>
+      <button type="button" class="next" id="next">${last ? '결과 보기' : '다음 문제'}</button>
+    </div>`;
+  updateChrome();
+  const nx = $('next');
+  nx.onclick = () => { state.i++; renderQuestion(); };
+  nx.focus({ preventScroll:true });
+}
+
+/* ── 결과 ────────────────────────────────────────────────────────── */
+function finish() {
+  playEl.classList.add('hidden'); $('quit').classList.add('hidden');
+  resultEl.classList.remove('hidden');
+  const n = state.log.length, o = state.log.filter(l => l.ok).length;
+  const pct = n ? Math.round(o / n * 100) : 0;
+  const misses = state.log.filter(l => !l.ok);
+
+  const byKind = KINDS.map(k => {
+    const rows = state.log.filter(l => l.q.kind === k.id);
+    return rows.length ? { ...k, n: rows.length, o: rows.filter(r => r.ok).length } : null;
+  }).filter(Boolean);
+
+  const said = pct === 100 ? '전부 맞혔다. 방향까지 흔들리지 않았다.'
+    : pct >= 80 ? '대체로 잡혀 있다. 틀린 것만 다시 보면 된다.'
+    : pct >= 50 ? '절반은 넘겼다. 틀린 쪽에 방향 문제가 몰려 있는지 보라.'
+    : '아직 관계가 안 붙었다. 관계도에서 선을 따라가며 다시 보라.';
+
+  const C = 2 * Math.PI * 42;
+  resultEl.innerHTML = `
+    <div class="result-top">
+      <div class="ring">
+        <svg viewBox="0 0 100 100" width="120" height="120">
+          <circle class="bg" cx="50" cy="50" r="42"/>
+          <circle class="fg" cx="50" cy="50" r="42" stroke-dasharray="${C}" stroke-dashoffset="${C}"/>
+        </svg>
+        <div class="num"><b>${o}<span style="font-size:.55em; color:var(--ink-3)">/${n}</span></b><span>${pct}%</span></div>
+      </div>
+      <p class="said">${esc(said)}</p>
+    </div>
+
+    <div class="sechead">유형별</div>
+    <div class="bykind">
+      ${byKind.map(k => `<div class="row">
+        <span class="nm">${esc(k.label)}</span>
+        <span class="track"><i style="width:${Math.round(k.o/k.n*100)}%"></i></span>
+        <span class="val">${k.o}/${k.n}</span></div>`).join('')}
+    </div>
+
+    ${misses.length ? `<div class="sechead">틀린 문제 <span class="note">${misses.length}개</span></div>
+      <div class="misses">${misses.map(m => {
+        const kindLabel = KINDS.find(k => k.id === m.q.kind).label;
+        const head = m.q.kind === 'ox' ? m.q.ask : m.q.truth;
+        return `<div class="miss">
+        <div class="q"><span class="kindtag">${esc(kindLabel)}</span>${esc(head)}</div>
+        <div class="a">고른 답 <s>${esc(m.q.choices[m.idx].text)}</s> · 정답 <b>${esc(m.q.choices.find(c => c.ok).text)}</b>
+        ${m.q.kind === 'ox' ? `<br>사실 — ${esc(m.q.truth)}` : ''}
+        <br>${esc(m.q.rel.label)}</div>
+      </div>`; }).join('')}</div>` : ''}
+
+    <div class="again">
+      ${misses.length ? '<button type="button" class="primary" id="retry">틀린 것만 다시</button>' : ''}
+      <button type="button" ${misses.length ? '' : 'class="primary"'} id="rerun">같은 조건으로 다시</button>
+      <button type="button" id="back">조건 바꾸기</button>
+    </div>
+
+    <p class="footnote">해설은 관계도에 실린 원문 서술 그대로다.
+    관계 전체를 그림으로 보려면 <a href="https://claude.ai/code/artifact/88e5e342-abe1-44ac-90d0-96bb2d87583d">사상가 관계도</a>로.</p>`;
+
+  requestAnimationFrame(() => {
+    const fg = resultEl.querySelector('.ring .fg');
+    if (fg) fg.style.strokeDashoffset = C * (1 - pct/100);
+  });
+  updateChrome();
+  $('counter').innerHTML = ''; $('bar').style.width = '100%';
+
+  if ($('retry')) $('retry').onclick = () => {
+    state.qs = shuffle(misses.map(m => m.q)); state.i = 0; state.log = []; state.answered = false;
+    resultEl.classList.add('hidden'); playEl.classList.remove('hidden'); $('quit').classList.remove('hidden');
+    renderQuestion();
+  };
+  $('rerun').onclick = start;
+  $('back').onclick = toSetup;
+  resultEl.scrollIntoView({ block:'start' });
+}
+
+function toSetup() {
+  playEl.classList.add('hidden'); resultEl.classList.add('hidden'); $('quit').classList.add('hidden');
+  setupEl.classList.remove('hidden');
+  $('counter').innerHTML = ''; $('score').innerHTML = ''; $('bar').style.width = '0';
+  renderSetup();
+  scrollTo({ top:0 });
+}
+$('quit').onclick = () => { if (state.log.length) finish(); else toSetup(); };
+
+document.addEventListener('keydown', ev => {
+  if (/^(INPUT|TEXTAREA)$/.test(ev.target.tagName)) return;
+  if (playEl.classList.contains('hidden')) return;
+  if (state.answered && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); $('next')?.click(); return; }
+  const n = parseInt(ev.key, 10);
+  if (!state.answered && n >= 1 && n <= 4) {
+    const b = playEl.querySelector(`.choice[data-i="${n-1}"]`);
+    if (b) { ev.preventDefault(); b.click(); }
+  }
+});
+
+renderSetup();
+</script>
