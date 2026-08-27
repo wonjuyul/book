@@ -1,0 +1,749 @@
+<title>윤리 사상 계보도</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --paper:#EFEEE9; --surface:#F8F7F3; --surface-2:#E8E6DF;
+  --ink:#1B1A17; --ink-2:#54514A; --ink-3:#8A8578;
+  --rule:#D8D5CB; --rule-2:#C4C0B3; --line:#B6B1A3;
+  --seal:#A8382C; --seal-soft:rgba(168,56,44,.09); --seal-line:rgba(168,56,44,.4);
+  --grid:rgba(27,26,23,.045);
+  --shadow:0 1px 2px rgba(27,26,23,.05), 0 10px 28px rgba(27,26,23,.08);
+  --g-ru:#A6402F;  --g-dao:#3F7A63; --g-mofa:#6B5844; --g-bud:#7A4370;
+  --g-anc:#2F5590;  --g-mod:#4E7580; --g-norm:#2E2D28; --g-just:#5A4E9C;
+  --g-envi:#5A7A2E; --g-cult:#C2661A; --g-care:#B04A6B; --g-util:#8A6A16;
+  --a-계승:#4E7580; --a-비판:#A8382C; --a-대립:#8C3F5E; --a-유사:#63805E; --a-비교:#8A8578;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#171612; --surface:#201E19; --surface-2:#2A2822;
+  --ink:#EDEAE1; --ink-2:#B4AFA2; --ink-3:#847F72;
+  --rule:#35322A; --rule-2:#474338; --line:#5A5546;
+  --seal:#DF7A63; --seal-soft:rgba(223,122,99,.13); --seal-line:rgba(223,122,99,.45);
+  --grid:rgba(237,234,225,.045);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.45);
+  --g-ru:#E0745C;  --g-dao:#6FB795; --g-mofa:#BFA588; --g-bud:#C288B4;
+  --g-anc:#7FA6E0;  --g-mod:#8FBBC6; --g-norm:#D8D3C4; --g-just:#A197E6;
+  --g-envi:#A2C75B; --g-cult:#E9A05A; --g-care:#E68CA8; --g-util:#D2A63F;
+  --a-계승:#8FBBC6; --a-비판:#E0745C; --a-대립:#D28AAE; --a-유사:#9BBF95; --a-비교:#847F72;
+}}
+:root[data-theme="dark"]{
+  --paper:#171612; --surface:#201E19; --surface-2:#2A2822;
+  --ink:#EDEAE1; --ink-2:#B4AFA2; --ink-3:#847F72;
+  --rule:#35322A; --rule-2:#474338; --line:#5A5546;
+  --seal:#DF7A63; --seal-soft:rgba(223,122,99,.13); --seal-line:rgba(223,122,99,.45);
+  --grid:rgba(237,234,225,.045);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 32px rgba(0,0,0,.45);
+  --g-ru:#E0745C;  --g-dao:#6FB795; --g-mofa:#BFA588; --g-bud:#C288B4;
+  --g-anc:#7FA6E0;  --g-mod:#8FBBC6; --g-norm:#D8D3C4; --g-just:#A197E6;
+  --g-envi:#A2C75B; --g-cult:#E9A05A; --g-care:#E68CA8; --g-util:#D2A63F;
+  --a-계승:#8FBBC6; --a-비판:#E0745C; --a-대립:#D28AAE; --a-유사:#9BBF95; --a-비교:#847F72;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink);
+  background:repeating-linear-gradient(0deg,var(--grid) 0 1px,transparent 1px 32px),var(--paper);
+  font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+:focus-visible{outline:2px solid var(--seal); outline-offset:3px; border-radius:3px}
+.wrap{max-width:80rem; margin:0 auto; padding:0 1.25rem 8rem}
+
+/* ── 머리 ─────────────────────────────────────────────────────── */
+.top{position:sticky; top:0; z-index:30; background:var(--paper); border-bottom:1px solid var(--rule)}
+.top .row{max-width:80rem; margin:0 auto; padding:.7rem 1.25rem; display:flex; align-items:center; gap:.7rem 1.1rem; flex-wrap:wrap}
+.top h1{margin:0; font-family:"Gowun Batang",serif; font-weight:700; font-size:1.1rem; white-space:nowrap}
+.top h1 .seal{display:inline-block; margin-right:.45rem; padding:.1em .32em .16em; background:var(--seal); color:var(--paper); border-radius:2px; font-size:.78em; vertical-align:.08em}
+.legend{display:flex; align-items:center; gap:.45rem; flex-wrap:wrap; font-size:.74rem}
+.legend .lab{font-family:"IBM Plex Mono",monospace; font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.tierbtn{
+  font:inherit; font-size:.73rem; padding:.24rem .5rem; cursor:pointer; border-radius:2px;
+  display:flex; align-items:center; gap:.34rem; background:var(--surface); border:1px solid var(--rule-2); color:var(--ink-2);
+}
+.tierbtn:hover{border-color:var(--ink-3)}
+.tierbtn[aria-pressed="false"]{opacity:.36}
+.tierbtn .sw{width:.85rem; height:.85rem; border-radius:2px; flex:0 0 auto}
+.sw.A{background:var(--ink)}
+.sw.B{background:var(--surface); border:2px solid var(--ink)}
+.sw.C{background:var(--surface); border:1px solid var(--rule-2)}
+.arcbtn{font:inherit; font-size:.73rem; padding:.24rem .5rem; cursor:pointer; border-radius:2px; background:var(--surface); border:1px solid var(--rule-2); color:var(--ink-2)}
+.arcbtn[aria-pressed="true"]{background:var(--ink); border-color:var(--ink); color:var(--paper)}
+
+/* ── 안내 ─────────────────────────────────────────────────────── */
+.intro{margin:2.2rem 0 .6rem; max-width:44rem}
+.intro h2{font-family:"Gowun Batang",serif; font-weight:700; font-size:1.5rem; line-height:1.5; margin:0 0 .6rem; text-wrap:pretty}
+.intro p{font-size:.87rem; line-height:1.76; color:var(--ink-2); margin:0 0 .7rem; text-wrap:pretty}
+.intro .caveat{font-size:.79rem; color:var(--ink-3); border-left:2px solid var(--seal-line); padding-left:.8rem; line-height:1.7}
+
+/* ── 트리 ─────────────────────────────────────────────────────── */
+.tree{margin-top:3.2rem}
+.thead{display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; margin-bottom:.3rem}
+.thead h3{margin:0; font-family:"Gowun Batang",serif; font-weight:700; font-size:1.22rem; text-wrap:balance}
+.thead .u{font-family:"IBM Plex Mono",monospace; font-size:.65rem; letter-spacing:.08em; color:var(--ink-3); border:1px solid var(--rule-2); padding:.14rem .34rem; border-radius:2px}
+.tlead{font-size:.84rem; line-height:1.7; color:var(--ink-2); margin:0 0 1rem; max-width:46rem; text-wrap:pretty}
+.scroller{overflow-x:auto; overflow-y:hidden; padding-bottom:.4rem; border-top:1px solid var(--rule); padding-top:1.2rem}
+.stage{position:relative; margin:0 auto}
+.stage svg{position:absolute; inset:0; overflow:visible; pointer-events:none}
+.tn{
+  position:absolute; border-radius:3px; text-align:center; line-height:1.32;
+  padding:.4rem .6rem; background:var(--surface); border:1px solid var(--rule-2); color:var(--ink);
+  max-width:11.5rem; transition:opacity .18s, box-shadow .15s;
+}
+.tn .n{display:block; font-size:.63rem; color:var(--ink-3); margin-top:.18rem; line-height:1.4; font-weight:400}
+.tn.r{font-family:"Gowun Batang",serif; font-weight:700; font-size:1rem; background:var(--seal); border-color:var(--seal); color:var(--paper); padding:.5rem .9rem}
+.tn.c{font-weight:500; font-size:.86rem; border-width:2px; border-color:var(--gc,var(--ink-3)); color:var(--ink)}
+.tn.c .n{color:var(--ink-3)}
+.tn.s{font-size:.78rem; color:var(--ink-2); border-style:dashed}
+.tn.p{font-family:"Gowun Batang",serif; font-weight:700; font-size:.9rem; cursor:pointer}
+.tn.p .h{font-family:"IBM Plex Mono",monospace; font-size:.6rem; font-weight:400; margin-left:.3rem; vertical-align:.1em; color:var(--seal)}
+.tn.p.A{background:var(--ink); border-color:var(--ink); color:var(--paper)}
+.tn.p.A .h{color:var(--paper); opacity:.8}
+.tn.p.B{border-width:2px; border-color:var(--ink)}
+.tn.p.C{color:var(--ink-2); border-color:var(--rule-2)}
+.tn.p.C .h{color:var(--ink-3)}
+.tn.p:hover{box-shadow:var(--shadow)}
+.tn.dim{opacity:.2}
+.tn.sel{box-shadow:0 0 0 2px var(--seal)}
+.alab{
+  position:absolute; transform:translate(-50%,-50%); pointer-events:none; white-space:nowrap;
+  font-family:"IBM Plex Sans KR",sans-serif; font-size:.63rem; padding:.1rem .34rem; border-radius:2px;
+  background:var(--paper); border:1px solid var(--rule); color:var(--ink-2);
+}
+.alab b{font-weight:500}
+.arcs-off .alab, .arcs-off .arclayer{display:none}
+
+/* ── 목록형(좁은 화면) ────────────────────────────────────────── */
+.indent{display:none; padding-top:1.1rem; border-top:1px solid var(--rule)}
+.indent ul{list-style:none; margin:0; padding:0 0 0 .9rem; border-left:1px solid var(--rule)}
+.indent > ul{padding-left:0; border-left:0}
+.indent li{margin:.28rem 0}
+.indent .ib{display:inline-block; border-radius:3px; padding:.26rem .5rem; font-size:.82rem; border:1px solid var(--rule-2); background:var(--surface)}
+.indent .ib.r{font-family:"Gowun Batang",serif; font-weight:700; background:var(--seal); border-color:var(--seal); color:var(--paper)}
+.indent .ib.c{font-weight:500; border-width:2px; border-color:var(--gc,var(--ink-3))}
+.indent .ib.s{border-style:dashed; color:var(--ink-2); font-size:.78rem}
+.indent .ib.p{font-family:"Gowun Batang",serif; font-weight:700; cursor:pointer}
+.indent .ib.p.A{background:var(--ink); border-color:var(--ink); color:var(--paper)}
+.indent .ib.p.B{border-width:2px; border-color:var(--ink)}
+.indent .ib.p.C{color:var(--ink-2)}
+.indent .ib .h{font-family:"IBM Plex Mono",monospace; font-size:.6rem; font-weight:400; margin-left:.28rem; opacity:.8}
+.indent li > .n{font-size:.72rem; color:var(--ink-3); margin-left:.45rem; font-weight:400}
+.arclist{margin-top:.9rem; display:flex; flex-direction:column; gap:.26rem}
+.arclist .a{font-size:.76rem; color:var(--ink-2); line-height:1.5}
+.arclist .a b{color:var(--ink); font-weight:500}
+.arclist .a .k{font-family:"IBM Plex Mono",monospace; font-size:.6rem; padding:.06rem .26rem; border:1px solid currentColor; border-radius:2px; margin:0 .3rem}
+</style>
+<style>
+/* ── 상세 카드 ────────────────────────────────────────────────── */
+.detail{
+  position:fixed; right:1.1rem; bottom:1.1rem; z-index:40; width:min(23rem,calc(100vw - 2.2rem));
+  background:var(--surface); border:1px solid var(--rule-2); box-shadow:var(--shadow); border-radius:3px;
+  padding:.95rem 1.05rem 1.05rem; display:none;
+}
+.detail.on{display:block}
+.detail .dh{display:flex; align-items:flex-start; gap:.55rem; margin-bottom:.5rem}
+.detail h4{margin:0; font-family:"Gowun Batang",serif; font-weight:700; font-size:1.24rem; line-height:1.2}
+.detail h4 .orig{display:block; font-family:"IBM Plex Mono",monospace; font-size:.66rem; color:var(--ink-3); margin-top:.26rem; font-weight:400}
+.detail .x{margin-left:auto; font:inherit; font-size:1.05rem; line-height:1; cursor:pointer; color:var(--ink-3); background:none; border:1px solid var(--rule-2); width:1.7rem; height:1.7rem; border-radius:2px; flex:0 0 auto}
+.detail .x:hover{color:var(--seal); border-color:var(--seal-line)}
+.detail .badges{display:flex; flex-wrap:wrap; gap:.28rem; margin-bottom:.6rem}
+.detail .b{font-family:"IBM Plex Mono",monospace; font-size:.62rem; padding:.16rem .34rem; border:1px solid var(--rule-2); border-radius:2px; color:var(--ink-2)}
+.detail .b.tier{border-color:var(--seal-line); color:var(--seal)}
+.detail .tag{font-family:"Gowun Batang",serif; font-size:.98rem; line-height:1.6; color:var(--ink); margin:0 0 .7rem; padding-bottom:.7rem; border-bottom:1px solid var(--rule); text-wrap:pretty}
+.detail .yh{font-family:"IBM Plex Mono",monospace; font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); margin-bottom:.32rem}
+.detail .yrs{display:flex; flex-wrap:wrap; gap:.22rem}
+.detail .yr{font-family:"IBM Plex Mono",monospace; font-size:.64rem; padding:.14rem .32rem; background:var(--paper); border:1px solid var(--rule); border-radius:2px; color:var(--ink-2)}
+.detail .none{font-size:.76rem; color:var(--ink-3); line-height:1.6}
+
+.foot{margin-top:3.4rem; padding-top:1.1rem; border-top:1px solid var(--rule); font-size:.76rem; line-height:1.76; color:var(--ink-3); max-width:46rem}
+.foot a{color:var(--seal)}
+.foot b{color:var(--ink-2); font-weight:500}
+
+@media (max-width:820px){
+  .scroller{display:none}
+  .indent{display:block}
+  .wrap{padding:0 1rem 9rem}
+  .intro h2{font-size:1.24rem}
+  .detail{right:.6rem; left:.6rem; bottom:.6rem; width:auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms !important}}
+</style>
+
+<header class="top">
+  <div class="row">
+    <h1><span class="seal">系</span>윤리 사상 계보도</h1>
+    <div class="legend">
+      <span class="lab">출제</span>
+      <button type="button" class="tierbtn" data-tier="A" aria-pressed="true"><span class="sw A"></span>최빈출 <span id="cA"></span></button>
+      <button type="button" class="tierbtn" data-tier="B" aria-pressed="true"><span class="sw B"></span>빈출 <span id="cB"></span></button>
+      <button type="button" class="tierbtn" data-tier="C" aria-pressed="true"><span class="sw C"></span>그 밖 <span id="cC"></span></button>
+    </div>
+    <button type="button" class="arcbtn" id="arcs" aria-pressed="true">관계선</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <h2>공리주의·의무론·덕윤리는 어디서 갈라져 나왔고, 그 끝에 누가 서 있는가</h2>
+    <p>여덟 갈래의 계보를 그렸다. 상자의 <b>굵기</b>가 기출 비중이다 — 검게 채워진 이름이 가장 많이 나온 사상가, 테두리만 굵은 이름이 그다음, 옅은 이름은 출제 비중이 낮다. 이름 옆 숫자는 출제 회차 수다.</p>
+    <p>아래로 뻗는 실선은 <b>갈래가 나뉜 자리</b>이고, 밑에서 휘어 도는 점선은 <b>사상가끼리 직접 맞붙은 자리</b>다 — 계승·비판·대립. 이름을 누르면 한 줄 요약과 출제 회차가 뜬다.</p>
+    <p class="caveat">숫자는 교재 「⚠ 함정·주의」에 붙은 평가원 회차 표기(2021~2026)를 센 것이다. <b>실제 출제 통계가 아니라 교재가 짚은 횟수</b>이므로, 회차 표기가 없어도 본문 비중이 큰 사상가(아퀴나스·마르크스·니부어 등)가 있다. 등급은 참고선으로만 쓸 것.</p>
+  </section>
+  <div id="trees"></div>
+  <p class="foot">
+    『생활과 윤리 전 범위 압축 요약본』(2027학년도 코드원 개념서)에서 사상가 <b>76명</b>을 <b>8개 계보</b>로 묶었다. 한 사람이 여러 자리에 서기도 한다 — 칸트는 의무론이면서 환경윤리의 인간중심주의이고 영구평화론이다.<br>
+    같은 자료로 만든 것들: <a href="https://claude.ai/code/artifact/88e5e342-abe1-44ac-90d0-96bb2d87583d">사상가 관계도</a> ·
+    <a href="https://claude.ai/code/artifact/dbff0cb2-b6d9-4b48-b54f-45bd86e5af64">관계 퀴즈</a> ·
+    <a href="https://claude.ai/code/artifact/218ece27-bdd3-42fe-a95d-a53abb413cab">기출 함정 드릴</a>
+  </p>
+</main>
+
+<aside class="detail" id="detail" role="dialog" aria-label="사상가 상세"></aside>
+
+<script>
+const P = {"공자":{"h":6,"m":27,"y":["2021 수능","2022 9평","2023 6평","2024 9평","2024 수능","2026 수능"],"t":"인(仁)은 존비친소에 따른 차별적 사랑이다","s":"孔子"},"맹자":{"h":7,"m":20,"y":["2021 6평","2021 수능","2022 6평","2022 수능","2024 6평","2025 6평","2025 수능"],"t":"사단(四端)을 사덕으로 확충하는 성선설","s":"孟子"},"순자":{"h":5,"m":11,"y":["2022 9평","2022 수능","2023 수능","2024 9평","2026 6평"],"t":"화성기위(化性起僞) — 예로써 본성을 다스린다","s":"荀子"},"정약용":{"h":4,"m":5,"y":["2022 수능","2023 6평","2023 9평","2024 6평"],"t":"청렴은 목민관의 본무 — 생업의 풍요가 도덕의 기초","s":"丁若鏞"},"노자":{"h":3,"m":7,"y":["2023 9평","2024 9평","2025 수능"],"t":"무위이무불위 — 무위야말로 최상의 다스림이다","s":"老子"},"장자":{"h":10,"m":17,"y":["2021 9평","2021 수능","2022 9평","2022 수능","2023 9평","2023 수능","2024 9평","2025 수능","2026 6평","2026 9평"],"t":"좌망·심재 — 시비선악의 분별을 버려라","s":"莊子"},"묵자":{"h":6,"m":6,"y":["2022 6평","2022 9평","2022 수능","2024 9평","2025 6평","2026 6평"],"t":"겸상애 교상리 — 서로 평등하게 사랑하고 이익을 나눈다","s":"墨子"},"한비자":{"h":0,"m":5,"y":[],"t":"인간은 오직 상과 벌(법)로써만 다스릴 수 있다","s":"韓非子"},"불교":{"h":8,"m":13,"y":["2021 6평","2021 수능","2022 9평","2022 수능","2023 6평","2023 수능","2024 9평","2026 6평"],"t":"연기설 — 모든 것은 연결되어 있고 실체는 없다","s":"석가모니 · 연기설"},"원효":{"h":1,"m":4,"y":["2024 9평"],"t":"화쟁(和諍) — 더 높은 차원에서 하나로 종합한다","s":"元曉"},"소크라테스":{"h":0,"m":1,"y":[],"t":"정의는 질서 잡힌 영혼의 본성이다","s":"Socrates"},"플라톤":{"h":5,"m":21,"y":["2021 6평","2021 수능","2023 6평","2023 수능","2024 9평"],"t":"죽음은 영혼의 해방이자 행복이다","s":"Platon"},"아리스토텔레스":{"h":7,"m":27,"y":["2021 6평","2022 6평","2022 수능","2023 수능","2024 수능","2025 수능","2026 9평"],"t":"행복은 완전한 덕에 따른 영혼의 활동이다","s":"Aristoteles"},"에피쿠로스":{"h":3,"m":5,"y":["2021 6평","2023 6평","2025 6평"],"t":"죽음은 아무것도 아니다 — 원자의 해체일 뿐","s":"Epikouros"},"스토아학파":{"h":1,"m":5,"y":["2024 수능"],"t":"우주의 로고스가 곧 자연법이다","s":"Stoicism"},"아퀴나스":{"h":1,"m":9,"y":["2024 수능"],"t":"자연법의 제1원리 — 선을 추구하고 악을 피하라","s":"Thomas Aquinas"},"데카르트":{"h":0,"m":4,"y":[],"t":"자연은 정신 없는 물질 — 기계론적 자연관","s":"René Descartes"},"베이컨":{"h":1,"m":5,"y":["2022 9평"],"t":"아는 것이 힘이다 — 자연은 정복의 대상","s":"Francis Bacon"},"루터":{"h":0,"m":5,"y":[],"t":"직업소명설 — 노동은 이웃사랑의 실천이다","s":"Martin Luther"},"칼뱅":{"h":2,"m":7,"y":["2025 수능","2026 수능"],"t":"직업적 성공은 구원의 증표(證票)다","s":"Jean Calvin"},"홉스":{"h":8,"m":8,"y":["2022 수능","2023 수능","2024 6평","2024 9평","2024 수능","2025 수능","2026 6평","2026 9평"],"t":"자연 상태는 만인의 만인에 대한 전쟁 상태다","s":"Thomas Hobbes"},"로크":{"h":4,"m":11,"y":["2024 9평","2024 수능","2026 6평","2026 9평"],"t":"신탁을 위반한 정부에는 저항권을 행사할 수 있다","s":"John Locke"},"루소":{"h":7,"m":8,"y":["2022 9평","2022 수능","2023 수능","2024 6평","2025 수능","2026 9평","2026 수능"],"t":"일반의지에 자연권을 전부 양도한다","s":"Jean-Jacques Rousseau"},"흄":{"h":0,"m":1,"y":[],"t":"유용성 있는 행위가 호의적 감정을 낳는다","s":"David Hume"},"마르크스":{"h":0,"m":9,"y":[],"t":"자본주의의 분업 노동은 인간소외를 낳는다","s":"Karl Marx"},"베버":{"h":1,"m":2,"y":["2024 9평"],"t":"프로테스탄트 윤리에서 자본주의 정신으로","s":"Max Weber"},"쇼펜하우어":{"h":0,"m":0,"y":[],"t":"자살은 문제의 해결이 아니라 회피다","s":"Arthur Schopenhauer"},"베카리아":{"h":7,"m":6,"y":["2022 9평","2022 수능","2023 수능","2024 6평","2025 수능","2026 9평","2026 수능"],"t":"생명은 양도할 수 없다 — 사형 반대, 종신노역형","s":"Cesare Beccaria"},"칸트":{"h":18,"m":70,"y":["2021 6평","2021 9평","2021 수능","2022 6평","2022 9평","2022 수능","2023 6평","2023 9평","2023 수능","2024 6평","2024 9평","2024 수능","2025 6평","2025 9평","2025 수능","2026 6평","2026 9평","2026 수능"],"t":"도덕법칙은 이성이 스스로 정립한다 — 형식윤리","s":"Immanuel Kant"},"벤담":{"h":8,"m":14,"y":["2021 9평","2021 수능","2022 수능","2023 9평","2025 6평","2025 9평","2026 6평","2026 수능"],"t":"최대 다수의 최대 행복 — 쾌락은 양으로 계산된다","s":"Jeremy Bentham"},"밀":{"h":9,"m":10,"y":["2021 6평","2021 9평","2022 9평","2023 9평","2024 6평","2025 6평","2025 9평","2026 6평","2026 수능"],"t":"쾌락에는 질적 차이가 있다","s":"John Stuart Mill"},"매킨타이어":{"h":7,"m":5,"y":["2021 6평","2021 9평","2021 수능","2024 6평","2025 6평","2026 9평","2026 수능"],"t":"덕은 관행에 내재하는 선을 이루는 데 필요한 성품이다","s":"Alasdair MacIntyre"},"니부어":{"h":1,"m":9,"y":["2026 9평"],"t":"개인은 도덕적일 수 있어도 집단은 그럴 수 없다","s":"Reinhold Niebuhr"},"모겐소":{"h":1,"m":7,"y":["2023 수능"],"t":"국제정치는 힘과 이익이 결정한다","s":"Hans Morgenthau"},"롤스":{"h":14,"m":38,"y":["2021 6평","2021 9평","2021 수능","2022 수능","2023 6평","2023 9평","2023 수능","2024 6평","2024 9평","2024 수능","2025 수능","2026 6평","2026 9평","2026 수능"],"t":"무지의 베일 아래에서 합의되는 것이 정의의 원칙이다","s":"John Rawls"},"노직":{"h":8,"m":13,"y":["2021 6평","2022 9평","2022 수능","2023 수능","2024 9평","2024 수능","2026 6평","2026 수능"],"t":"정의는 취득·양도·교정의 역사적 과정에 달렸다","s":"Robert Nozick"},"왈처":{"h":0,"m":3,"y":[],"t":"분배영역마다 고유한 분배 원칙이 있다","s":"Michael Walzer"},"드워킨":{"h":0,"m":1,"y":[],"t":"헌법 정신에 반하는 법률에는 불복종할 수 있다","s":"Ronald Dworkin"},"하버마스":{"h":8,"m":9,"y":["2021 9평","2022 수능","2023 6평","2024 6평","2024 9평","2025 6평","2026 6평","2026 수능"],"t":"홀로 사유하는 나가 아니라 대화하는 우리","s":"Jürgen Habermas"},"아펠":{"h":2,"m":2,"y":["2025 6평","2026 수능"],"t":"인간의 상호 인정이 소통의 기본 전제다","s":"Karl-Otto Apel"},"싱어":{"h":14,"m":31,"y":["2018 6평","2020 9평","2021 6평","2021 수능","2022 9평","2022 수능","2023 6평","2024 6평","2024 9평","2024 수능","2025 9평","2026 6평","2026 9평","2026 수능"],"t":"기준은 이성이 아니라 쾌고감수능력이다","s":"Peter Singer"},"레건":{"h":8,"m":23,"y":["2018 6평","2020 9평","2022 6평","2022 수능","2023 9평","2024 수능","2025 9평","2026 9평"],"t":"삶의 주체는 수단이 아니라 목적으로 대우해야 한다","s":"Tom Regan"},"슈바이처":{"h":0,"m":4,"y":[],"t":"생명에의 외경 — 생명은 그 자체로 신성하다","s":"Albert Schweitzer"},"테일러":{"h":7,"m":22,"y":["2018 6평","2020 9평","2023 9평","2024 6평","2025 6평","2025 수능","2026 6평"],"t":"모든 생명체는 목적론적 삶의 중심이다","s":"Paul Taylor"},"레오폴드":{"h":10,"m":16,"y":["2018 6평","2020 9평","2021 9평","2022 6평","2022 9평","2023 9평","2025 6평","2025 수능","2026 6평","2026 수능"],"t":"생명공동체의 온전성·안정성·아름다움에 이바지하면 옳다","s":"Aldo Leopold"},"네스":{"h":2,"m":6,"y":["2025 6평","2025 수능"],"t":"큰 자아 실현과 생명중심적 평등","s":"Arne Naess"},"요나스":{"h":8,"m":20,"y":["2021 6평","2022 9평","2022 수능","2024 6평","2024 수능","2025 9평","2025 수능","2026 수능"],"t":"윤리적 공백 — 힘이 커진 만큼 책임도 커져야 한다","s":"Hans Jonas"},"노턴":{"h":0,"m":1,"y":[],"t":"영리한 인간중심주의 — 세대 간 정의로 환경을 지킨다","s":"Bryan Norton"},"패스모어":{"h":0,"m":2,"y":[],"t":"인간의 이익을 위해 환경을 보호해야 한다","s":"John Passmore"},"포퍼":{"h":1,"m":3,"y":["2025 수능"],"t":"반증 가능성이 없는 이론은 과학이 아니다","s":"Karl Popper"},"하이데거":{"h":5,"m":9,"y":["2021 9평","2023 6평","2023 수능","2024 6평","2025 6평"],"t":"죽음을 향한 존재 / 기술의 본질은 탈은폐다","s":"Martin Heidegger"},"야스퍼스":{"h":3,"m":4,"y":["2021 9평","2023 수능","2025 6평"],"t":"기술은 가치중립적 수단이며 인간이 그 지도자여야 한다","s":"Karl Jaspers"},"하이젠베르크":{"h":0,"m":2,"y":[],"t":"과학자는 연구 과정 단계부터 책임을 진다","s":"Werner Heisenberg"},"오펜하이머":{"h":0,"m":1,"y":[],"t":"과학자에게는 진리를 공표할 책임만 있다","s":"J. Robert Oppenheimer"},"톨스토이":{"h":0,"m":3,"y":[],"t":"예술은 감정의 전달이다","s":"Lev Tolstoy"},"아도르노":{"h":4,"m":4,"y":["2021 6평","2022 6평","2024 6평","2025 수능"],"t":"문화산업은 대중의 획일적 사고를 유도한다","s":"Theodor Adorno"},"벤야민":{"h":4,"m":2,"y":["2021 6평","2022 6평","2024 6평","2025 수능"],"t":"기술 복제 시대에 아우라는 사라지고 전시가치가 남는다","s":"Walter Benjamin"},"보드리야르":{"h":4,"m":3,"y":["2021 9평","2022 9평","2023 수능","2025 9평"],"t":"현대인은 상품이 아니라 기호(이미지)를 소비한다","s":"Jean Baudrillard"},"베블런":{"h":4,"m":3,"y":["2021 9평","2021 수능","2022 9평","2025 9평"],"t":"과시적 소비의 목적은 구별 짓기다","s":"Thorstein Veblen"},"짐멜":{"h":4,"m":3,"y":["2021 9평","2022 9평","2023 9평","2025 9평"],"t":"유행은 모방과 차별화를 동시에 만족시킨다","s":"Georg Simmel"},"엘리아데":{"h":4,"m":4,"y":["2022 수능","2024 9평","2025 수능","2026 6평"],"t":"성(聖)은 반드시 속(俗)을 통해 드러난다","s":"Mircea Eliade"},"뒤르켐":{"h":0,"m":1,"y":[],"t":"종교는 사회 그 자체다","s":"Émile Durkheim"},"프로이트":{"h":0,"m":1,"y":[],"t":"종교는 환상이다","s":"Sigmund Freud"},"퀭":{"h":2,"m":2,"y":["2023 9평","2025 9평"],"t":"종교 간 평화 없이 국가 간 평화도 없다","s":"Hans Küng"},"오토":{"h":0,"m":1,"y":[],"t":"종교는 직관과 감정, 체험으로 파악된다","s":"Rudolf Otto"},"틸리히":{"h":0,"m":1,"y":[],"t":"종교는 인간의 궁극적 관심이다","s":"Paul Tillich"},"프롬":{"h":3,"m":4,"y":["2023 수능","2024 9평","2026 9평"],"t":"사랑은 개성을 유지하면서 이루는 합일이다","s":"Erich Fromm"},"길리건":{"h":0,"m":1,"y":[],"t":"남성중심적 정의윤리는 관계와 배려를 간과했다","s":"Carol Gilligan"},"나딩스":{"h":1,"m":2,"y":["2023 9평"],"t":"배려는 배려자와 피배려자의 상호작용에서 이루어진다","s":"Nel Noddings"},"보부아르":{"h":1,"m":1,"y":["2021 6평"],"t":"여성성은 사회적으로 만들어진 산물이다","s":"Simone de Beauvoir"},"갈퉁":{"h":3,"m":3,"y":["2021 9평","2024 9평","2025 6평"],"t":"적극적 평화 — 구조적·문화적 폭력까지 없어야 한다","s":"Johan Galtung"},"소로":{"h":0,"m":3,"y":[],"t":"법보다 정의에 대한 존경심이 앞선다","s":"Henry David Thoreau"},"간디":{"h":0,"m":1,"y":[],"t":"부당한 법에 대한 불복종은 비폭력·평화적이어야 한다","s":"Mahatma Gandhi"},"마틴 루터 킹":{"h":0,"m":0,"y":[],"t":"정의롭지 못한 법에 불복종하고 처벌을 감수한다","s":"Martin Luther King Jr."},"베이츠":{"h":0,"m":3,"y":[],"t":"천연자원의 분포는 우연이므로 재분배해야 한다","s":"Charles Beitz"},"포기":{"h":1,"m":4,"y":["2023 9평"],"t":"차등 원칙은 국제사회에도 적용되어야 한다","s":"Thomas Pogge"}};
+/* 계보 — k: r 뿌리 / c 갈래 / s 세부분류 / p 사상가 */
+const TREES = [
+{ id:'norm', title:'서양 규범윤리 — 윤리 문제에 대한 접근', unit:'대단원 Ⅰ',
+  lead:'무엇을 기준으로 옳고 그름을 가리는가 — 결과인가, 법칙인가, 사람의 품성인가.',
+  root:{ l:'규범윤리', k:'r', kids:[
+    { l:'목적론 · 결과주의', k:'c', c:'util', n:'궁극적 목적이 먼저 주어진다', kids:[
+      { l:'공리주의', k:'s', n:'최대 다수의 최대 행복', kids:[
+        { l:'고전적(양적) 공리주의', k:'s', kids:[{l:'벤담',k:'p'}] },
+        { l:'질적 공리주의', k:'s', kids:[{l:'밀',k:'p'}] },
+        { l:'현대(선호) 공리주의', k:'s', kids:[{l:'싱어',k:'p'}] }
+      ]}
+    ]},
+    { l:'의무론 · 법칙 중심', k:'c', c:'norm', n:'행위의 근본 원칙에 주목한다', kids:[
+      { l:'자연법 윤리', k:'s', n:'선을 추구하고 악을 피하라', kids:[{l:'스토아학파',k:'p'},{l:'아퀴나스',k:'p'}] },
+      { l:'정언명령의 윤리', k:'s', n:'준칙의 보편화 가능성', kids:[{l:'칸트',k:'p'}] }
+    ]},
+    { l:'덕윤리 · 행위자 중심', k:'c', c:'anc', n:'어떤 사람이 되어야 하는가', kids:[
+      { l:'고대 덕윤리', k:'s', n:'중용과 실천적 지혜', kids:[{l:'아리스토텔레스',k:'p'}] },
+      { l:'서사적 덕론', k:'s', n:'관행에 내재하는 선', kids:[{l:'매킨타이어',k:'p'}] }
+    ]},
+    { l:'도덕감정론', k:'c', c:'mod', n:'도덕 판단의 기준은 감정', kids:[
+      { l:'유용성 → 호의적 감정', k:'s', kids:[{l:'흄',k:'p'}] }
+    ]},
+    { l:'현대 윤리', k:'c', c:'just', n:'의무론·공리주의를 겨냥해 갈라져 나온 갈래', kids:[
+      { l:'책임 윤리', k:'s', kids:[{l:'요나스',k:'p'}] },
+      { l:'담론 윤리', k:'s', kids:[{l:'하버마스',k:'p'},{l:'아펠',k:'p'}] },
+      { l:'배려 윤리', k:'s', kids:[{l:'길리건',k:'p'},{l:'나딩스',k:'p'}] }
+    ]}
+  ]},
+  arcs:[
+    {f:'벤담', t:'싱어', l:'쾌고감수능력', kind:'계승'},
+    {f:'아리스토텔레스', t:'매킨타이어', l:'덕윤리의 부활', kind:'계승'},
+    {f:'매킨타이어', t:'칸트', l:'맥락 간과', kind:'비판'},
+    {f:'요나스', t:'칸트', l:'미래세대 누락', kind:'비판'},
+    {f:'하버마스', t:'칸트', l:'독백적 이성', kind:'비판'},
+    {f:'길리건', t:'칸트', l:'관계·배려 간과', kind:'비판'},
+    {f:'칸트', t:'벤담', l:'의무론 vs 목적론', kind:'대립'},
+    {f:'벤담', t:'흄', l:'계산은 이성의 기능', kind:'비판'}
+  ]},
+
+{ id:'east', title:'동양 윤리 — 제자백가와 불교', unit:'대단원 Ⅰ',
+  lead:'춘추전국의 혼란을 무엇으로 다스릴 것인가 — 인(仁)인가, 겸애인가, 무위인가, 법인가.',
+  root:{ l:'동양 윤리', k:'r', kids:[
+    { l:'유가 · 인(仁)과 예(禮)', k:'c', c:'ru', kids:[
+      { l:'공자', k:'p', kids:[
+        { l:'맹자', k:'p', n:'성선설' },
+        { l:'순자', k:'p', n:'성악설' },
+        { l:'정약용', k:'p', n:'실학 · 청렴' }
+      ]}
+    ]},
+    { l:'도가 · 무위자연', k:'c', c:'dao', kids:[
+      { l:'노자', k:'p', kids:[{ l:'장자', k:'p', n:'좌망 · 심재' }] }
+    ]},
+    { l:'묵가 · 겸애', k:'c', c:'mofa', kids:[{l:'묵자',k:'p'}] },
+    { l:'법가 · 법치', k:'c', c:'mofa', kids:[{l:'한비자',k:'p'}] },
+    { l:'불교 · 연기설', k:'c', c:'bud', kids:[
+      { l:'불교', k:'p', kids:[{ l:'원효', k:'p', n:'화쟁' }] }
+    ]}
+  ]},
+  arcs:[
+    {f:'순자', t:'한비자', l:'인성은 변하지 않는다', kind:'계승'},
+    {f:'묵자', t:'공자', l:'차등적 사랑은 편애', kind:'비판'},
+    {f:'노자', t:'공자', l:'인위적 예가 혼란의 원인', kind:'비판'},
+    {f:'한비자', t:'공자', l:'덕치로는 못 다스린다', kind:'비판'},
+    {f:'맹자', t:'순자', l:'악의 기원', kind:'대립'}
+  ]},
+
+{ id:'justice', title:'사회 정의와 국가', unit:'대단원 Ⅲ',
+  lead:'국가는 어떻게 생겨나며, 무엇을 어떤 기준으로 나누어야 하는가.',
+  root:{ l:'사회 정의 · 국가', k:'r', kids:[
+    { l:'사회계약론', k:'c', c:'mod', n:'자연 상태에서 국가로', kids:[
+      { l:'절대군주제', k:'s', kids:[{l:'홉스',k:'p'}] },
+      { l:'입헌군주제 · 저항권', k:'s', kids:[{l:'로크',k:'p'}] },
+      { l:'공화제 · 일반의지', k:'s', kids:[{l:'루소',k:'p'}] }
+    ]},
+    { l:'분배적 정의', k:'c', c:'just', n:'무엇을 어떻게 나눌 것인가', kids:[
+      { l:'평등주의적 자유주의', k:'s', n:'공정으로서의 정의', kids:[{l:'롤스',k:'p'}] },
+      { l:'자유지상주의', k:'s', n:'소유권리론', kids:[{l:'노직',k:'p'}] },
+      { l:'복합적 평등', k:'s', n:'영역별 분배 원칙', kids:[{l:'왈처',k:'p'}] }
+    ]},
+    { l:'정의론의 출발', k:'c', c:'anc', n:'질서 잡힌 영혼에서 분배로', kids:[
+      { l:'영혼의 조화', k:'s', kids:[{l:'소크라테스',k:'p'},{l:'플라톤',k:'p'}] },
+      { l:'기하학적 비례', k:'s', n:'덕에 따른 분배', kids:[{l:'아리스토텔레스',k:'p'}] }
+    ]},
+    { l:'직업 윤리', k:'c', c:'mod', n:'노동을 무엇으로 볼 것인가', kids:[
+      { l:'직업소명설', k:'s', kids:[{l:'루터',k:'p'},{l:'칼뱅',k:'p'}] },
+      { l:'노동 소외', k:'s', kids:[{l:'마르크스',k:'p'}] }
+    ]},
+    { l:'공동체주의', k:'c', c:'anc', n:'연고적 자아', kids:[{l:'매킨타이어',k:'p'}] },
+    { l:'사회윤리', k:'c', c:'care', n:'도덕적 이원론', kids:[{l:'니부어',k:'p'}] },
+    { l:'형벌 이론', k:'c', c:'mofa', kids:[
+      { l:'응보형주의', k:'s', kids:[{l:'칸트',k:'p'}] },
+      { l:'범죄예방주의', k:'s', kids:[{l:'벤담',k:'p'},{l:'베카리아',k:'p'}] }
+    ]}
+  ]},
+  arcs:[
+    {f:'로크', t:'노직', l:'노동가치설 · 로크적 단서', kind:'계승'},
+    {f:'칸트', t:'롤스', l:'도덕적 평등 → 무지의 베일', kind:'계승'},
+    {f:'노직', t:'롤스', l:'정형적 원리', kind:'비판'},
+    {f:'왈처', t:'롤스', l:'단일 분배원칙', kind:'비판'},
+    {f:'매킨타이어', t:'롤스', l:'국가의 가치중립', kind:'대립'},
+    {f:'홉스', t:'로크', l:'자연 상태 · 저항권', kind:'대립'},
+    {f:'베카리아', t:'칸트', l:'사형', kind:'대립'},
+    {f:'소크라테스', t:'플라톤', l:'질서 잡힌 영혼', kind:'계승'},
+    {f:'루터', t:'칼뱅', l:'예정설 · 구원의 증표', kind:'계승'},
+    {f:'아리스토텔레스', t:'노직', l:'덕에 따른 분배 = 정형적 원리', kind:'비판'}
+  ]},
+
+{ id:'env', title:'환경윤리 — 도덕적 지위는 어디까지인가', unit:'대단원 Ⅳ',
+  lead:'인간만인가, 고통을 느끼는 존재까지인가, 살아 있는 모든 것인가, 생태계 자체인가.',
+  root:{ l:'환경윤리', k:'r', kids:[
+    { l:'인간중심주의', k:'c', c:'mod', n:'도덕적 지위는 인간만', kids:[
+      { l:'기계론적 자연관', k:'s', kids:[{l:'데카르트',k:'p'},{l:'베이컨',k:'p'}] },
+      { l:'간접적 의무', k:'s', kids:[{l:'칸트',k:'p'}] },
+      { l:'온건한 인간중심주의', k:'s', kids:[{l:'노턴',k:'p'},{l:'패스모어',k:'p'}] }
+    ]},
+    { l:'동물중심주의', k:'c', c:'envi', n:'개체 중심', kids:[
+      { l:'감각 중심 · 동물해방론', k:'s', kids:[{l:'싱어',k:'p'}] },
+      { l:'권리 중심 · 동물권리론', k:'s', kids:[{l:'레건',k:'p'}] }
+    ]},
+    { l:'생명중심주의', k:'c', c:'dao', n:'살아 있는 모든 것', kids:[
+      { l:'생명에의 외경', k:'s', kids:[{l:'슈바이처',k:'p'}] },
+      { l:'목적론적 삶의 중심', k:'s', kids:[{l:'테일러',k:'p'}] }
+    ]},
+    { l:'생태중심주의', k:'c', c:'bud', n:'전체론 · 생태계 자체', kids:[
+      { l:'대지윤리', k:'s', kids:[{l:'레오폴드',k:'p'}] },
+      { l:'심층생태학', k:'s', kids:[{l:'네스',k:'p'}] }
+    ]},
+    { l:'책임 윤리', k:'c', c:'just', n:'미래세대와 자연까지', kids:[{l:'요나스',k:'p'}] }
+  ]},
+  arcs:[
+    {f:'칸트', t:'레건', l:'목적 대우 · 권리', kind:'계승'},
+    {f:'레건', t:'칸트', l:'가장자리 인간', kind:'비판'},
+    {f:'싱어', t:'칸트', l:'종차별주의', kind:'비판'},
+    {f:'레건', t:'레오폴드', l:'환경파시즘', kind:'비판'},
+    {f:'네스', t:'노턴', l:'피상적 생태주의', kind:'비판'},
+    {f:'테일러', t:'레오폴드', l:'개체론 vs 전체론', kind:'대립'},
+    {f:'요나스', t:'베이컨', l:'기술 낙관주의', kind:'비판'}
+  ]},
+
+{ id:'sci', title:'과학기술과 윤리', unit:'대단원 Ⅳ',
+  lead:'과학은 가치중립적인가, 기술은 수단일 뿐인가, 과학자는 어디까지 책임지는가.',
+  root:{ l:'과학기술 윤리', k:'r', kids:[
+    { l:'과학의 가치중립성', k:'c', c:'mod', kids:[
+      { l:'주제 선정에 가치 개입', k:'s', kids:[{l:'베버',k:'p'}] },
+      { l:'반증주의', k:'s', kids:[{l:'포퍼',k:'p'}] }
+    ]},
+    { l:'기술관', k:'c', c:'envi', kids:[
+      { l:'가치중립 긍정', k:'s', n:'기술은 수단', kids:[{l:'야스퍼스',k:'p'}] },
+      { l:'가치중립 부정', k:'s', n:'기술의 본질은 탈은폐', kids:[{l:'하이데거',k:'p'}] }
+    ]},
+    { l:'과학자의 책임', k:'c', c:'care', kids:[
+      { l:'책임 긍정', k:'s', kids:[{l:'하이젠베르크',k:'p'}] },
+      { l:'책임 부정', k:'s', kids:[{l:'오펜하이머',k:'p'}] }
+    ]},
+    { l:'책임 윤리', k:'c', c:'just', n:'윤리적 공백', kids:[{l:'요나스',k:'p'}] }
+  ]},
+  arcs:[
+    {f:'야스퍼스', t:'하이데거', l:'기술이 수단임을 간과', kind:'대립'},
+    {f:'하이젠베르크', t:'오펜하이머', l:'사회적 책임', kind:'대립'}
+  ]},
+
+{ id:'culture', title:'문화 · 예술 · 종교 · 소비', unit:'대단원 Ⅴ',
+  lead:'예술은 도덕에 봉사해야 하는가, 대중문화는 해방인가 지배인가, 우리는 무엇을 소비하는가.',
+  root:{ l:'문화 윤리', k:'r', kids:[
+    { l:'예술과 도덕', k:'c', c:'anc', kids:[
+      { l:'도덕주의', k:'s', n:'예술은 인격 함양을 목적으로', kids:[{l:'플라톤',k:'p'},{l:'톨스토이',k:'p'}] },
+      { l:'모방론(객관주의)', k:'s', kids:[{l:'아리스토텔레스',k:'p'}] },
+      { l:'미적 판단의 자율성', k:'s', kids:[{l:'칸트',k:'p'}] }
+    ]},
+    { l:'대중문화 · 프랑크푸르트학파', k:'c', c:'just', kids:[
+      { l:'문화산업 비판', k:'s', kids:[{l:'아도르노',k:'p'}] },
+      { l:'아우라의 상실', k:'s', kids:[{l:'벤야민',k:'p'}] }
+    ]},
+    { l:'소비문화', k:'c', c:'cult', kids:[
+      { l:'기호 소비', k:'s', kids:[{l:'보드리야르',k:'p'}] },
+      { l:'과시적 소비', k:'s', kids:[{l:'베블런',k:'p'}] },
+      { l:'유행론', k:'s', kids:[{l:'짐멜',k:'p'}] }
+    ]},
+    { l:'종교', k:'c', c:'bud', kids:[
+      { l:'성현(聖顯)', k:'s', kids:[{l:'엘리아데',k:'p'}] },
+      { l:'종교 긍정', k:'s', kids:[{l:'뒤르켐',k:'p'},{l:'오토',k:'p'},{l:'틸리히',k:'p'}] },
+      { l:'종교 부정', k:'s', kids:[{l:'마르크스',k:'p'},{l:'프로이트',k:'p'}] },
+      { l:'종교 간 대화', k:'s', kids:[{l:'퀭',k:'p'}] }
+    ]}
+  ]},
+  arcs:[
+    {f:'아도르노', t:'벤야민', l:'대중문화의 평가', kind:'대립'},
+    {f:'아리스토텔레스', t:'플라톤', l:'형상은 현실 속에', kind:'비판'},
+    {f:'엘리아데', t:'뒤르켐', l:'성과 속의 관계', kind:'대립'},
+    {f:'마르크스', t:'아도르노', l:'자본이 주체', kind:'계승'}
+  ]},
+
+{ id:'peace', title:'지구촌 평화와 해외원조', unit:'대단원 Ⅵ',
+  lead:'국제관계는 힘인가 제도인가, 원조는 선택인가 의무인가.',
+  root:{ l:'평화 · 공존', k:'r', kids:[
+    { l:'국제정치 세계관', k:'c', c:'care', kids:[
+      { l:'현실주의 · 세력균형', k:'s', kids:[{l:'니부어',k:'p'},{l:'모겐소',k:'p'}] },
+      { l:'이상주의 · 집단안보', k:'s', kids:[{l:'칸트',k:'p'}] }
+    ]},
+    { l:'평화론', k:'c', c:'dao', kids:[
+      { l:'영구평화론', k:'s', n:'공화적 체제 · 평화연맹', kids:[{l:'칸트',k:'p'}] },
+      { l:'적극적 평화', k:'s', n:'구조적·문화적 폭력까지', kids:[{l:'갈퉁',k:'p'}] }
+    ]},
+    { l:'시민불복종', k:'c', c:'just', kids:[
+      { l:'공유된 정의관', k:'s', kids:[{l:'롤스',k:'p'}] },
+      { l:'이익·손해 계산', k:'s', kids:[{l:'싱어',k:'p'}] },
+      { l:'개인의 양심', k:'s', kids:[{l:'소로',k:'p'},{l:'간디',k:'p'},{l:'마틴 루터 킹',k:'p'}] },
+      { l:'헌법 정신', k:'s', kids:[{l:'드워킨',k:'p'}] }
+    ]},
+    { l:'해외원조', k:'c', c:'envi', kids:[
+      { l:'선택의 관점', k:'s', kids:[{l:'노직',k:'p'}] },
+      { l:'의무 · 국제주의', k:'s', kids:[{l:'롤스',k:'p'}] },
+      { l:'의무 · 세계시민주의', k:'s', kids:[{l:'싱어',k:'p'}] },
+      { l:'지구적 평등 원칙', k:'s', kids:[{l:'베이츠',k:'p'},{l:'포기',k:'p'}] }
+    ]}
+  ]},
+  arcs:[
+    {f:'니부어', t:'칸트', l:'세력균형 vs 집단안보', kind:'대립'},
+    {f:'롤스', fi:1, t:'싱어', ti:1, l:'사회인가 개인인가', kind:'대립'},
+    {f:'노직', t:'싱어', ti:1, l:'자선은 선택', kind:'대립'},
+    {f:'베이츠', t:'롤스', ti:1, l:'차등 원칙의 국제 적용', kind:'비판'},
+    {f:'갈퉁', t:'칸트', ti:1, l:'평화의 범위', kind:'비교'}
+  ]},
+
+{ id:'life', title:'생명과 사랑의 윤리', unit:'대단원 Ⅱ',
+  lead:'죽음을 어떻게 볼 것인가, 생명은 어디서 시작하는가, 사랑은 무엇인가.',
+  root:{ l:'생명 · 사랑', k:'r', kids:[
+    { l:'죽음관', k:'c', c:'anc', kids:[
+      { l:'영혼의 해방', k:'s', n:'죽음은 행복', kids:[{l:'플라톤',k:'p'}] },
+      { l:'원자의 해체', k:'s', n:'죽음은 아무것도 아니다', kids:[{l:'에피쿠로스',k:'p'}] },
+      { l:'죽음을 향한 존재', k:'s', n:'자각이 삶을 연다', kids:[{l:'하이데거',k:'p'}] },
+      { l:'사생일여', k:'s', n:'기의 모임과 흩어짐', kids:[{l:'장자',k:'p'}] }
+    ]},
+    { l:'자살에 대한 관점', k:'c', c:'mofa', kids:[
+      { l:'자연법 위반', k:'s', kids:[{l:'아퀴나스',k:'p'}] },
+      { l:'정언명령 위반', k:'s', kids:[{l:'칸트',k:'p'}] },
+      { l:'문제의 회피', k:'s', kids:[{l:'쇼펜하우어',k:'p'}] }
+    ]},
+    { l:'생명 윤리', k:'c', c:'envi', kids:[
+      { l:'유전자 조작', k:'s', n:'치료는 허용, 강화는 수단화', kids:[{l:'하버마스',k:'p'}] },
+      { l:'동물의 도덕적 지위', k:'s', kids:[{l:'싱어',k:'p'},{l:'레건',k:'p'}] }
+    ]},
+    { l:'사랑과 성 윤리', k:'c', c:'care', kids:[
+      { l:'성숙한 사랑', k:'s', n:'보호·책임·존경·이해', kids:[{l:'프롬',k:'p'}] },
+      { l:'전인격의 상호 양도', k:'s', kids:[{l:'칸트',k:'p'}] },
+      { l:'배려 윤리', k:'s', kids:[{l:'길리건',k:'p'},{l:'나딩스',k:'p'}] },
+      { l:'여성주의', k:'s', n:'여성성은 사회적 산물', kids:[{l:'보부아르',k:'p'}] }
+    ]}
+  ]},
+  arcs:[
+    {f:'플라톤', t:'에피쿠로스', l:'사후세계의 유무', kind:'대립'},
+    {f:'길리건', t:'칸트', ti:1, l:'정의윤리 비판', kind:'비판'},
+    {f:'프롬', t:'장자', l:'직관에 의한 일치', kind:'유사'},
+    {f:'레건', t:'칸트', ti:1, l:'가장자리 인간', kind:'비판'}
+  ]}
+];
+
+/* ══════════════════════════════════════════════════════════════════
+   계보도 — 측정 후 배치, 직각 연결선 + 아래로 휘도는 관계선
+   ══════════════════════════════════════════════════════════════════ */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $ = id => document.getElementById(id);
+const NS = 'http://www.w3.org/2000/svg';
+const el = (t,a={}) => { const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); return e; };
+const tierOf = h => h >= 8 ? 'A' : h >= 4 ? 'B' : 'C';
+const TIERNAME = { A:'최빈출', B:'빈출', C:'그 밖' };
+
+const COL_GAP = 16, ROW_GAP = 46, PAD = 24, ARC_ZONE = 150;
+const state = { tiers:new Set(['A','B','C']), arcs:true, sel:null };
+
+/* ── 트리 렌더 ───────────────────────────────────────────────── */
+function buildTree(spec) {
+  const sec = document.createElement('section');
+  sec.className = 'tree';
+  sec.innerHTML = `
+    <div class="thead"><h3>${esc(spec.title)}</h3><span class="u">${esc(spec.unit)}</span></div>
+    <p class="tlead">${esc(spec.lead)}</p>
+    <div class="scroller"><div class="stage"></div></div>
+    <div class="indent"></div>`;
+  const stage = sec.querySelector('.stage');
+  const svg = el('svg'); stage.append(svg);
+  const gLink = el('g'), gArc = el('g', { class:'arclayer' });
+  svg.append(gLink, gArc);
+
+  /* 노드 DOM 생성 (측정용으로 먼저 붙인다) */
+  const nodes = [], persons = [];
+  (function make(n, depth, parent) {
+    const d = document.createElement('div');
+    d.className = 'tn ' + n.k;
+    if (n.k === 'p') {
+      const p = P[n.l] || { h:0, m:0, y:[], t:'' };
+      d.classList.add(tierOf(p.h));
+      d.innerHTML = `${esc(n.l)}${p.h ? `<span class="h">${p.h}</span>` : ''}` + (n.n ? `<span class="n">${esc(n.n)}</span>` : '');
+      d.tabIndex = 0; d.setAttribute('role','button');
+      d.onclick = () => showDetail(n.l, d);
+      d.onkeydown = ev => { if (ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); showDetail(n.l, d); } };
+      persons.push({ l:n.l, node:null });
+    } else {
+      if (n.c) d.style.setProperty('--gc', `var(--g-${n.c})`);
+      d.innerHTML = esc(n.l) + (n.n ? `<span class="n">${esc(n.n)}</span>` : '');
+    }
+    stage.append(d);
+    const rec = { spec:n, dom:d, depth, parent, kids:[] };
+    nodes.push(rec);
+    if (n.k === 'p') persons[persons.length-1].node = rec;
+    if (parent) parent.kids.push(rec);
+    (n.kids || []).forEach(k => make(k, depth+1, rec));
+    return rec;
+  })(spec.root, 0, null);
+
+  return { sec, spec, stage, svg, gLink, gArc, nodes, persons };
+}
+
+/* ── 배치 ───────────────────────────────────────────────────── */
+function layout(T) {
+  const vis = n => n.spec.k !== 'p' || state.tiers.has(tierOf((P[n.spec.l]||{h:0}).h));
+  /* 자식이 모두 숨겨지면 그 가지도 숨긴다 */
+  const alive = n => {
+    if (!n.kids.length) return vis(n);
+    const any = n.kids.map(alive).some(Boolean);
+    n._alive = any || vis(n);
+    return n._alive;
+  };
+  T.nodes.forEach(n => n._alive = undefined);
+  alive(T.nodes[0]);
+  T.nodes.forEach(n => { if (n._alive === undefined) n._alive = vis(n); });
+
+  T.nodes.forEach(n => {
+    n.dom.style.display = n._alive ? '' : 'none';
+    n.w = n._alive ? n.dom.offsetWidth : 0;
+    n.h = n._alive ? n.dom.offsetHeight : 0;
+  });
+
+  /* 깊이별 y */
+  const maxD = Math.max(...T.nodes.map(n => n.depth));
+  const rowH = [];
+  for (let d = 0; d <= maxD; d++) rowH[d] = Math.max(0, ...T.nodes.filter(n => n.depth===d && n._alive).map(n => n.h));
+  const rowY = []; let y = PAD;
+  for (let d = 0; d <= maxD; d++) { rowY[d] = y; y += rowH[d] + ROW_GAP; }
+  const totalH = y - ROW_GAP + PAD + (T.spec.arcs && T.spec.arcs.length && state.arcs ? ARC_ZONE : 0);
+
+  /* x — 먼저 각 가지가 차지할 폭을 정하고, 그 안에서 가운데 놓는다.
+     부모 상자가 자식 폭보다 넓어도 옆 가지를 침범하지 않는다. */
+  (function measure(n) {
+    if (!n._alive) { n.span = 0; return 0; }
+    const kids = n.kids.filter(k => k._alive);
+    if (!kids.length) return (n.span = n.w);
+    const inner = kids.reduce((a,k) => a + measure(k), 0) + COL_GAP * (kids.length - 1);
+    return (n.span = Math.max(inner, n.w));
+  })(T.nodes[0]);
+
+  (function place(n, x0) {
+    if (!n._alive) return;
+    n.x = x0 + (n.span - n.w) / 2;
+    n.y = rowY[n.depth];
+    n.cx = n.x + n.w / 2;
+    const kids = n.kids.filter(k => k._alive);
+    if (!kids.length) return;
+    const inner = kids.reduce((a,k) => a + k.span, 0) + COL_GAP * (kids.length - 1);
+    let cx = x0 + (n.span - inner) / 2;
+    kids.forEach(k => { place(k, cx); cx += k.span + COL_GAP; });
+  })(T.nodes[0], PAD);
+
+  const totalW = Math.max(...T.nodes.filter(n=>n._alive).map(n => n.x + n.w)) + PAD;
+  T.stage.style.width = totalW + 'px';
+  T.stage.style.height = totalH + 'px';
+  T.svg.setAttribute('viewBox', `0 0 ${totalW} ${totalH}`);
+  T.svg.setAttribute('width', totalW); T.svg.setAttribute('height', totalH);
+  T.nodes.forEach(n => { if (n._alive) { n.dom.style.left = n.x+'px'; n.dom.style.top = n.y+'px'; } });
+
+  drawLinks(T); drawArcs(T, totalH);
+}
+
+function drawLinks(T) {
+  T.gLink.textContent = '';
+  T.nodes.forEach(n => {
+    if (!n._alive) return;
+    const kids = n.kids.filter(k => k._alive);
+    if (!kids.length) return;
+    const y0 = n.y + n.h, y1 = kids[0].y, mid = y0 + (y1 - y0) * 0.5;
+    const d = [`M${n.cx},${y0} V${mid}`];
+    kids.forEach(k => d.push(`M${k.cx},${mid} V${k.y}`));
+    d.push(`M${Math.min(...kids.map(k=>k.cx))},${mid} H${Math.max(...kids.map(k=>k.cx))}`);
+    T.gLink.append(el('path', { d:d.join(' '), fill:'none', stroke:'var(--line)', 'stroke-width':1.2, 'stroke-linecap':'round' }));
+  });
+}
+
+function drawArcs(T, totalH) {
+  T.gArc.textContent = '';
+  T.stage.querySelectorAll('.alab').forEach(e => e.remove());
+  if (!state.arcs || !T.spec.arcs) return;
+  const find = (name, idx=0) => T.persons.filter(p => p.l === name)[idx]?.node;
+  const live = T.spec.arcs
+    .map(a => ({ a, s:find(a.f, a.fi||0), t:find(a.t, a.ti||0) }))
+    .filter(o => o.s && o.t && o.s._alive && o.t._alive);
+  if (!live.length) return;
+
+  /* 짧은 연결부터 얕게, 긴 연결일수록 깊게 — 선끼리 덜 얽힌다 */
+  const order = live.slice().sort((p, q) =>
+    Math.abs(p.s.cx - p.t.cx) - Math.abs(q.s.cx - q.t.cx));
+  const step = Math.min(26, (ARC_ZONE - 40) / Math.max(1, order.length - 1));
+  const base = totalH - ARC_ZONE + 26;
+  const placed = [];
+
+  order.forEach((o, i) => {
+    const { a, s, t } = o;
+    const col = `var(--a-${a.kind})`;
+    const x1 = s.cx, y1 = s.y + s.h, x2 = t.cx, y2 = t.y + t.h;
+    const dip = base + i * step;
+    T.gArc.append(el('path', {
+      d:`M${x1},${y1} C${x1},${dip} ${x2},${dip} ${x2},${y2}`,
+      fill:'none', stroke:col, 'stroke-width':1.3,
+      'stroke-dasharray': a.kind==='유사' ? '5 4' : (a.kind==='비교' ? '1.5 4' : 'none'),
+      'marker-end': `url(#ah-${encodeURIComponent(a.kind)})`, opacity:.8 }));
+
+    const lab = document.createElement('div');
+    lab.className = 'alab';
+    lab.style.borderColor = col;
+    lab.innerHTML = `<b style="color:${col}">${esc(a.kind)}</b> ${esc(a.l)}`;
+    T.stage.append(lab);
+    /* 곡선의 최저점(t=0.5)에 붙인다 */
+    let lx = (x1 + x2) / 2, ly = 0.125 * (y1 + y2) + 0.75 * dip;
+    const w = lab.offsetWidth, h = lab.offsetHeight;
+    /* 앞서 놓인 라벨과 겹치면 아래로 밀어낸다 */
+    for (let guard = 0; guard < 40; guard++) {
+      const hit = placed.find(r => Math.abs(r.x - lx) < (r.w + w)/2 + 6 && Math.abs(r.y - ly) < (r.h + h)/2 + 3);
+      if (!hit) break;
+      ly = hit.y + (hit.h + h)/2 + 4;
+    }
+    placed.push({ x:lx, y:ly, w, h });
+    lab.style.left = lx + 'px';
+    lab.style.top = ly + 'px';
+  });
+
+  /* 라벨이 무대 밖으로 밀렸으면 무대를 늘린다 */
+  const need = Math.max(...placed.map(r => r.y + r.h/2)) + 14;
+  if (need > totalH) {
+    T.stage.style.height = need + 'px';
+    T.svg.setAttribute('height', need);
+    T.svg.setAttribute('viewBox', `0 0 ${T.stage.offsetWidth} ${need}`);
+  }
+}
+
+/* ── 목록형(좁은 화면) ──────────────────────────────────────── */
+function renderIndent(T) {
+  const box = T.sec.querySelector('.indent');
+  const li = n => {
+    const vis = n.k !== 'p' || state.tiers.has(tierOf((P[n.l]||{h:0}).h));
+    const kids = (n.kids || []).map(li).filter(Boolean);
+    if (!vis && !kids.length) return null;
+    let inner;
+    if (n.k === 'p') {
+      const p = P[n.l] || { h:0 };
+      inner = `<span class="ib p ${tierOf(p.h)}" data-p="${esc(n.l)}" role="button" tabindex="0">${esc(n.l)}${p.h?`<span class="h">${p.h}</span>`:''}</span>${n.n?`<span class="n">${esc(n.n)}</span>`:''}`;
+    } else {
+      const style = n.c ? ` style="--gc:var(--g-${n.c})"` : '';
+      inner = `<span class="ib ${n.k}"${style}>${esc(n.l)}</span>${n.n?`<span class="n">${esc(n.n)}</span>`:''}`;
+    }
+    return `<li>${inner}${kids.length?`<ul>${kids.join('')}</ul>`:''}</li>`;
+  };
+  const arcs = (T.spec.arcs||[]).map(a =>
+    `<div class="a"><span class="k" style="color:var(--a-${a.kind})">${esc(a.kind)}</span><b>${esc(a.f)}</b> → <b>${esc(a.t)}</b> · ${esc(a.l)}</div>`).join('');
+  box.innerHTML = `<ul>${li(T.spec.root)||''}</ul>` + (arcs && state.arcs ? `<div class="arclist">${arcs}</div>` : '');
+  box.querySelectorAll('[data-p]').forEach(b => {
+    b.onclick = () => showDetail(b.dataset.p, b);
+    b.onkeydown = ev => { if (ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); showDetail(b.dataset.p, b); } };
+  });
+}
+
+/* ── 상세 카드 ─────────────────────────────────────────────── */
+const detail = $('detail');
+function showDetail(name, src) {
+  const p = P[name];
+  if (!p) return;
+  document.querySelectorAll('.tn.sel, .ib.sel').forEach(e => e.classList.remove('sel'));
+  if (src) src.classList.add('sel');
+  state.sel = name;
+  const t = tierOf(p.h);
+  detail.innerHTML = `
+    <div class="dh">
+      <h4>${esc(name)}<span class="orig">${esc(p.s||'')}</span></h4>
+      <button type="button" class="x" id="dx" aria-label="닫기">×</button>
+    </div>
+    <div class="badges">
+      <span class="b tier">${TIERNAME[t]}</span>
+      <span class="b">출제 회차 ${p.h}</span>
+      <span class="b">교재 언급 ${p.m}</span>
+    </div>
+    <p class="tag">${esc(p.t)}</p>
+    ${p.y.length
+      ? `<div class="yh">교재가 밝힌 회차</div><div class="yrs">${p.y.map(y=>`<span class="yr">${esc(y)}</span>`).join('')}</div>`
+      : `<p class="none">교재가 이 사상가에게 평가원 회차를 붙이지 않았다. 출제가 없었다는 뜻은 아니고, 함정으로 짚히지 않았다는 뜻이다.</p>`}`;
+  detail.classList.add('on');
+  $('dx').onclick = closeDetail;
+}
+function closeDetail() {
+  detail.classList.remove('on'); state.sel = null;
+  document.querySelectorAll('.tn.sel, .ib.sel').forEach(e => e.classList.remove('sel'));
+}
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') closeDetail(); });
+document.addEventListener('click', ev => {
+  if (!ev.target.closest('.detail') && !ev.target.closest('[data-p]') && !ev.target.closest('.tn.p')) closeDetail();
+});
+
+/* ── 조립 ───────────────────────────────────────────────────── */
+const built = [];
+function init() {
+  /* 화살촉 정의 (문서에 하나만) */
+  const defsHost = el('svg', { width:0, height:0, style:'position:absolute' });
+  const defs = el('defs');
+  ['계승','비판','대립','유사','비교'].forEach(k => {
+    const m = el('marker', { id:`ah-${encodeURIComponent(k)}`, viewBox:'0 0 10 10', refX:9, refY:5,
+      markerWidth:5, markerHeight:5, orient:'auto', markerUnits:'strokeWidth' });
+    m.append(el('path', { d:'M0,1.4 L9,5 L0,8.6 z', fill:`var(--a-${k})` }));
+    defs.append(m);
+  });
+  defsHost.append(defs); document.body.append(defsHost);
+
+  const host = $('trees');
+  TREES.forEach(spec => { const T = buildTree(spec); host.append(T.sec); built.push(T); });
+
+  /* 등급별 인원 (중복 제외) */
+  const cnt = { A:0, B:0, C:0 };
+  Object.values(P).forEach(v => cnt[tierOf(v.h)]++);
+  $('cA').textContent = cnt.A; $('cB').textContent = cnt.B; $('cC').textContent = cnt.C;
+
+  document.querySelectorAll('.tierbtn').forEach(b => b.onclick = () => {
+    const t = b.dataset.tier;
+    if (state.tiers.has(t)) { if (state.tiers.size > 1) state.tiers.delete(t); } else state.tiers.add(t);
+    b.setAttribute('aria-pressed', String(state.tiers.has(t)));
+    redraw();
+  });
+  $('arcs').onclick = () => {
+    state.arcs = !state.arcs;
+    $('arcs').setAttribute('aria-pressed', String(state.arcs));
+    document.body.classList.toggle('arcs-off', !state.arcs);
+    redraw();
+  };
+  redraw();
+}
+function redraw() { built.forEach(T => { layout(T); renderIndent(T); }); }
+
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(redraw, 160); });
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => setTimeout(redraw, 40));
+init();
+</script>
