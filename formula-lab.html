@@ -1,0 +1,1463 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>헷갈리는 공식 실험실</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;900&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+<style>
+/* ── tokens ─────────────────────────────────────────────── */
+:root{
+  --paper:#EEF1F6; --surface:#FFFFFF; --surface-2:#F6F8FC;
+  --ink:#101827; --ink-2:#4E5872; --ink-3:#818BA4;
+  --rule:#D3D9E6; --rule-soft:#E4E8F1;
+  --accent:#2B3FA0; --accent-soft:#DEE3F6; --accent-ink:#2B3FA0;
+  --signal:#C93F17; --signal-soft:#FBE6DD;
+  --pos:#12715A; --pos-soft:#DCF0E8;
+  --mid:#8A6108; --mid-soft:#F7ECD3;
+  --neg:#A6303F; --neg-soft:#F8E0E3;
+  --grid:rgba(43,63,160,.11); --page-grid:rgba(43,63,160,.07); --axis:rgba(16,24,39,.34);
+  --shadow:0 1px 0 rgba(16,24,39,.03), 0 14px 34px -26px rgba(16,24,39,.55);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0B1019; --surface:#141B29; --surface-2:#1A2333;
+    --ink:#E8ECF5; --ink-2:#A8B1C7; --ink-3:#7B85A0;
+    --rule:#2A3449; --rule-soft:#222B3D;
+    --accent:#8FA2FF; --accent-soft:#212D57; --accent-ink:#8FA2FF;
+    --signal:#FF8657; --signal-soft:#3E2015;
+    --pos:#4FC79E; --pos-soft:#12332B;
+    --mid:#E4B657; --mid-soft:#34290F;
+    --neg:#F2818E; --neg-soft:#3A1B20;
+    --grid:rgba(143,162,255,.13); --page-grid:rgba(143,162,255,.055); --axis:rgba(232,236,245,.36);
+    --shadow:0 1px 0 rgba(0,0,0,.2), 0 14px 34px -26px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0B1019; --surface:#141B29; --surface-2:#1A2333;
+  --ink:#E8ECF5; --ink-2:#A8B1C7; --ink-3:#7B85A0;
+  --rule:#2A3449; --rule-soft:#222B3D;
+  --accent:#8FA2FF; --accent-soft:#212D57; --accent-ink:#8FA2FF;
+  --signal:#FF8657; --signal-soft:#3E2015;
+  --pos:#4FC79E; --pos-soft:#12332B;
+  --mid:#E4B657; --mid-soft:#34290F;
+  --neg:#F2818E; --neg-soft:#3A1B20;
+  --grid:rgba(143,162,255,.13); --page-grid:rgba(143,162,255,.055); --axis:rgba(232,236,245,.36);
+  --shadow:0 1px 0 rgba(0,0,0,.2), 0 14px 34px -26px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--page-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--page-grid) 1px, transparent 1px);
+  background-size:26px 26px;
+  font-family:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  font-size:15px; line-height:1.7; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px 110px}
+
+/* ── math typesetting ───────────────────────────────────── */
+.m,.v{font-family:'STIX Two Text',Cambria,Georgia,serif}
+.v{font-style:italic}
+.frac{display:inline-flex;flex-direction:column;vertical-align:-0.62em;text-align:center;margin:0 .18em;line-height:1.28;font-size:.94em}
+.frac>span{padding:0 .32em;display:block}
+.frac>span:first-child{border-bottom:1.2px solid currentColor;padding-bottom:.05em}
+.frac>span:last-child{padding-top:.05em}
+.rad{border-top:1.2px solid currentColor;padding:.05em .2em 0 .12em;margin-left:-.06em}
+.sq{vertical-align:-.24em;font-size:.72em;font-style:normal;letter-spacing:0}
+.hl{color:var(--signal);font-weight:600}
+.hl2{color:var(--accent-ink);font-weight:600}
+.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums;font-style:normal}
+
+/* ── header ─────────────────────────────────────────────── */
+header.top{padding:46px 0 30px;border-bottom:1px solid var(--rule)}
+.eyebrow{font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:var(--signal);text-transform:uppercase}
+h1{font-family:'Gothic A1',sans-serif;font-weight:900;font-size:clamp(30px,5.2vw,46px);line-height:1.12;margin:14px 0 0;letter-spacing:-.02em;text-wrap:balance}
+header.top p{max-width:62ch;color:var(--ink-2);margin:12px 0 0;font-size:14.5px}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.key{display:inline-flex;align-items:center;gap:7px;font:500 11.5px/1 'IBM Plex Mono',monospace;color:var(--ink-2);
+  border:1px solid var(--rule);background:var(--surface);padding:7px 10px;border-radius:3px}
+.key i{width:9px;height:9px;border-radius:50%;display:block}
+
+/* ── shell + index ──────────────────────────────────────── */
+.shell{display:grid;grid-template-columns:186px minmax(0,1fr);gap:44px;align-items:start;margin-top:34px}
+nav.index,main.cards{min-width:0}
+nav.index{position:sticky;top:22px}
+nav.index h2{font:600 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--ink-3);margin:0 0 12px;text-transform:uppercase}
+nav.index ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+nav.index a{display:block;padding:6px 0 6px 12px;border-left:2px solid var(--rule-soft);color:var(--ink-2);
+  text-decoration:none;font-size:13.5px;transition:border-color .15s,color .15s}
+nav.index a:hover,nav.index a:focus-visible{color:var(--signal);border-left-color:var(--signal)}
+nav.index .grp{font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;color:var(--ink-3);
+  margin:16px 0 6px;padding-left:12px}
+nav.index .grp:first-child{margin-top:0}
+
+/* ── card ───────────────────────────────────────────────── */
+.cards{display:flex;flex-direction:column;gap:30px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:5px;padding:24px 26px 22px;
+  display:flex;flex-direction:column;gap:18px;box-shadow:var(--shadow);scroll-margin-top:20px;min-width:0}
+.card-head{display:flex;flex-direction:column;gap:5px}
+.tag{font:600 10px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--accent-ink);text-transform:uppercase}
+.card h3{font-family:'Gothic A1',sans-serif;font-weight:800;font-size:22px;margin:0;letter-spacing:-.015em}
+.when{margin:0;color:var(--ink-2);font-size:13.5px}
+
+.formula{background:var(--surface-2);border:1px solid var(--rule-soft);border-radius:4px;
+  padding:18px 20px;font-family:'STIX Two Text',serif;font-size:21px;line-height:2.25;overflow-x:auto}
+.formula .lbl{font-family:'IBM Plex Sans KR',sans-serif;font-size:12px;color:var(--ink-3);
+  display:inline-block;min-width:74px;font-weight:500}
+
+.lab{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:20px;align-items:start}
+.lab.wide{grid-template-columns:minmax(0,1fr)}
+.stage{background:var(--surface-2);border:1px solid var(--rule-soft);border-radius:4px;overflow:hidden;min-width:0}
+.stage-svg{display:block;width:100%;height:auto;touch-action:none}
+.panel{display:flex;flex-direction:column;gap:14px;min-width:0}
+
+/* ── controls ───────────────────────────────────────────── */
+.ctrl{display:grid;grid-template-columns:78px minmax(0,1fr) 46px;gap:10px;align-items:center}
+.ctrl label{font:500 12.5px/1 'IBM Plex Mono',monospace;color:var(--ink-2)}
+.ctrl output{font:600 12.5px/1 'IBM Plex Mono',monospace;color:var(--signal);text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--accent);height:20px;margin:0;background:transparent}
+.seg{display:flex;gap:0;border:1px solid var(--rule);border-radius:3px;overflow:hidden;width:fit-content;flex-wrap:wrap}
+.seg button{font:500 12px/1 'IBM Plex Sans KR',sans-serif;padding:8px 12px;background:var(--surface);
+  color:var(--ink-2);border:0;border-right:1px solid var(--rule);cursor:pointer;transition:background .14s,color .14s}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.seg button:hover:not([aria-pressed="true"]){background:var(--accent-soft)}
+.nums{display:flex;gap:10px;flex-wrap:wrap}
+.nums label{font:500 12px/1 'IBM Plex Mono',monospace;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.nums input{width:52px;font:500 13px 'IBM Plex Mono',monospace;padding:6px 7px;border:1px solid var(--rule);
+  border-radius:3px;background:var(--surface);color:var(--ink);text-align:center}
+button.act{font:600 12.5px 'IBM Plex Sans KR',sans-serif;padding:9px 14px;border:1px solid var(--accent);
+  background:var(--accent);color:#fff;border-radius:3px;cursor:pointer;width:fit-content}
+button.act.ghost{background:transparent;color:var(--accent-ink)}
+button.act:hover{filter:brightness(1.08)}
+:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
+/* ── readouts ───────────────────────────────────────────── */
+.readout{background:var(--surface-2);border:1px solid var(--rule-soft);border-radius:4px;padding:14px 16px;
+  font-family:'STIX Two Text',serif;font-size:16px;line-height:2.1;overflow-x:auto}
+.readout .step{display:block;white-space:nowrap}
+.readout .cap{font-family:'IBM Plex Sans KR',sans-serif;font-size:11.5px;color:var(--ink-3);
+  letter-spacing:.02em;display:block;margin-bottom:2px}
+.chip{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 'IBM Plex Sans KR',sans-serif;
+  padding:6px 10px;border-radius:3px;border:1px solid transparent;width:fit-content}
+.chip.pos{background:var(--pos-soft);color:var(--pos);border-color:var(--pos)}
+.chip.mid{background:var(--mid-soft);color:var(--mid);border-color:var(--mid)}
+.chip.neg{background:var(--neg-soft);color:var(--neg);border-color:var(--neg)}
+.chip.ind{background:var(--accent-soft);color:var(--accent-ink);border-color:var(--accent)}
+
+/* ── tables ─────────────────────────────────────────────── */
+.tblbox{overflow-x:auto;border:1px solid var(--rule-soft);border-radius:4px;min-width:0}
+table.tbl{width:100%;border-collapse:collapse;font:500 12.5px 'IBM Plex Mono',monospace;
+  font-variant-numeric:tabular-nums;background:var(--surface)}
+table.tbl th,table.tbl td{border:1px solid var(--rule-soft);padding:7px 10px;text-align:center;white-space:nowrap}
+table.tbl th{background:var(--surface-2);color:var(--ink-2);font-weight:600;font-size:11.5px}
+table.tbl td.hd{background:var(--surface-2);color:var(--ink-2);font-family:'STIX Two Text',serif;font-style:italic;font-size:14px}
+table.tbl td .adj{color:var(--signal);font-size:10px;vertical-align:super}
+table.tbl tr.sol td{color:var(--accent-ink);font-weight:600}
+
+/* ── warn / note ────────────────────────────────────────── */
+.warn{background:var(--signal-soft);border:1px solid var(--rule-soft);border-left:none;border-radius:4px;
+  padding:13px 16px;font-size:13.5px;color:var(--ink);margin:0;line-height:1.75}
+.warn b.chiplbl{display:inline-block;background:var(--signal);color:#fff;font:600 9.5px/1 'IBM Plex Mono',monospace;
+  letter-spacing:.12em;padding:4px 7px;border-radius:2px;margin-right:9px;vertical-align:1.5px}
+.warn ul{margin:8px 0 0;padding-left:18px}
+.warn li{margin:3px 0}
+.note{font-size:13px;color:var(--ink-2);margin:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.mini{background:var(--surface-2);border:1px solid var(--rule-soft);border-radius:4px;padding:13px 15px}
+.mini h4{font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--ink-3);margin:0 0 8px;text-transform:uppercase}
+.mini p{margin:0;font-family:'STIX Two Text',serif;font-size:16px;line-height:1.95}
+
+/* ── svg element styles ─────────────────────────────────── */
+.stage-svg .grid-l{stroke:var(--grid);stroke-width:1}
+.stage-svg .axis-l{stroke:var(--axis);stroke-width:1.2}
+.stage-svg .tick{fill:var(--ink-3);font:500 9.5px 'IBM Plex Mono',monospace}
+.stage-svg .lab{fill:var(--ink);font:600 12px 'STIX Two Text',serif;font-style:italic}
+.stage-svg .lab-s{fill:var(--ink-2);font:500 11px 'IBM Plex Mono',monospace}
+.stage-svg .leg{stroke:var(--accent);stroke-width:1.6;fill:none}
+.stage-svg .dash{stroke:var(--accent);stroke-width:1.4;fill:none;stroke-dasharray:5 4;opacity:.85}
+.stage-svg .hypo{stroke:var(--signal);stroke-width:2.4;fill:none;stroke-linecap:round}
+.stage-svg .curve{stroke:var(--accent);stroke-width:2.2;fill:none;stroke-linejoin:round}
+.stage-svg .hit{fill:transparent}
+.stage-svg .handle{cursor:grab}
+.stage-svg .handle:active,.stage-svg .handle.dragging{cursor:grabbing}
+.stage-svg .handle .dot{stroke:var(--surface);stroke-width:2}
+.stage-svg .handle:focus-visible .ring,.stage-svg .handle:hover .ring{opacity:.32}
+.stage-svg .ring{fill:currentColor;opacity:0;transition:opacity .15s}
+.stage-svg .handle{outline:none}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+@media (max-width:940px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:22px}
+  nav.index{position:static;border-bottom:1px solid var(--rule);padding-bottom:16px}
+  nav.index ol{flex-direction:row;flex-wrap:wrap;gap:6px}
+  nav.index a{border-left:0;border:1px solid var(--rule);border-radius:3px;padding:6px 10px;background:var(--surface)}
+  nav.index .grp{display:none}
+}
+@media (max-width:720px){
+  .lab{grid-template-columns:minmax(0,1fr)}
+  .card{padding:20px 17px 18px}
+  .formula{font-size:18px;padding:15px 14px;line-height:1.95}
+  .formula .lbl{display:block;min-width:0;margin:0 0 2px}
+  .formula br{display:none}
+  .ctrl{grid-template-columns:72px minmax(0,1fr) 42px;gap:8px}
+}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Drag · Slide · Check</div>
+  <h1>헷갈리는 공식 실험실</h1>
+  <p>외워도 시험장에서 흔들리는 공식 11개를, 점을 끌어보고 값을 바꿔보면서 <b>눈으로 확인</b>하는 곳.
+     모든 그림의 파란 점은 마우스로 끌 수 있고(키보드는 <span class="num">Tab</span> → 방향키), 숫자는 실시간으로 다시 계산됩니다.
+     카드마다 맨 아래 <span class="num">헷갈림 방지</span> 칸이 진짜 핵심입니다.</p>
+  <div class="legend">
+    <span class="key"><i style="background:var(--accent)"></i>끌 수 있는 점 · 보조선</span>
+    <span class="key"><i style="background:var(--signal)"></i>지금 구하는 값</span>
+    <span class="key"><i style="background:var(--pos)"></i>조건 만족</span>
+    <span class="key"><i style="background:var(--neg)"></i>조건 불만족</span>
+  </div>
+</header>
+
+<div class="shell">
+<nav class="index" aria-label="공식 색인">
+  <h2>색인</h2>
+  <ol>
+    <li class="grp">거리</li>
+    <li><a href="#c1">두 점 사이의 거리</a></li>
+    <li><a href="#c2">점과 직선 사이의 거리</a></li>
+    <li><a href="#c3">원의 방정식 · 원과 직선</a></li>
+    <li class="grp">비율</li>
+    <li><a href="#c4">내분점 · 외분점</a></li>
+    <li><a href="#c5">비율로 길이 구하기</a></li>
+    <li class="grp">방정식</li>
+    <li><a href="#c6">근의 공식</a></li>
+    <li><a href="#c7">판별식</a></li>
+    <li><a href="#c8">부정방정식</a></li>
+    <li><a href="#c9">고차방정식</a></li>
+    <li class="grp">수열 · 도형</li>
+    <li><a href="#c10">시그마 계산</a></li>
+    <li><a href="#c11">정삼각형</a></li>
+  </ol>
+</nav>
+
+<main class="cards">
+
+<!-- ── 1. 두 점 사이의 거리 ─────────────────────────────── -->
+<section class="card" id="c1">
+  <div class="card-head">
+    <span class="tag">거리 01</span>
+    <h3>두 점 사이의 거리</h3>
+    <p class="when">좌표 두 개만 주어졌을 때. 사실 피타고라스 정리 그 자체입니다.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">평면</span>
+    <span class="v">AB</span> = <span class="m">&radic;<span class="rad">(<span class="v">x</span><span class="sq">2</span>&minus;<span class="v">x</span><span class="sq">1</span>)<sup>2</sup> + (<span class="v">y</span><span class="sq">2</span>&minus;<span class="v">y</span><span class="sq">1</span>)<sup>2</sup></span></span><br>
+    <span class="lbl">수직선</span>
+    <span class="v">AB</span> = |<span class="v">x</span><span class="sq">2</span> &minus; <span class="v">x</span><span class="sq">1</span>|
+    &nbsp;&nbsp;<span class="lbl" style="min-width:auto">공간</span>
+    &radic;<span class="rad">(&Delta;<span class="v">x</span>)<sup>2</sup>+(&Delta;<span class="v">y</span>)<sup>2</sup>+(&Delta;<span class="v">z</span>)<sup>2</sup></span>
+  </div>
+  <div class="lab">
+    <div class="stage" id="s1"></div>
+    <div class="panel">
+      <div class="readout" id="r1"></div>
+      <p class="note">A와 B를 끌어보세요. 직각삼각형의 두 변(가로·세로)이 항상 <span class="v">&Delta;x</span>, <span class="v">&Delta;y</span>이고 빗변이 거리입니다.</p>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    빼는 <b>순서는 아무래도 상관없습니다</b>. 어차피 제곱하니까 <span class="m">(<span class="v">x</span><span class="sq">2</span>&minus;<span class="v">x</span><span class="sq">1</span>)<sup>2</sup> = (<span class="v">x</span><span class="sq">1</span>&minus;<span class="v">x</span><span class="sq">2</span>)<sup>2</sup></span>.
+    대신 <b>제곱근을 마지막에 한 번만</b> 씌우는 것. <span class="m">&radic;<span class="rad">&nbsp;</span></span>를 각 항에 따로 씌우면 틀립니다.
+  </div>
+</section>
+
+<!-- ── 2. 점과 직선 사이의 거리 ─────────────────────────── -->
+<section class="card" id="c2">
+  <div class="card-head">
+    <span class="tag">거리 02</span>
+    <h3>점과 직선 사이의 거리</h3>
+    <p class="when">점에서 직선에 <b>수직으로</b> 내린 길이. 직선은 반드시 <span class="m"><span class="v">ax</span>+<span class="v">by</span>+<span class="v">c</span>=0</span> 꼴로 바꾼 뒤 대입합니다.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">거리</span>
+    <span class="v">d</span> =
+    <span class="frac"><span>|<span class="v">ax</span><span class="sq">0</span> + <span class="v">by</span><span class="sq">0</span> + <span class="v">c</span>|</span><span>&radic;<span class="rad"><span class="v">a</span><sup>2</sup> + <span class="v">b</span><sup>2</sup></span></span></span>
+    <span class="lbl" style="min-width:auto;margin-left:18px">원점에서</span>
+    <span class="frac"><span>|<span class="v">c</span>|</span><span>&radic;<span class="rad"><span class="v">a</span><sup>2</sup>+<span class="v">b</span><sup>2</sup></span></span></span>
+  </div>
+  <div class="lab">
+    <div class="stage" id="s2"></div>
+    <div class="panel">
+      <div class="readout" id="r2"></div>
+      <p class="note">점 <span class="v">P</span>와 직선 위의 두 점 <span class="v">L</span><span class="sq">1</span>, <span class="v">L</span><span class="sq">2</span>를 모두 끌 수 있습니다. 빨간 선이 항상 직선과 직각을 이룹니다.</p>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li><span class="m"><span class="v">y</span> = <span class="v">mx</span> + <span class="v">n</span></span> 꼴로 주어지면 <b>반드시 이항</b>해서 <span class="m"><span class="v">mx</span> &minus; <span class="v">y</span> + <span class="v">n</span> = 0</span>으로. 이때 <span class="m"><span class="v">b</span> = &minus;1</span>입니다.</li>
+      <li>분모는 <b><span class="v">x</span>, <span class="v">y</span>의 계수만</b>. 상수항 <span class="v">c</span>는 분모에 절대 들어가지 않습니다.</li>
+      <li>분자에는 <b>절댓값</b>. 음수가 나왔다고 거리가 음수일 수는 없습니다.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 3. 원 ──────────────────────────────────────────── -->
+<section class="card" id="c3">
+  <div class="card-head">
+    <span class="tag">거리 03</span>
+    <h3>원의 방정식 · 원과 직선의 위치관계</h3>
+    <p class="when">원은 "중심에서 거리가 <span class="v">r</span>로 일정한 점들". 그래서 앞의 <b>점과 직선 사이의 거리</b>가 그대로 쓰입니다.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">표준형</span>
+    (<span class="v">x</span>&minus;<span class="v">a</span>)<sup>2</sup> + (<span class="v">y</span>&minus;<span class="v">b</span>)<sup>2</sup> = <span class="v">r</span><sup>2</sup>
+    &nbsp;&rarr;&nbsp; 중심 (<span class="v">a</span>, <span class="v">b</span>), 반지름 <span class="v">r</span><br>
+    <span class="lbl">위치관계</span>
+    <span class="v">d</span> &lt; <span class="v">r</span> 두 점에서 만남 &nbsp;·&nbsp;
+    <span class="v">d</span> = <span class="v">r</span> 접함 &nbsp;·&nbsp;
+    <span class="v">d</span> &gt; <span class="v">r</span> 만나지 않음
+  </div>
+  <div class="lab">
+    <div class="stage" id="s3"></div>
+    <div class="panel">
+      <div class="ctrl"><label for="i3r">반지름 r</label><input type="range" id="i3r" min="1" max="5" step="0.5" value="3"><output id="o3r">3</output></div>
+      <div class="ctrl"><label for="i3m">기울기 m</label><input type="range" id="i3m" min="-3" max="3" step="0.25" value="0.5"><output id="o3m">0.5</output></div>
+      <div class="ctrl"><label for="i3n">절편 n</label><input type="range" id="i3n" min="-6" max="6" step="0.5" value="-1"><output id="o3n">-1</output></div>
+      <div class="readout" id="r3"></div>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li>중심은 <b>부호를 뒤집어</b> 읽습니다. <span class="m">(<span class="v">x</span>+3)<sup>2</sup>+(<span class="v">y</span>&minus;2)<sup>2</sup>=25</span> &rarr; 중심 <span class="m">(&minus;3, 2)</span>, 반지름 <span class="num">5</span>(<b>25가 아님</b>).</li>
+      <li>일반형 <span class="m"><span class="v">x</span><sup>2</sup>+<span class="v">y</span><sup>2</sup>+<span class="v">Ax</span>+<span class="v">By</span>+<span class="v">C</span>=0</span>은 완전제곱으로: 중심 <span class="m">(&minus;<span class="v">A</span>/2, &minus;<span class="v">B</span>/2)</span>, <span class="m"><span class="v">r</span><sup>2</sup> = <span class="v">A</span><sup>2</sup>/4 + <span class="v">B</span><sup>2</sup>/4 &minus; <span class="v">C</span></span>.</li>
+      <li>판별식으로 풀어도 같은 결론이 나옵니다. <b>거리 비교가 훨씬 빠릅니다.</b></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 4. 내분점 · 외분점 ───────────────────────────────── -->
+<section class="card" id="c4">
+  <div class="card-head">
+    <span class="tag">비율 01</span>
+    <h3>내분점 · 외분점</h3>
+    <p class="when">선분 <span class="v">AB</span>를 <span class="m"><span class="v">m</span>:<span class="v">n</span></span>으로 나누는 점. 외분은 <b>내분식에서 <span class="v">n</span>에 마이너스를 붙인 것</b>뿐입니다.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">내분점 P</span>
+    <span class="frac"><span><span class="v">mx</span><span class="sq">2</span> + <span class="v">nx</span><span class="sq">1</span></span><span><span class="v">m</span> + <span class="v">n</span></span></span>,
+    <span class="frac"><span><span class="v">my</span><span class="sq">2</span> + <span class="v">ny</span><span class="sq">1</span></span><span><span class="v">m</span> + <span class="v">n</span></span></span><br>
+    <span class="lbl">외분점 Q</span>
+    <span class="frac"><span><span class="v">mx</span><span class="sq">2</span> <span class="hl">&minus;</span> <span class="v">nx</span><span class="sq">1</span></span><span><span class="v">m</span> <span class="hl">&minus;</span> <span class="v">n</span></span></span>,
+    <span class="frac"><span><span class="v">my</span><span class="sq">2</span> <span class="hl">&minus;</span> <span class="v">ny</span><span class="sq">1</span></span><span><span class="v">m</span> <span class="hl">&minus;</span> <span class="v">n</span></span></span>
+    <span class="lbl" style="min-width:auto;margin-left:14px">중점</span>
+    <span class="m">(<span class="v">x</span><span class="sq">1</span>+<span class="v">x</span><span class="sq">2</span>)/2</span> 꼴
+  </div>
+  <div class="lab">
+    <div class="stage" id="s4"></div>
+    <div class="panel">
+      <div class="ctrl"><label for="i4m">m</label><input type="range" id="i4m" min="1" max="6" step="1" value="2"><output id="o4m">2</output></div>
+      <div class="ctrl"><label for="i4n">n</label><input type="range" id="i4n" min="1" max="6" step="1" value="1"><output id="o4n">1</output></div>
+      <div class="readout" id="r4"></div>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li><b><span class="v">m</span>은 먼 쪽 좌표에 곱합니다.</b> <span class="m"><span class="v">m</span>:<span class="v">n</span></span>이면 <span class="v">m</span>은 <span class="v">x</span><span class="sq">2</span>에, <span class="v">n</span>은 <span class="v">x</span><span class="sq">1</span>에. (A에 붙은 비율이 A에 곱해지는 게 아닙니다 — 대각선으로 곱한다고 외우세요.)</li>
+      <li>외분점은 <span class="m"><span class="v">m</span>&gt;<span class="v">n</span></span>이면 <b>B 바깥쪽</b>, <span class="m"><span class="v">m</span>&lt;<span class="v">n</span></span>이면 <b>A 바깥쪽</b>. <span class="m"><span class="v">m</span>=<span class="v">n</span></span>이면 분모가 0 &rarr; <b>외분점이 존재하지 않습니다.</b></li>
+      <li>중점은 내분점의 <span class="m">1:1</span> 특수한 경우일 뿐입니다.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 5. 비율로 길이 구하기 ────────────────────────────── -->
+<section class="card" id="c5">
+  <div class="card-head">
+    <span class="tag">비율 02</span>
+    <h3>비율로 길이 구하기</h3>
+    <p class="when">평행선이 보이면 닮음, 중선이 보이면 <span class="m">2:1</span>. 도형 문제에서 길이를 "재지 않고" 구하는 방법.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">평행선</span>
+    <span class="m">DE &parallel; BC</span> &rArr; <span class="m">AD:DB = AE:EC</span>, &nbsp;<span class="m">DE = <span class="frac"><span>AD</span><span>AB</span></span> &times; BC</span><br>
+    <span class="lbl">무게중심</span>
+    <span class="m">AG:GM = 2:1</span> (꼭짓점 쪽이 2) &nbsp;&nbsp;
+    <span class="lbl" style="min-width:auto">닮음비 <span class="v">k</span></span>
+    <span class="m">길이 <span class="v">k</span> · 넓이 <span class="v">k</span><sup>2</sup> · 부피 <span class="v">k</span><sup>3</sup></span>
+  </div>
+  <div class="lab">
+    <div class="stage" id="s5"></div>
+    <div class="panel">
+      <div class="seg" id="g5" role="group" aria-label="보기 전환">
+        <button data-mode="par" aria-pressed="true">평행선 비례</button>
+        <button data-mode="cen" aria-pressed="false">무게중심 2:1</button>
+        <button data-mode="area" aria-pressed="false">넓이비</button>
+      </div>
+      <div class="ctrl"><label for="i5t">AD : AB</label><input type="range" id="i5t" min="0.15" max="0.85" step="0.05" value="0.4"><output id="o5t">0.4</output></div>
+      <div class="readout" id="r5"></div>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li>닮음비가 <span class="m">2:3</span>이면 넓이비는 <span class="m">4:9</span>. <b>넓이비를 그대로 길이비로 쓰지 마세요.</b> 거꾸로, 넓이비가 <span class="m">9:16</span>이면 길이비는 <span class="m">3:4</span>(제곱근).</li>
+      <li>무게중심은 <b>꼭짓점에서 2</b>, 대변 중점 쪽이 1. 헷갈리면 "무거운 쪽(꼭짓점)이 길다"로 기억.</li>
+      <li>비례식을 세울 때 <b>대응하는 변끼리</b> 짝지어야 합니다. 그림에서 같은 각을 먼저 표시하세요.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 6. 근의 공식 ─────────────────────────────────────── -->
+<section class="card" id="c6">
+  <div class="card-head">
+    <span class="tag">방정식 01</span>
+    <h3>근의 공식</h3>
+    <p class="when">인수분해가 안 될 때 쓰는 최후의 수단. 짝수 공식을 같이 쓰면 계산이 절반으로 줄어듭니다.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">기본형</span>
+    <span class="v">x</span> = <span class="frac"><span>&minus;<span class="v">b</span> &plusmn; &radic;<span class="rad"><span class="v">b</span><sup>2</sup> &minus; 4<span class="v">ac</span></span></span><span>2<span class="v">a</span></span></span>
+    <span class="lbl" style="min-width:auto;margin-left:20px">짝수 공식 (<span class="v">b</span>=2<span class="v">b</span>&prime;)</span>
+    <span class="v">x</span> = <span class="frac"><span>&minus;<span class="v">b</span>&prime; &plusmn; &radic;<span class="rad"><span class="v">b</span>&prime;<sup>2</sup> &minus; <span class="v">ac</span></span></span><span><span class="v">a</span></span></span>
+  </div>
+  <div class="lab">
+    <div class="stage" id="s6"></div>
+    <div class="panel">
+      <div class="ctrl"><label for="i6a">a</label><input type="range" id="i6a" min="-3" max="3" step="1" value="1"><output id="o6a">1</output></div>
+      <div class="ctrl"><label for="i6b">b</label><input type="range" id="i6b" min="-8" max="8" step="1" value="-2"><output id="o6b">-2</output></div>
+      <div class="ctrl"><label for="i6c">c</label><input type="range" id="i6c" min="-8" max="8" step="1" value="-3"><output id="o6c">-3</output></div>
+      <div class="readout" id="r6"></div>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li><b>분모 <span class="m">2<span class="v">a</span></span>는 전체에 걸립니다.</b> <span class="m">&minus;<span class="v">b</span></span>만 나누고 루트를 따로 두면 틀립니다.</li>
+      <li>맨 앞은 <span class="m">&plusmn;<span class="v">b</span></span>가 아니라 <b><span class="m">&minus;<span class="v">b</span></span></b>. <span class="v">b</span>가 음수면 부호가 두 번 바뀌어 양수가 됩니다.</li>
+      <li>루트 안은 <span class="m"><span class="v">b</span><sup>2</sup>&minus;4<span class="v">ac</span></span>. <span class="m">4<span class="v">ac</span>&minus;<span class="v">b</span><sup>2</sup></span>가 아닙니다.</li>
+      <li>짝수 공식은 분모가 <span class="m">2<span class="v">a</span></span>가 아니라 <b><span class="m"><span class="v">a</span></span></b>, 루트 안도 <span class="m">4<span class="v">ac</span></span>가 아니라 <span class="m"><span class="v">ac</span></span>입니다.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 7. 판별식 ────────────────────────────────────────── -->
+<section class="card" id="c7">
+  <div class="card-head">
+    <span class="tag">방정식 02</span>
+    <h3>판별식</h3>
+    <p class="when">근의 공식의 <b>루트 안</b>만 떼어낸 것. 루트 안이 음수면 실수 범위에서 답이 없다 — 그게 전부입니다.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">판별식</span>
+    <span class="v">D</span> = <span class="v">b</span><sup>2</sup> &minus; 4<span class="v">ac</span>
+    <span class="lbl" style="min-width:auto;margin-left:16px"><span class="v">b</span>=2<span class="v">b</span>&prime;일 때</span>
+    <span class="frac"><span><span class="v">D</span></span><span>4</span></span> = <span class="v">b</span>&prime;<sup>2</sup> &minus; <span class="v">ac</span>
+    &nbsp;&nbsp;<span class="lbl" style="min-width:auto">해석</span>
+    <span class="v">D</span>&gt;0 서로 다른 두 실근 · <span class="v">D</span>=0 중근 · <span class="v">D</span>&lt;0 서로 다른 두 허근
+  </div>
+  <div class="lab">
+    <div class="stage" id="s7"></div>
+    <div class="panel">
+      <div class="ctrl"><label for="i7c">상수항 c</label><input type="range" id="i7c" min="-6" max="8" step="0.5" value="-2"><output id="o7c">-2</output></div>
+      <div class="readout" id="r7"></div>
+      <p class="note">c를 올리면 포물선이 위로 올라갑니다. <b>x축과 만나는 개수</b>가 곧 실근의 개수, 그게 곧 D의 부호입니다.</p>
+    </div>
+  </div>
+  <div class="tblbox">
+    <table class="tbl">
+      <thead><tr><th>상황</th><th>D &gt; 0</th><th>D = 0</th><th>D &lt; 0</th></tr></thead>
+      <tbody>
+        <tr><td class="hd">이차방정식의 근</td><td>서로 다른 두 실근</td><td>중근(하나)</td><td>서로 다른 두 허근</td></tr>
+        <tr><td class="hd">포물선과 x축</td><td>두 점에서 만남</td><td>접함</td><td>만나지 않음</td></tr>
+        <tr><td class="hd">원과 직선 (대입 후)</td><td>두 점에서 만남</td><td>접함</td><td>만나지 않음</td></tr>
+        <tr><td class="hd">a&gt;0인 이차부등식 &gt;0</td><td>x&lt;α 또는 x&gt;β</td><td>x&ne;α인 모든 실수</td><td>모든 실수</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li>"접한다" = <b>중근</b> = <span class="m"><span class="v">D</span>=0</span>. 이 셋은 완전히 같은 말입니다.</li>
+      <li><span class="m"><span class="v">D</span>/4</span>를 쓸 땐 <b>4로 나눈 값과 비교</b>하는 것이지 부등호 방향이 바뀌지 않습니다. 부호 판정 결과는 <span class="v">D</span>와 동일.</li>
+      <li><span class="m"><span class="v">a</span>=0</span>이면 애초에 이차방정식이 아니라 <b>판별식을 쓸 수 없습니다.</b> "이차방정식이" 라는 말이 있으면 <span class="m"><span class="v">a</span>&ne;0</span> 조건을 먼저 챙기세요.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 8. 부정방정식 ────────────────────────────────────── -->
+<section class="card" id="c8">
+  <div class="card-head">
+    <span class="tag">방정식 03</span>
+    <h3>부정방정식</h3>
+    <p class="when">식은 하나인데 미지수는 둘. 그냥 풀면 해가 무수히 많지만, <b>정수·자연수 조건</b>이 붙으면 답이 유한해집니다.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">전략</span>
+    좌변을 <b class="hl">곱의 꼴</b>, 우변을 <b class="hl">상수</b>로 &nbsp;&rarr;&nbsp; ( )( ) = 상수 &nbsp;&rarr;&nbsp; 약수쌍 나열(구구단)<br>
+    <span class="lbl">변형 공식</span>
+    <span class="v">xy</span> + <span class="v">Ax</span> + <span class="v">By</span> + <span class="v">C</span> = 0
+    &nbsp;&rArr;&nbsp;
+    (<span class="v">x</span>+<span class="v">B</span>)(<span class="v">y</span>+<span class="v">A</span>) = <span class="v">AB</span> &minus; <span class="v">C</span>
+  </div>
+  <div class="lab wide">
+    <div class="panel">
+      <div class="seg" id="g8" role="group" aria-label="식의 형태 선택">
+        <button data-form="prod" aria-pressed="true">xy = N</button>
+        <button data-form="shift" aria-pressed="false">(x−p)(y−q) = N</button>
+        <button data-form="gen" aria-pressed="false">xy + Ax + By + C = 0</button>
+      </div>
+      <div class="nums" id="n8"></div>
+      <div class="seg" id="g8c" role="group" aria-label="정수 조건">
+        <button data-cond="int" aria-pressed="true">x, y는 정수</button>
+        <button data-cond="nat" aria-pressed="false">x, y는 자연수</button>
+      </div>
+      <div class="readout" id="r8"></div>
+      <div class="tblbox"><table class="tbl" id="t8"></table></div>
+      <div class="tblbox"><table class="tbl" id="t8b"></table></div>
+      <p class="note" id="n8note"></p>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li>정수 조건이면 <b>음의 약수도 반드시 포함</b>합니다. <span class="m">3 = 3&times;1 = 1&times;3 = (&minus;3)&times;(&minus;1) = (&minus;1)&times;(&minus;3)</span> — 네 쌍.</li>
+      <li>괄호를 만든 뒤 원래 변수로 되돌릴 때 <b>부호를 반대로</b>. <span class="m">(<span class="v">x</span>+5)</span>가 3이면 <span class="m"><span class="v">x</span> = 3 &minus; 5 = &minus;2</span>입니다.</li>
+      <li>변형 공식의 우변은 <span class="m"><span class="v">AB</span>&minus;<span class="v">C</span></span>. 괄호 안 상수는 <b><span class="v">x</span> 옆에 <span class="v">B</span>(=<span class="v">y</span>의 계수), <span class="v">y</span> 옆에 <span class="v">A</span>(=<span class="v">x</span>의 계수)</b>로 <b>엇갈려</b> 들어갑니다.</li>
+      <li>조건이 없으면 해가 무수히 많습니다. 문제에 "정수", "자연수"가 있는지부터 확인하세요.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 9. 고차방정식 ────────────────────────────────────── -->
+<section class="card" id="c9">
+  <div class="card-head">
+    <span class="tag">방정식 04</span>
+    <h3>고차방정식 (삼차 이상)</h3>
+    <p class="when">"대입해서 0이 되는 값 찾기 &rarr; 조립제법으로 차수 낮추기 &rarr; 남은 이차식은 근의 공식". 이 세 단계가 전부입니다.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">인수정리</span>
+    <span class="v">f</span>(&alpha;) = 0 &nbsp;&hArr;&nbsp; <span class="v">f</span>(<span class="v">x</span>)는 (<span class="v">x</span> &minus; &alpha;)로 나누어떨어짐<br>
+    <span class="lbl">후보근</span>
+    &alpha; = &plusmn; <span class="frac"><span>상수항의 약수</span><span>최고차항 계수의 약수</span></span>
+  </div>
+  <div class="lab wide">
+    <div class="panel">
+      <div class="nums" id="n9"></div>
+      <div id="cand9" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center"></div>
+      <div class="tblbox" id="syn9box"><table class="tbl" id="t9"></table></div>
+      <div class="readout" id="r9"></div>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="mini"><h4>세제곱 공식</h4><p class="m"><span class="v">a</span><sup>3</sup>&plusmn;<span class="v">b</span><sup>3</sup> = (<span class="v">a</span>&plusmn;<span class="v">b</span>)(<span class="v">a</span><sup>2</sup>&#8723;<span class="v">ab</span>+<span class="v">b</span><sup>2</sup>)</p></div>
+    <div class="mini"><h4>복이차식 (치환)</h4><p class="m"><span class="v">x</span><sup>4</sup>+<span class="v">x</span><sup>2</sup>+1 = (<span class="v">x</span><sup>2</sup>+<span class="v">x</span>+1)(<span class="v">x</span><sup>2</sup>&minus;<span class="v">x</span>+1)</p></div>
+    <div class="mini"><h4>삼차 근과 계수</h4><p class="m">&alpha;+&beta;+&gamma; = &minus;<span class="v">b</span>/<span class="v">a</span>, &nbsp;&alpha;&beta;&gamma; = &minus;<span class="v">d</span>/<span class="v">a</span></p></div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li>조립제법에는 <b>빠진 차수의 0도 반드시 써야</b> 합니다. <span class="m"><span class="v">x</span><sup>3</sup>&minus;7<span class="v">x</span>+6</span> &rarr; 계수는 <span class="num">1, 0, −7, 6</span>.</li>
+      <li>왼쪽에 쓰는 수는 <b>&alpha; 자체</b>입니다. <span class="m">(<span class="v">x</span>&minus;2)</span>로 나눌 때 &minus;2가 아니라 <b>2</b>를 씁니다.</li>
+      <li>후보근은 <b>상수항의 약수 ÷ 최고차항의 약수</b>. 순서를 뒤집지 마세요. 보통 <span class="m">&plusmn;1, &plusmn;2</span>부터 넣어봅니다.</li>
+      <li>삼차 이상은 <b>실근이 하나뿐일 수 있습니다.</b> 남은 이차식의 <span class="v">D</span>&lt;0이면 나머지 둘은 허근.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 10. 시그마 ───────────────────────────────────────── -->
+<section class="card" id="c10">
+  <div class="card-head">
+    <span class="tag">수열 01</span>
+    <h3>시그마 계산</h3>
+    <p class="when">"1부터 <span class="v">n</span>까지 더해라"의 줄임말. 공식 세 개와 성질 두 개면 대부분 풀립니다.</p>
+  </div>
+  <div class="formula">
+    <span class="m">&Sigma;<span class="v">k</span> = <span class="frac"><span><span class="v">n</span>(<span class="v">n</span>+1)</span><span>2</span></span></span> &nbsp;&nbsp;
+    <span class="m">&Sigma;<span class="v">k</span><sup>2</sup> = <span class="frac"><span><span class="v">n</span>(<span class="v">n</span>+1)(2<span class="v">n</span>+1)</span><span>6</span></span></span> &nbsp;&nbsp;
+    <span class="m">&Sigma;<span class="v">k</span><sup>3</sup> = <span class="frac"><span><span class="v">n</span><sup>2</sup>(<span class="v">n</span>+1)<sup>2</sup></span><span>4</span></span> = (&Sigma;<span class="v">k</span>)<sup>2</sup></span><br>
+    <span class="lbl">성질</span>
+    <span class="m">&Sigma;(<span class="v">a</span><span class="v">k</span>+<span class="v">b</span>) = <span class="v">a</span>&Sigma;<span class="v">k</span> + <span class="hl"><span class="v">bn</span></span></span> &nbsp;·&nbsp;
+    <span class="m">&Sigma;<span class="v">c</span> = <span class="hl"><span class="v">cn</span></span></span>
+  </div>
+  <div class="lab">
+    <div class="stage" id="s10"></div>
+    <div class="panel">
+      <div class="seg" id="g10" role="group" aria-label="차수 선택">
+        <button data-p="1" aria-pressed="true">Σk</button>
+        <button data-p="2" aria-pressed="false">Σk²</button>
+        <button data-p="3" aria-pressed="false">Σk³</button>
+      </div>
+      <div class="ctrl"><label for="i10n">n</label><input type="range" id="i10n" min="1" max="15" step="1" value="6"><output id="o10n">6</output></div>
+      <div class="readout" id="r10"></div>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li><b><span class="m">&Sigma;<span class="v">c</span> = <span class="v">cn</span></span></b>입니다. 상수라고 그냥 <span class="v">c</span>로 두면 틀립니다. <span class="v">n</span>번 더하니까요.</li>
+      <li><b>시그마는 곱셈에 분배되지 않습니다.</b> <span class="m">&Sigma;(<span class="v">a</span><span class="v">b</span>) &ne; (&Sigma;<span class="v">a</span>)(&Sigma;<span class="v">b</span>)</span>. 덧셈·상수배만 분배됩니다.</li>
+      <li>시작이 <span class="m"><span class="v">k</span>=1</span>이 아니면 <span class="m">&Sigma;<span class="sq">k=3</span><sup>n</sup> = &Sigma;<span class="sq">k=1</span><sup>n</sup> &minus; &Sigma;<span class="sq">k=1</span><sup>2</sup></span>처럼 <b>빼서</b> 맞춥니다.</li>
+      <li>항의 개수는 <span class="m">(끝) &minus; (시작) + 1</span>. <span class="m"><span class="v">k</span>=3</span>부터 <span class="m"><span class="v">k</span>=10</span>까지는 8개(7개 아님).</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ── 11. 정삼각형 ─────────────────────────────────────── -->
+<section class="card" id="c11">
+  <div class="card-head">
+    <span class="tag">도형 01</span>
+    <h3>정삼각형의 크기</h3>
+    <p class="when">한 변만 알면 전부 나옵니다. 뿌리는 <span class="m">30&deg;-60&deg;-90&deg;</span> 직각삼각형의 <span class="m">1 : &radic;<span class="rad">3</span> : 2</span> 하나뿐.</p>
+  </div>
+  <div class="formula">
+    <span class="lbl">높이</span> <span class="m"><span class="v">h</span> = <span class="frac"><span>&radic;<span class="rad">3</span></span><span>2</span></span><span class="v">a</span></span> &nbsp;&nbsp;
+    <span class="lbl" style="min-width:auto">넓이</span> <span class="m"><span class="v">S</span> = <span class="frac"><span>&radic;<span class="rad">3</span></span><span>4</span></span><span class="v">a</span><sup>2</sup></span><br>
+    <span class="lbl">내접원</span> <span class="m"><span class="v">r</span> = <span class="frac"><span>&radic;<span class="rad">3</span></span><span>6</span></span><span class="v">a</span></span> &nbsp;&nbsp;
+    <span class="lbl" style="min-width:auto">외접원</span> <span class="m"><span class="v">R</span> = <span class="frac"><span>&radic;<span class="rad">3</span></span><span>3</span></span><span class="v">a</span> = 2<span class="v">r</span></span>
+  </div>
+  <div class="lab">
+    <div class="stage" id="s11"></div>
+    <div class="panel">
+      <div class="ctrl"><label for="i11a">한 변 a</label><input type="range" id="i11a" min="1" max="12" step="0.5" value="6"><output id="o11a">6</output></div>
+      <div class="seg" id="g11" role="group" aria-label="표시 전환">
+        <button data-show="h" aria-pressed="true">높이·넓이</button>
+        <button data-show="c" aria-pressed="false">내접원·외접원</button>
+      </div>
+      <div class="readout" id="r11"></div>
+    </div>
+  </div>
+  <div class="warn"><b class="chiplbl">헷갈림 방지</b>
+    <ul>
+      <li><b>높이는 <span class="m">&radic;<span class="rad">3</span>/2</span>, 넓이는 <span class="m">&radic;<span class="rad">3</span>/4</span>.</b> 넓이는 <span class="m">&frac12; &times; <span class="v">a</span> &times; <span class="v">h</span></span>라서 높이의 <b>절반</b>이 됩니다. 4와 2를 바꿔 쓰지 마세요.</li>
+      <li>넓이에는 <span class="m"><span class="v">a</span><sup>2</sup></span>, 높이에는 <span class="m"><span class="v">a</span></span>. 차수를 확인하면 헷갈릴 일이 없습니다.</li>
+      <li>정삼각형에서 <b>무게중심 = 내심 = 외심</b>이 한 점입니다. 그래서 <span class="m"><span class="v">R</span> = 2<span class="v">r</span></span>이고, 높이를 <span class="m">2:1</span>로 나눈 것이 그대로 <span class="v">R</span>과 <span class="v">r</span>입니다.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+/* ═══ 공통 헬퍼 ═══════════════════════════════════════════ */
+var NS="http://www.w3.org/2000/svg";
+function el(tag,attrs,parent){
+  var n=document.createElementNS(NS,tag);
+  for(var k in attrs){ if(attrs[k]!==undefined&&attrs[k]!==null) n.setAttribute(k,attrs[k]); }
+  if(parent) parent.appendChild(n);
+  return n;
+}
+function txt(node,s){ node.textContent=s; return node; }
+function $(id){ return document.getElementById(id); }
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+function fmt(v,d){
+  d=(d===undefined)?2:d;
+  if(!isFinite(v)) return "—";
+  var s=v.toFixed(d);
+  if(s.indexOf(".")>=0) s=s.replace(/0+$/,"").replace(/\.$/,"");
+  return (s==="-0")?"0":s;
+}
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var t=b; b=a%b; a=t; } return a; }
+function simpSqrt(n){ var k=1,m=n; for(var i=2;i*i<=m;i++){ while(m%(i*i)===0){ m/=i*i; k*=i; } } return [k,m]; }
+function frac(a,b){ return '<span class="frac"><span>'+a+'</span><span>'+b+'</span></span>'; }
+function rad(inner){ return '&radic;<span class="rad">'+inner+'</span>'; }
+function signed(v,d){ var s=fmt(Math.abs(v),d); return (v<0?" &minus; ":" + ")+s; }
+/* 변수 앞 계수: ±1 은 숫자를 생략 */
+function signedC(v){ return (v<0?" &minus; ":" + ")+(Math.abs(v)===1?"":fmt(Math.abs(v),0)); }
+function leadC(v){ return v===1?"":v===-1?"&minus;":neg(v); }
+function par(v,d){ var s=fmt(v,d); return v<0?("("+s.replace("-","&minus;")+")"):s; }
+function neg(s){ return String(s).replace(/-/g,"&minus;"); }
+/* √n 을 k√m 으로 정리해 문자열로 */
+function radStr(n){
+  if(n<0) return rad(neg(fmt(n)));
+  var r=Math.sqrt(n);
+  if(Math.abs(r-Math.round(r))<1e-9) return '<span class="num">'+Math.round(r)+'</span>';
+  var s=simpSqrt(Math.round(n));
+  return (s[0]>1?'<span class="num">'+s[0]+'</span>':'')+rad('<span class="num">'+s[1]+'</span>');
+}
+
+/* ─── 좌표평면 ─── */
+function plane(host,o){
+  var W=o.W||520, H=o.H||390;
+  var svg=el("svg",{viewBox:"0 0 "+W+" "+H,class:"stage-svg","aria-label":o.label||"좌표평면"},host);
+  var xmin=o.xmin,xmax=o.xmax,ymin=o.ymin,ymax=o.ymax;
+  var sx=W/(xmax-xmin), sy=H/(ymax-ymin);
+  var P={
+    svg:svg,W:W,H:H,xmin:xmin,xmax:xmax,ymin:ymin,ymax:ymax,sx:sx,sy:sy,
+    X:function(x){ return (x-xmin)*sx; },
+    Y:function(y){ return H-(y-ymin)*sy; },
+    Lx:function(d){ return d*sx; },
+    Ly:function(d){ return d*sy; },
+    toMath:function(ev){
+      var r=svg.getBoundingClientRect();
+      return { x: xmin+((ev.clientX-r.left)*(W/r.width))/sx,
+               y: ymin+(H-(ev.clientY-r.top)*(H/r.height))/sy };
+    },
+    layer:function(){ return el("g",{},svg); },
+    wipe:function(g){ while(g.firstChild) g.removeChild(g.firstChild); }
+  };
+  if(o.grid!==false){
+    var gg=el("g",{},svg), i;
+    for(i=Math.ceil(xmin);i<=xmax;i++) el("line",{x1:P.X(i),y1:0,x2:P.X(i),y2:H,class:"grid-l"},gg);
+    for(i=Math.ceil(ymin);i<=ymax;i++) el("line",{x1:0,y1:P.Y(i),x2:W,y2:P.Y(i),class:"grid-l"},gg);
+  }
+  if(o.axes!==false){
+    var ax=el("g",{},svg);
+    el("line",{x1:0,y1:P.Y(0),x2:W,y2:P.Y(0),class:"axis-l"},ax);
+    el("line",{x1:P.X(0),y1:0,x2:P.X(0),y2:H,class:"axis-l"},ax);
+    var tstep=o.tick||2, j;
+    for(j=Math.ceil(xmin/tstep)*tstep;j<=xmax;j+=tstep){
+      if(j===0||P.X(j)<14||P.X(j)>W-14) continue;
+      txt(el("text",{x:P.X(j),y:P.Y(0)+13,class:"tick","text-anchor":"middle"},ax),String(j)); }
+    for(j=Math.ceil(ymin/tstep)*tstep;j<=ymax;j+=tstep){
+      if(j===0||P.Y(j)<12||P.Y(j)>H-12||P.X(0)<26) continue;
+      txt(el("text",{x:P.X(0)-6,y:P.Y(j)+3.5,class:"tick","text-anchor":"end"},ax),String(j)); }
+  }
+  return P;
+}
+
+/* ─── 끌 수 있는 점 ─── */
+function mkHandle(layer,label,color){
+  var g=el("g",{class:"handle",tabindex:"0",role:"application","aria-label":label+" 점. 방향키로 이동"},layer);
+  g.style.color=color;
+  el("circle",{r:15,class:"ring"},g);
+  el("circle",{r:14,class:"hit"},g);
+  el("circle",{r:5.5,class:"dot",style:"fill:"+color},g);
+  var t=el("text",{x:11,y:-10,class:"lab"},g); t.textContent=label;
+  g.setPos=function(P,x,y){ g.setAttribute("transform","translate("+P.X(x)+","+P.Y(y)+")"); };
+  return g;
+}
+function draggable(P,g,get,set,step){
+  step=step||1;
+  var pid=null;
+  function snap(v){ return Math.round(v/step)*step; }
+  function apply(mx,my){
+    set(clamp(snap(mx),P.xmin+0.5,P.xmax-0.5), clamp(snap(my),P.ymin+0.5,P.ymax-0.5));
+  }
+  g.addEventListener("pointerdown",function(e){
+    e.preventDefault(); pid=e.pointerId;
+    try{ g.setPointerCapture(pid); }catch(_){}
+    g.classList.add("dragging"); g.focus({preventScroll:true});
+  });
+  g.addEventListener("pointermove",function(e){
+    if(pid===null) return; e.preventDefault();
+    var m=P.toMath(e); apply(m.x,m.y);
+  });
+  function end(){ if(pid!==null){ try{ g.releasePointerCapture(pid); }catch(_){} pid=null; g.classList.remove("dragging"); } }
+  g.addEventListener("pointerup",end);
+  g.addEventListener("pointercancel",end);
+  g.addEventListener("keydown",function(e){
+    var p=get(), dx=0, dy=0;
+    if(e.key==="ArrowLeft") dx=-step; else if(e.key==="ArrowRight") dx=step;
+    else if(e.key==="ArrowUp") dy=step; else if(e.key==="ArrowDown") dy=-step; else return;
+    e.preventDefault(); apply(p.x+dx,p.y+dy);
+  });
+}
+/* 직각 표시 */
+function rightAngle(layer,P,cx,cy,ux,uy,vx,vy,size){
+  size=size||11;
+  var x0=P.X(cx), y0=P.Y(cy);
+  var ax=ux*size, ay=-uy*size, bx=vx*size, by=-vy*size;
+  el("path",{d:"M "+(x0+ax)+" "+(y0+ay)+" L "+(x0+ax+bx)+" "+(y0+ay+by)+" L "+(x0+bx)+" "+(y0+by),
+    fill:"none",stroke:"var(--ink-3)","stroke-width":1.2},layer);
+}
+function bind(id,out,fn,digits){
+  var i=$(id), o=$(out);
+  function up(){ o.textContent=fmt(parseFloat(i.value),digits===undefined?2:digits); fn(parseFloat(i.value)); }
+  i.addEventListener("input",up); up();
+}
+function segGroup(id,fn){
+  var box=$(id);
+  box.addEventListener("click",function(e){
+    var b=e.target.closest("button"); if(!b) return;
+    Array.prototype.forEach.call(box.querySelectorAll("button"),function(x){ x.setAttribute("aria-pressed",String(x===b)); });
+    fn(b.dataset);
+  });
+}
+
+/* ═══ 1. 두 점 사이의 거리 ═══════════════════════════════ */
+(function(){
+  var P=plane($("s1"),{xmin:-8,xmax:8,ymin:-6,ymax:6,W:520,H:390,label:"두 점 사이의 거리"});
+  var art=P.layer(), hl=P.layer();
+  var A={x:-4,y:-2}, B={x:3,y:2};
+  var hA=mkHandle(hl,"A","var(--accent)"), hB=mkHandle(hl,"B","var(--accent)");
+  draggable(P,hA,function(){return A;},function(x,y){A.x=x;A.y=y;draw();},1);
+  draggable(P,hB,function(){return B;},function(x,y){B.x=x;B.y=y;draw();},1);
+  function draw(){
+    P.wipe(art);
+    var C={x:B.x,y:A.y};
+    el("line",{x1:P.X(A.x),y1:P.Y(A.y),x2:P.X(C.x),y2:P.Y(C.y),class:"dash"},art);
+    el("line",{x1:P.X(C.x),y1:P.Y(C.y),x2:P.X(B.x),y2:P.Y(B.y),class:"dash"},art);
+    el("line",{x1:P.X(A.x),y1:P.Y(A.y),x2:P.X(B.x),y2:P.Y(B.y),class:"hypo"},art);
+    var dx=B.x-A.x, dy=B.y-A.y;
+    if(Math.abs(dx)>0.01&&Math.abs(dy)>0.01)
+      rightAngle(art,P,C.x,C.y,dx>0?-1:1,0,0,dy>0?1:-1,11);
+    if(Math.abs(dx)>0.01)
+      txt(el("text",{x:P.X((A.x+B.x)/2),y:P.Y(A.y)+(dy>0?16:-8),class:"lab-s","text-anchor":"middle"},art),
+          "|Δx| = "+fmt(Math.abs(dx),0));
+    if(Math.abs(dy)>0.01)
+      txt(el("text",{x:P.X(B.x)+(dx>0?8:-8),y:P.Y((A.y+B.y)/2),class:"lab-s","text-anchor":dx>0?"start":"end"},art),
+          "|Δy| = "+fmt(Math.abs(dy),0));
+    hA.setPos(P,A.x,A.y); hB.setPos(P,B.x,B.y);
+    var sq=dx*dx+dy*dy, d=Math.sqrt(sq);
+    $("r1").innerHTML=
+      '<span class="step"><span class="cap">좌표</span>A('+neg(A.x)+', '+neg(A.y)+') , &nbsp;B('+neg(B.x)+', '+neg(B.y)+')</span>'+
+      '<span class="step"><span class="cap">대입</span><span class="v">AB</span> = '+
+        rad('('+par(B.x)+' &minus; '+par(A.x)+')<sup>2</sup> + ('+par(B.y)+' &minus; '+par(A.y)+')<sup>2</sup>')+'</span>'+
+      '<span class="step"><span class="cap">정리</span>= '+rad(neg(fmt(dx,0))+'<sup>2</sup> + '+neg(fmt(dy,0))+'<sup>2</sup>')+
+        ' = '+rad('<span class="num">'+fmt(dx*dx,0)+" + "+fmt(dy*dy,0)+'</span>')+' = '+radStr(sq)+'</span>'+
+      '<span class="step"><span class="cap">값</span><span class="hl"><span class="num">'+fmt(d,3)+'</span></span></span>';
+  }
+  draw();
+})();
+
+/* ═══ 2. 점과 직선 사이의 거리 ═══════════════════════════ */
+(function(){
+  var P=plane($("s2"),{xmin:-8,xmax:8,ymin:-6,ymax:6,W:520,H:390,label:"점과 직선 사이의 거리"});
+  var art=P.layer(), hl=P.layer();
+  var pt={x:-3,y:3}, L1={x:-5,y:-3}, L2={x:4,y:1};
+  var hP=mkHandle(hl,"P","var(--signal)"),
+      h1=mkHandle(hl,"L₁","var(--accent)"), h2=mkHandle(hl,"L₂","var(--accent)");
+  draggable(P,hP,function(){return pt;},function(x,y){pt.x=x;pt.y=y;draw();},1);
+  draggable(P,h1,function(){return L1;},function(x,y){ if(x===L2.x&&y===L2.y) return; L1.x=x;L1.y=y;draw();},1);
+  draggable(P,h2,function(){return L2;},function(x,y){ if(x===L1.x&&y===L1.y) return; L2.x=x;L2.y=y;draw();},1);
+  function draw(){
+    P.wipe(art);
+    var a=L2.y-L1.y, b=-(L2.x-L1.x), c=-(a*L1.x+b*L1.y);
+    var g=gcd(gcd(a,b),c)||1; a/=g; b/=g; c/=g;
+    if(a<0||(a===0&&b<0)){ a=-a; b=-b; c=-c; }
+    var nn=a*a+b*b, val=a*pt.x+b*pt.y+c, d=Math.abs(val)/Math.sqrt(nn);
+    var Hx=pt.x-a*val/nn, Hy=pt.y-b*val/nn;
+    /* 직선을 화면 끝까지 연장 */
+    var ux=-b, uy=a, L=Math.sqrt(nn), t=40/L*1;
+    var p1x=Hx-ux*t, p1y=Hy-uy*t, p2x=Hx+ux*t, p2y=Hy+uy*t;
+    el("line",{x1:P.X(p1x),y1:P.Y(p1y),x2:P.X(p2x),y2:P.Y(p2y),class:"leg"},art);
+    el("line",{x1:P.X(pt.x),y1:P.Y(pt.y),x2:P.X(Hx),y2:P.Y(Hy),class:"hypo","stroke-dasharray":"6 4"},art);
+    el("circle",{cx:P.X(Hx),cy:P.Y(Hy),r:4,style:"fill:var(--signal)"},art);
+    txt(el("text",{x:P.X(Hx)+9,y:P.Y(Hy)+16,class:"lab-s"},art),"H (수선의 발)");
+    var nu=a/L, nv=b/L;
+    rightAngle(art,P,Hx,Hy,-b/L,a/L,(val>0?nu:-nu),(val>0?nv:-nv),10);
+    txt(el("text",{x:P.X((pt.x+Hx)/2)+9,y:P.Y((pt.y+Hy)/2),class:"lab-s"},art),"d = "+fmt(d,2));
+    hP.setPos(P,pt.x,pt.y); h1.setPos(P,L1.x,L1.y); h2.setPos(P,L2.x,L2.y);
+    var eq=(a===1?"":a===-1?"&minus;":neg(a))+'<span class="v">x</span>'+
+      (b===0?"":(b>0?" + ":" &minus; ")+(Math.abs(b)===1?"":Math.abs(b))+'<span class="v">y</span>')+
+      (c===0?"":(c>0?" + ":" &minus; ")+Math.abs(c))+" = 0";
+    $("r2").innerHTML=
+      '<span class="step"><span class="cap">직선</span>'+eq+'</span>'+
+      '<span class="step"><span class="cap">점</span>P('+neg(pt.x)+', '+neg(pt.y)+')</span>'+
+      '<span class="step"><span class="cap">대입</span><span class="v">d</span> = '+
+        frac('|'+neg(a)+'&middot;'+par(pt.x)+signed(b)+'&middot;'+par(pt.y)+signed(c)+'|',
+             rad(par(a,0)+'<sup>2</sup> + '+par(b,0)+'<sup>2</sup>'))+'</span>'+
+      '<span class="step"><span class="cap">정리</span>= '+
+        frac('<span class="num">'+fmt(Math.abs(val),0)+'</span>',radStr(nn))+
+        ' = <span class="hl"><span class="num">'+fmt(d,3)+'</span></span></span>';
+  }
+  draw();
+})();
+
+/* ═══ 3. 원의 방정식 · 원과 직선 ═════════════════════════ */
+(function(){
+  var P=plane($("s3"),{xmin:-8,xmax:8,ymin:-6,ymax:6,W:520,H:390,label:"원과 직선"});
+  var art=P.layer(), hl=P.layer();
+  var C={x:0,y:0}, r=3, m=0.5, n=-1;
+  var hC=mkHandle(hl,"C","var(--accent)");
+  draggable(P,hC,function(){return C;},function(x,y){C.x=x;C.y=y;draw();},1);
+  bind("i3r","o3r",function(v){ r=v; draw(); },1);
+  bind("i3m","o3m",function(v){ m=v; draw(); },2);
+  bind("i3n","o3n",function(v){ n=v; draw(); },1);
+  function draw(){
+    P.wipe(art);
+    el("ellipse",{cx:P.X(C.x),cy:P.Y(C.y),rx:P.Lx(r),ry:P.Ly(r),class:"leg","stroke-width":2.2},art);
+    var a=m,b=-1,c=n, nn=a*a+b*b, val=a*C.x+b*C.y+c, d=Math.abs(val)/Math.sqrt(nn);
+    var Hx=C.x-a*val/nn, Hy=C.y-b*val/nn;
+    var ux=1/Math.sqrt(nn), uy=m/Math.sqrt(nn), t=40;
+    el("line",{x1:P.X(Hx-ux*t),y1:P.Y(Hy-uy*t),x2:P.X(Hx+ux*t),y2:P.Y(Hy+uy*t),
+      style:"stroke:var(--ink-2)","stroke-width":1.8,fill:"none"},art);
+    el("line",{x1:P.X(C.x),y1:P.Y(C.y),x2:P.X(Hx),y2:P.Y(Hy),class:"hypo","stroke-dasharray":"6 4"},art);
+    txt(el("text",{x:P.X((C.x+Hx)/2)+8,y:P.Y((C.y+Hy)/2)-4,class:"lab-s"},art),"d = "+fmt(d,2));
+    var state,cls;
+    if(d<r-1e-9){ state="두 점에서 만난다"; cls="pos"; }
+    else if(Math.abs(d-r)<1e-9){ state="접한다 (한 점)"; cls="mid"; }
+    else { state="만나지 않는다"; cls="neg"; }
+    if(d<r-1e-9){
+      var h=Math.sqrt(r*r-d*d);
+      [-1,1].forEach(function(s){
+        el("circle",{cx:P.X(Hx+ux*h*s),cy:P.Y(Hy+uy*h*s),r:4.5,style:"fill:var(--pos)"},art);
+      });
+    } else if(Math.abs(d-r)<1e-9){
+      el("circle",{cx:P.X(Hx),cy:P.Y(Hy),r:4.5,style:"fill:var(--mid)"},art);
+    }
+    hC.setPos(P,C.x,C.y);
+    var A2=-2*C.x, B2=-2*C.y, C2=C.x*C.x+C.y*C.y-r*r;
+    $("r3").innerHTML=
+      '<span class="step"><span class="cap">표준형</span>'+
+        (C.x===0?'<span class="v">x</span>':'(<span class="v">x</span>'+(C.x>0?" &minus; ":" + ")+Math.abs(C.x)+')')+'<sup>2</sup> + '+
+        (C.y===0?'<span class="v">y</span>':'(<span class="v">y</span>'+(C.y>0?" &minus; ":" + ")+Math.abs(C.y)+')')+'<sup>2</sup> = '+
+        '<span class="num">'+fmt(r*r,2)+'</span></span>'+
+      '<span class="step"><span class="cap">일반형</span><span class="v">x</span><sup>2</sup> + <span class="v">y</span><sup>2</sup>'+
+        (A2?signed(A2)+'<span class="v">x</span>':"")+(B2?signed(B2)+'<span class="v">y</span>':"")+
+        signed(C2)+' = 0</span>'+
+      '<span class="step"><span class="cap">중심·반지름</span>C('+neg(C.x)+', '+neg(C.y)+') , <span class="v">r</span> = <span class="num">'+fmt(r,1)+'</span></span>'+
+      '<span class="step"><span class="cap">직선</span><span class="v">y</span> = '+neg(fmt(m,2))+'<span class="v">x</span>'+signed(n,1)+
+        ' &nbsp;&rarr;&nbsp; '+neg(fmt(m,2))+'<span class="v">x</span> &minus; <span class="v">y</span>'+signed(n,1)+' = 0</span>'+
+      '<span class="step"><span class="cap">거리 비교</span><span class="v">d</span> = <span class="num">'+fmt(d,3)+'</span> &nbsp;'+
+        (d<r-1e-9?"&lt;":(Math.abs(d-r)<1e-9?"=":"&gt;"))+'&nbsp; <span class="v">r</span> = <span class="num">'+fmt(r,1)+'</span></span>'+
+      '<span class="chip '+cls+'" style="margin-top:6px">'+state+'</span>';
+  }
+  draw();
+})();
+
+/* ═══ 4. 내분점 · 외분점 ═════════════════════════════════ */
+(function(){
+  var P=plane($("s4"),{xmin:-8,xmax:8,ymin:-6,ymax:6,W:520,H:390,label:"내분점과 외분점"});
+  var art=P.layer(), hl=P.layer();
+  var A={x:-5,y:-3}, B={x:3,y:2}, m=2, n=1;
+  var hA=mkHandle(hl,"A","var(--accent)"), hB=mkHandle(hl,"B","var(--accent)");
+  draggable(P,hA,function(){return A;},function(x,y){A.x=x;A.y=y;draw();},1);
+  draggable(P,hB,function(){return B;},function(x,y){B.x=x;B.y=y;draw();},1);
+  bind("i4m","o4m",function(v){ m=v; draw(); },0);
+  bind("i4n","o4n",function(v){ n=v; draw(); },0);
+  function draw(){
+    P.wipe(art);
+    var dx=B.x-A.x, dy=B.y-A.y, L=Math.sqrt(dx*dx+dy*dy)||1;
+    /* 연장선 */
+    el("line",{x1:P.X(A.x-dx*3),y1:P.Y(A.y-dy*3),x2:P.X(B.x+dx*3),y2:P.Y(B.y+dy*3),
+      style:"stroke:var(--rule)","stroke-width":1.2,"stroke-dasharray":"4 5"},art);
+    el("line",{x1:P.X(A.x),y1:P.Y(A.y),x2:P.X(B.x),y2:P.Y(B.y),class:"leg","stroke-width":2.6},art);
+    /* m+n 등분 눈금 */
+    var k=m+n, i;
+    for(i=1;i<k;i++){
+      var px=A.x+dx*i/k, py=A.y+dy*i/k;
+      el("circle",{cx:P.X(px),cy:P.Y(py),r:2.4,style:"fill:var(--ink-3)"},art);
+    }
+    var Px=(m*B.x+n*A.x)/(m+n), Py=(m*B.y+n*A.y)/(m+n);
+    el("circle",{cx:P.X(Px),cy:P.Y(Py),r:6,style:"fill:var(--accent);stroke:var(--surface);stroke-width:2"},art);
+    txt(el("text",{x:P.X(Px)+10,y:P.Y(Py)+18,class:"lab-s",style:"fill:var(--accent)"},art),"P 내분");
+    var out="", cls="ind";
+    if(m!==n){
+      var Qx=(m*B.x-n*A.x)/(m-n), Qy=(m*B.y-n*A.y)/(m-n);
+      var inside=(Qx>P.xmin+0.3&&Qx<P.xmax-0.3&&Qy>P.ymin+0.3&&Qy<P.ymax-0.3);
+      if(inside){
+        el("circle",{cx:P.X(Qx),cy:P.Y(Qy),r:6,style:"fill:var(--signal);stroke:var(--surface);stroke-width:2"},art);
+        txt(el("text",{x:P.X(Qx)+10,y:P.Y(Qy)+18,class:"lab-s",style:"fill:var(--signal)"},art),"Q 외분");
+      }else{
+        /* 화면 밖이면 방향 화살표 */
+        var ex=clamp(Qx,P.xmin+0.6,P.xmax-0.6), ey=clamp(Qy,P.ymin+0.6,P.ymax-0.6);
+        el("circle",{cx:P.X(ex),cy:P.Y(ey),r:5,style:"fill:var(--signal);opacity:.45"},art);
+        txt(el("text",{x:clamp(P.X(ex),44,P.W-44),y:clamp(P.Y(ey)-12,16,P.H-8),class:"lab-s",style:"fill:var(--signal)","text-anchor":"middle"},art),"Q (화면 밖)");
+      }
+      out='<span class="step"><span class="cap">외분점 Q</span>('+
+        frac(neg(m)+'&middot;'+par(B.x)+' &minus; '+neg(n)+'&middot;'+par(A.x),neg(m)+' &minus; '+neg(n))+', '+
+        frac(neg(m)+'&middot;'+par(B.y)+' &minus; '+neg(n)+'&middot;'+par(A.y),neg(m)+' &minus; '+neg(n))+
+        ') = (<span class="hl"><span class="num">'+fmt(Qx,2)+'</span></span>, <span class="hl"><span class="num">'+fmt(Qy,2)+'</span></span>)</span>';
+    }else{
+      out='<span class="chip neg" style="margin-top:6px">m = n 이므로 분모가 0 → 외분점이 존재하지 않습니다</span>';
+    }
+    hA.setPos(P,A.x,A.y); hB.setPos(P,B.x,B.y);
+    $("r4").innerHTML=
+      '<span class="step"><span class="cap">비</span>AP : PB = <span class="num">'+m+' : '+n+'</span></span>'+
+      '<span class="step"><span class="cap">내분점 P</span>('+
+        frac(neg(m)+'&middot;'+par(B.x)+' + '+neg(n)+'&middot;'+par(A.x),neg(m)+' + '+neg(n))+', '+
+        frac(neg(m)+'&middot;'+par(B.y)+' + '+neg(n)+'&middot;'+par(A.y),neg(m)+' + '+neg(n))+
+        ') = (<span class="hl2"><span class="num">'+fmt(Px,2)+'</span></span>, <span class="hl2"><span class="num">'+fmt(Py,2)+'</span></span>)</span>'+
+      out+
+      '<span class="step"><span class="cap">중점</span>(<span class="num">'+fmt((A.x+B.x)/2,1)+'</span>, <span class="num">'+fmt((A.y+B.y)/2,1)+'</span>) &nbsp;<span style="font-family:\'IBM Plex Sans KR\';font-size:11.5px;color:var(--ink-3)">= 1:1 내분점</span></span>';
+  }
+  draw();
+})();
+
+/* ═══ 5. 비율로 길이 구하기 ══════════════════════════════ */
+(function(){
+  var P=plane($("s5"),{xmin:-8,xmax:8,ymin:-6,ymax:6,W:520,H:390,label:"닮음과 비율"});
+  var art=P.layer(), hl=P.layer();
+  var A={x:-1,y:4}, B={x:-6,y:-4}, C={x:6,y:-4}, t=0.4, mode="par";
+  var hA=mkHandle(hl,"A","var(--accent)");
+  draggable(P,hA,function(){return A;},function(x,y){ A.x=x; A.y=clamp(y,-2,5.5); draw(); },1);
+  bind("i5t","o5t",function(v){ t=v; draw(); },2);
+  segGroup("g5",function(d){ mode=d.mode; draw(); });
+  function ratioTxt(v){
+    var p=Math.round(v*20), q=20-p, g=gcd(p,q)||1;
+    return (p/g)+" : "+(q/g);
+  }
+  function poly(pts,style,cls){
+    var d=pts.map(function(p,i){ return (i?"L ":"M ")+P.X(p.x)+" "+P.Y(p.y); }).join(" ")+" Z";
+    return el("path",{d:d,style:style,class:cls},art);
+  }
+  function draw(){
+    P.wipe(art);
+    var D={x:A.x+(B.x-A.x)*t,y:A.y+(B.y-A.y)*t},
+        E={x:A.x+(C.x-A.x)*t,y:A.y+(C.y-A.y)*t},
+        M={x:(B.x+C.x)/2,y:(B.y+C.y)/2},
+        G={x:(A.x+B.x+C.x)/3,y:(A.y+B.y+C.y)/3};
+    var BC=Math.hypot(C.x-B.x,C.y-B.y), AB=Math.hypot(B.x-A.x,B.y-A.y),
+        AC=Math.hypot(C.x-A.x,C.y-A.y), DE=BC*t;
+    var area=Math.abs((B.x-A.x)*(C.y-A.y)-(C.x-A.x)*(B.y-A.y))/2;
+    if(mode==="area") poly([A,D,E],"fill:var(--signal);opacity:.22;stroke:none");
+    poly([A,B,C],"fill:var(--accent);opacity:.08;stroke:none");
+    poly([A,B,C],"fill:none;stroke:var(--accent);stroke-width:2.2");
+    var body="";
+    if(mode==="par"||mode==="area"){
+      el("line",{x1:P.X(D.x),y1:P.Y(D.y),x2:P.X(E.x),y2:P.Y(E.y),class:"hypo"},art);
+      [[D,"D"],[E,"E"]].forEach(function(p){
+        el("circle",{cx:P.X(p[0].x),cy:P.Y(p[0].y),r:5,style:"fill:var(--signal)"},art);
+        txt(el("text",{x:P.X(p[0].x)-14,y:P.Y(p[0].y)+4,class:"lab"},art),p[1]);
+      });
+      ["B","C"].forEach(function(nm,i){
+        var p=i?C:B;
+        txt(el("text",{x:P.X(p.x)+(i?8:-16),y:P.Y(p.y)+16,class:"lab"},art),nm);
+      });
+    }
+    if(mode==="cen"){
+      el("line",{x1:P.X(A.x),y1:P.Y(A.y),x2:P.X(M.x),y2:P.Y(M.y),class:"dash"},art);
+      el("line",{x1:P.X(B.x),y1:P.Y(B.y),x2:P.X((A.x+C.x)/2),y2:P.Y((A.y+C.y)/2),class:"dash",style:"opacity:.4"},art);
+      el("line",{x1:P.X(C.x),y1:P.Y(C.y),x2:P.X((A.x+B.x)/2),y2:P.Y((A.y+B.y)/2),class:"dash",style:"opacity:.4"},art);
+      el("line",{x1:P.X(A.x),y1:P.Y(A.y),x2:P.X(G.x),y2:P.Y(G.y),class:"hypo"},art);
+      el("circle",{cx:P.X(G.x),cy:P.Y(G.y),r:6,style:"fill:var(--signal);stroke:var(--surface);stroke-width:2"},art);
+      txt(el("text",{x:P.X(G.x)+10,y:P.Y(G.y)+5,class:"lab"},art),"G");
+      txt(el("text",{x:P.X(M.x),y:P.Y(M.y)+17,class:"lab-s","text-anchor":"middle"},art),"M (중점)");
+      txt(el("text",{x:P.X((A.x+G.x)/2)-8,y:P.Y((A.y+G.y)/2),class:"lab-s","text-anchor":"end",style:"fill:var(--signal)"},art),"2");
+      txt(el("text",{x:P.X((G.x+M.x)/2)-8,y:P.Y((G.y+M.y)/2),class:"lab-s","text-anchor":"end"},art),"1");
+    }
+    hA.setPos(P,A.x,A.y);
+    if(mode==="par"){
+      body='<span class="step"><span class="cap">비</span>AD : DB = AE : EC = <span class="num">'+ratioTxt(t)+'</span></span>'+
+        '<span class="step"><span class="cap">DE 길이</span>DE = '+frac("AD","AB")+' &times; BC = <span class="num">'+fmt(t,2)+'</span> &times; <span class="num">'+fmt(BC,2)+'</span> = <span class="hl"><span class="num">'+fmt(DE,2)+'</span></span></span>'+
+        '<span class="step"><span class="cap">확인</span>AB = <span class="num">'+fmt(AB,2)+'</span>, AD = <span class="num">'+fmt(AB*t,2)+'</span>, AC = <span class="num">'+fmt(AC,2)+'</span>, AE = <span class="num">'+fmt(AC*t,2)+'</span></span>';
+    }else if(mode==="cen"){
+      body='<span class="step"><span class="cap">무게중심</span>G = ('+frac('<span class="v">x</span><span class="sq">1</span>+<span class="v">x</span><span class="sq">2</span>+<span class="v">x</span><span class="sq">3</span>',"3")+', '+frac('<span class="v">y</span><span class="sq">1</span>+<span class="v">y</span><span class="sq">2</span>+<span class="v">y</span><span class="sq">3</span>',"3")+') = (<span class="hl"><span class="num">'+fmt(G.x,2)+'</span></span>, <span class="hl"><span class="num">'+fmt(G.y,2)+'</span></span>)</span>'+
+        '<span class="step"><span class="cap">비</span>AG : GM = <span class="num">2 : 1</span> &nbsp;&rarr;&nbsp; AG = '+frac("2","3")+'AM</span>'+
+        '<span class="step"><span class="cap">길이</span>AM = <span class="num">'+fmt(Math.hypot(M.x-A.x,M.y-A.y),2)+'</span>, AG = <span class="num">'+fmt(Math.hypot(G.x-A.x,G.y-A.y),2)+'</span>, GM = <span class="num">'+fmt(Math.hypot(M.x-G.x,M.y-G.y),2)+'</span></span>';
+    }else{
+      body='<span class="step"><span class="cap">닮음비</span>△ADE : △ABC 의 길이비 = <span class="num">'+ratioTxt(t).split(" : ")[0]+"'"+'</span> &nbsp;(<span class="v">k</span> = <span class="num">'+fmt(t,2)+'</span>)</span>'+
+        '<span class="step"><span class="cap">넓이비</span><span class="v">k</span><sup>2</sup> = <span class="num">'+fmt(t,2)+'</span><sup>2</sup> = <span class="hl"><span class="num">'+fmt(t*t,3)+'</span></span></span>'+
+        '<span class="step"><span class="cap">실제 넓이</span>△ABC = <span class="num">'+fmt(area,2)+'</span> , △ADE = <span class="num">'+fmt(area*t*t,2)+'</span></span>'+
+        '<span class="step"><span class="cap">부피비</span><span class="v">k</span><sup>3</sup> = <span class="num">'+fmt(t*t*t,3)+'</span> <span style="font-family:\'IBM Plex Sans KR\';font-size:11.5px;color:var(--ink-3)">(입체도형일 때)</span></span>';
+    }
+    $("r5").innerHTML=body;
+  }
+  draw();
+})();
+
+/* ═══ 6. 근의 공식 ═══════════════════════════════════════ */
+function rootsBlock(a,b,c){
+  if(a===0){
+    if(b===0) return '<span class="chip neg">a = 0, b = 0 → 이차방정식도 일차방정식도 아닙니다</span>';
+    return '<span class="chip mid">a = 0 이므로 이차방정식이 아닙니다 → 일차방정식의 해 x = '+fmt(-c/b,3)+'</span>';
+  }
+  var D=b*b-4*a*c, out="";
+  if(D<0){
+    var s=simpSqrt(-D), pre=(s[0]>1?s[0]:"");
+    var g1=gcd(gcd(Math.abs(b),s[0]),Math.abs(2*a))||1;
+    out='<span class="step"><span class="cap">근 (허근)</span><span class="v">x</span> = '+
+      frac(neg(-b/g1)+' &plusmn; '+(s[0]/g1===1?"":neg(s[0]/g1))+'<span class="v">i</span>'+rad('<span class="num">'+s[1]+'</span>'),neg(2*a/g1))+
+      '</span>';
+  }else{
+    var r=Math.sqrt(D), perfect=Math.abs(r-Math.round(r))<1e-9;
+    if(perfect){
+      var r1=(-b+Math.round(r))/(2*a), r2=(-b-Math.round(r))/(2*a);
+      out='<span class="step"><span class="cap">근</span><span class="v">x</span> = <span class="hl"><span class="num">'+fmt(r1,4)+'</span></span> &nbsp;또는&nbsp; <span class="v">x</span> = <span class="hl"><span class="num">'+fmt(r2,4)+'</span></span>'+
+        ' <span style="font-family:\'IBM Plex Sans KR\';font-size:11.5px;color:var(--ink-3)">(D가 완전제곱수 → 인수분해로도 풀립니다)</span></span>';
+    }else{
+      var s2=simpSqrt(D), g2=gcd(gcd(Math.abs(b),s2[0]),Math.abs(2*a))||1;
+      out='<span class="step"><span class="cap">근</span><span class="v">x</span> = '+
+        frac(neg(-b/g2)+' &plusmn; '+(s2[0]/g2===1?"":neg(s2[0]/g2))+rad('<span class="num">'+s2[1]+'</span>'),neg(2*a/g2))+
+        ' = <span class="hl"><span class="num">'+fmt((-b+r)/(2*a),3)+'</span></span> 또는 <span class="hl"><span class="num">'+fmt((-b-r)/(2*a),3)+'</span></span></span>';
+    }
+  }
+  return out;
+}
+(function(){
+  var P=plane($("s6"),{xmin:-7,xmax:7,ymin:-7,ymax:9,W:520,H:390,label:"이차함수 그래프와 근"});
+  var art=P.layer();
+  var a=1,b=-2,c=-3;
+  bind("i6a","o6a",function(v){ a=v; draw(); },0);
+  bind("i6b","o6b",function(v){ b=v; draw(); },0);
+  bind("i6c","o6c",function(v){ c=v; draw(); },0);
+  function draw(){
+    P.wipe(art);
+    var i,d="",first=true;
+    if(a!==0||b!==0){
+      for(i=P.xmin;i<=P.xmax+0.001;i+=0.05){
+        var y=a*i*i+b*i+c;
+        if(y<P.ymin-4||y>P.ymax+4){ first=true; continue; }
+        d+=(first?"M ":"L ")+P.X(i).toFixed(1)+" "+P.Y(y).toFixed(1)+" "; first=false;
+      }
+      el("path",{d:d,class:"curve"},art);
+    }
+    var D=b*b-4*a*c;
+    if(a!==0){
+      var vx=-b/(2*a), vy=a*vx*vx+b*vx+c;
+      el("line",{x1:P.X(vx),y1:0,x2:P.X(vx),y2:P.H,style:"stroke:var(--ink-3)","stroke-width":1,"stroke-dasharray":"3 5"},art);
+      el("circle",{cx:P.X(vx),cy:P.Y(vy),r:4,style:"fill:var(--ink-2)"},art);
+      txt(el("text",{x:P.X(vx)+8,y:P.Y(vy)+(a>0?16:-8),class:"lab-s"},art),"꼭짓점 ("+fmt(vx,2)+", "+fmt(vy,2)+")");
+      if(D>=0){
+        var r=Math.sqrt(D);
+        [(-b+r)/(2*a),(-b-r)/(2*a)].forEach(function(x0,k){
+          if(D===0&&k===1) return;
+          el("circle",{cx:P.X(x0),cy:P.Y(0),r:5.5,style:"fill:var(--signal);stroke:var(--surface);stroke-width:2"},art);
+          txt(el("text",{x:P.X(x0),y:P.Y(0)-12,class:"lab-s","text-anchor":"middle",style:"fill:var(--signal)"},art),fmt(x0,2));
+        });
+      }
+    }
+    var eqn=(a===0?"":leadC(a)+'<span class="v">x</span><sup>2</sup>')+
+      (b===0?"":(a===0?leadC(b):signedC(b))+'<span class="v">x</span>')+(c===0?"":(a===0&&b===0?neg(c):signed(c,0)))+" = 0";
+    $("r6").innerHTML=
+      '<span class="step"><span class="cap">방정식</span>'+eqn+'</span>'+
+      '<span class="step"><span class="cap">공식 대입</span><span class="v">x</span> = '+
+        frac('&minus;'+par(b,0)+' &plusmn; '+rad(par(b,0)+'<sup>2</sup> &minus; 4&middot;'+par(a,0)+'&middot;'+par(c,0)),'2&middot;'+par(a,0))+'</span>'+
+      '<span class="step"><span class="cap">판별식</span><span class="v">D</span> = <span class="num">'+(b*b)+'</span>'+signed(-4*a*c,0)+' = <span class="hl2"><span class="num">'+neg(D)+'</span></span></span>'+
+      rootsBlock(a,b,c)+
+      (b%2===0&&a!==0?'<span class="step"><span class="cap">짝수 공식</span><span class="v">b</span>&prime; = <span class="num">'+neg(b/2)+'</span> → <span class="v">x</span> = '+
+        frac('&minus;'+par(b/2,0)+' &plusmn; '+rad(par(b/2,0)+'<sup>2</sup> &minus; '+par(a,0)+'&middot;'+par(c,0)),par(a,0))+
+        ' &nbsp;<span style="font-family:\'IBM Plex Sans KR\';font-size:11.5px;color:var(--ink-3)">(D/4 = '+neg(b*b/4-a*c)+')</span></span>':"");
+  }
+  draw();
+})();
+
+/* ═══ 7. 판별식 ══════════════════════════════════════════ */
+(function(){
+  var P=plane($("s7"),{xmin:-4,xmax:6,ymin:-6,ymax:8,W:520,H:390,label:"판별식과 x축"});
+  var art=P.layer();
+  var a=1,b=-2,c=-2;
+  bind("i7c","o7c",function(v){ c=v; draw(); },1);
+  function draw(){
+    P.wipe(art);
+    var i,d="",first=true;
+    for(i=P.xmin;i<=P.xmax+0.001;i+=0.05){
+      var y=a*i*i+b*i+c;
+      if(y<P.ymin-4||y>P.ymax+4){ first=true; continue; }
+      d+=(first?"M ":"L ")+P.X(i).toFixed(1)+" "+P.Y(y).toFixed(1)+" "; first=false;
+    }
+    el("path",{d:d,class:"curve"},art);
+    var D=b*b-4*a*c, vx=-b/(2*a), vy=a*vx*vx+b*vx+c, state,cls,cnt;
+    if(D>1e-9){ state="서로 다른 두 실근"; cls="pos"; cnt=2; }
+    else if(D>-1e-9){ state="중근 (한 점에서 접함)"; cls="mid"; cnt=1; }
+    else { state="실근 없음 (서로 다른 두 허근)"; cls="neg"; cnt=0; }
+    el("circle",{cx:P.X(vx),cy:P.Y(vy),r:4.5,
+      style:"fill:var(--"+(cls==="pos"?"pos":cls==="mid"?"mid":"neg")+")"},art);
+    txt(el("text",{x:P.X(vx)+9,y:P.Y(vy)+5,class:"lab-s"},art),"꼭짓점 y = "+fmt(vy,2));
+    if(D>=0){
+      var r=Math.sqrt(D);
+      [(-b+r)/(2*a),(-b-r)/(2*a)].forEach(function(x0,k){
+        if(D<1e-9&&k===1) return;
+        el("circle",{cx:P.X(x0),cy:P.Y(0),r:5.5,style:"fill:var(--signal);stroke:var(--surface);stroke-width:2"},art);
+      });
+    }
+    txt(el("text",{x:16,y:26,class:"lab-s",style:"fill:var(--ink-2)"},art),
+      "x² − 2x "+(c<0?"− ":"+ ")+fmt(Math.abs(c),1)+" = 0");
+    $("r7").innerHTML=
+      '<span class="step"><span class="cap">방정식</span><span class="v">x</span><sup>2</sup> &minus; 2<span class="v">x</span>'+signed(c,1)+' = 0</span>'+
+      '<span class="step"><span class="cap">판별식</span><span class="v">D</span> = (&minus;2)<sup>2</sup> &minus; 4&middot;1&middot;'+par(c,1)+
+        ' = <span class="num">4</span>'+signed(-4*c,1)+' = <span class="hl"><span class="num">'+neg(fmt(D,1))+'</span></span></span>'+
+      '<span class="step"><span class="cap">x축과의 교점</span><span class="num">'+cnt+'</span>개</span>'+
+      '<span class="chip '+cls+'" style="margin-top:6px">D '+(D>1e-9?"&gt; 0":(D>-1e-9?"= 0":"&lt; 0"))+' → '+state+'</span>';
+  }
+  draw();
+})();
+
+/* ═══ 8. 부정방정식 ══════════════════════════════════════ */
+(function(){
+  var form="prod", cond="int";
+  var st={ prod:{N:3}, shift:{p:1,q:-5,N:3}, gen:{A:-3,B:5,C:-5} };
+  var defs={
+    prod:[["N","N",3]],
+    shift:[["p","p",1],["q","q",-5],["N","N",3]],
+    gen:[["A","A (x의 계수)",-3],["B","B (y의 계수)",5],["C","C (상수)",-5]]
+  };
+  segGroup("g8",function(d){ form=d.form; fields(); render(); });
+  segGroup("g8c",function(d){ cond=d.cond; render(); });
+  function fields(){
+    var box=$("n8"); box.innerHTML="";
+    defs[form].forEach(function(f){
+      var lab=document.createElement("label");
+      lab.innerHTML='<span>'+f[1]+'</span>';
+      var inp=document.createElement("input");
+      inp.type="number"; inp.value=st[form][f[0]]; inp.step="1";
+      inp.setAttribute("aria-label",f[1]);
+      inp.addEventListener("input",function(){
+        var v=parseInt(inp.value,10);
+        if(!isNaN(v)){ st[form][f[0]]=v; render(); }
+      });
+      lab.appendChild(inp); box.appendChild(lab);
+    });
+  }
+  function divisors(N){
+    var pos=[],i;
+    for(i=1;i<=Math.abs(N);i++) if(N%i===0) pos.push(i);
+    pos.sort(function(x,y){ return y-x; });
+    return pos.concat(pos.map(function(v){ return -v; }));
+  }
+  function render(){
+    var p,q,N,head,deriv="";
+    if(form==="prod"){
+      N=st.prod.N; p=0; q=0;
+      head='<span class="v">xy</span> = <span class="num">'+neg(N)+'</span>';
+      deriv='<span class="step"><span class="cap">이미 곱의 꼴</span>'+head+' &nbsp;→&nbsp; <span class="v">x</span> &times; <span class="v">y</span> = <span class="num">'+neg(N)+'</span> 의 약수쌍을 모두 찾습니다</span>';
+    }else if(form==="shift"){
+      p=st.shift.p; q=st.shift.q; N=st.shift.N;
+      head='(<span class="v">x</span>'+signed(-p,0)+')(<span class="v">y</span>'+signed(-q,0)+') = <span class="num">'+neg(N)+'</span>';
+      deriv='<span class="step"><span class="cap">곱의 꼴</span>'+head+'</span>'+
+        '<span class="step"><span class="cap">되돌리기</span><span class="v">x</span> = (첫 칸)'+signed(p,0)+' , &nbsp;<span class="v">y</span> = (둘째 칸)'+signed(q,0)+'</span>';
+    }else{
+      var A=st.gen.A,B=st.gen.B,C=st.gen.C;
+      p=-B; q=-A; N=A*B-C;
+      head='(<span class="v">x</span>'+signed(B,0)+')(<span class="v">y</span>'+signed(A,0)+') = <span class="num">'+neg(N)+'</span>';
+      deriv='<span class="step"><span class="cap">원래 식</span><span class="v">xy</span>'+signed(A,0)+'<span class="v">x</span>'+signed(B,0)+'<span class="v">y</span>'+signed(C,0)+' = 0</span>'+
+        '<span class="step"><span class="cap">괄호 만들기</span>x 옆에는 <b class="hl">y의 계수 '+neg(B)+'</b>, y 옆에는 <b class="hl">x의 계수 '+neg(A)+'</b> (엇갈려서)</span>'+
+        '<span class="step"><span class="cap">변형</span>(<span class="v">x</span>'+signed(B,0)+')(<span class="v">y</span>'+signed(A,0)+') = <span class="v">AB</span> &minus; <span class="v">C</span> = '+
+          par(A,0)+'&middot;'+par(B,0)+' &minus; '+par(C,0)+' = <span class="hl"><span class="num">'+neg(N)+'</span></span></span>'+
+        '<span class="step"><span class="cap">되돌리기</span><span class="v">x</span> = (첫 칸)'+signed(-B,0)+' , &nbsp;<span class="v">y</span> = (둘째 칸)'+signed(-A,0)+'</span>';
+    }
+    $("r8").innerHTML=deriv;
+    var t1=$("t8"), t2=$("t8b");
+    if(N===0){
+      t1.innerHTML=""; t2.innerHTML="";
+      $("n8note").innerHTML='<span class="chip neg">우변이 0입니다. 이때는 두 괄호 중 하나가 0이면 되므로 <b>해가 무수히 많습니다</b> (x = '+p+' 인 모든 y, 또는 y = '+q+' 인 모든 x).</span>';
+      return;
+    }
+    var ds=divisors(N), rows=[], i;
+    for(i=0;i<ds.length;i++){
+      var d1=ds[i], d2=N/d1, x=p+d1, y=q+d2;
+      if(cond==="nat"&&(x<1||y<1)) continue;
+      rows.push([d1,d2,x,y]);
+    }
+    var cap=18, trunc=rows.length>cap;
+    if(trunc) rows=rows.slice(0,cap);
+    var lblA=(p===0?'<span class="v">x</span>':'<span class="v">x</span>'+signed(-p,0)),
+        lblB=(q===0?'<span class="v">y</span>':'<span class="v">y</span>'+signed(-q,0));
+    function row(label,cells){
+      return "<tr><td class='hd'>"+label+"</td>"+cells.map(function(c){ return "<td>"+c+"</td>"; }).join("")+"</tr>";
+    }
+    var adjA=p===0?"":'<span class="adj">'+(p>0?"+":"&minus;")+Math.abs(p)+'</span>';
+    var adjB=q===0?"":'<span class="adj">'+(q>0?"+":"&minus;")+Math.abs(q)+'</span>';
+    var same=(p===0&&q===0);
+    t1.parentNode.style.display=same?"none":"";
+    t1.innerHTML=same?"":
+      row(lblA,rows.map(function(r){ return neg(r[0])+adjA; }))+
+      row(lblB,rows.map(function(r){ return neg(r[1])+adjB; }));
+    t2.innerHTML=
+      row('<span class="v">x</span>',rows.map(function(r){ return neg(r[2]); }))+
+      row('<span class="v">y</span>',rows.map(function(r){ return neg(r[3]); }));
+    t2.rows[0].className="sol"; t2.rows[1].className="sol";
+    var listed=rows.map(function(r){ return "("+r[2]+", "+r[3]+")"; }).join(", ");
+    $("n8note").innerHTML= rows.length===0
+      ? '<span class="chip neg">조건을 만족하는 해가 없습니다.</span>'
+      : '<b>해 '+rows.length+'개</b> &nbsp;<span class="num">'+neg(listed)+'</span>'+
+        (trunc?' &nbsp;<span style="color:var(--ink-3)">(약수가 많아 앞 '+cap+'개만 표시)</span>':"")+
+        '<br><span style="color:var(--ink-3)">'+(same
+          ? "곱해서 "+neg(N)+"이 되는 정수쌍을 빠짐없이 나열한 것입니다."
+          : "위 표의 각 칸에 약수쌍을 넣고 빨간 숫자만큼 더하면 아래 표의 x, y가 됩니다.")+'</span>';
+  }
+  fields(); render();
+})();
+
+/* ═══ 9. 고차방정식 ══════════════════════════════════════ */
+(function(){
+  var co={a:1,b:-2,c:-5,d:6}, picked=null;
+  var box=$("n9");
+  [["a","x³ 계수"],["b","x² 계수"],["c","x 계수"],["d","상수항"]].forEach(function(f){
+    var lab=document.createElement("label");
+    lab.innerHTML='<span>'+f[1]+'</span>';
+    var inp=document.createElement("input");
+    inp.type="number"; inp.value=co[f[0]]; inp.step="1"; inp.setAttribute("aria-label",f[1]);
+    inp.addEventListener("input",function(){
+      var v=parseInt(inp.value,10);
+      if(!isNaN(v)){ co[f[0]]=v; picked=null; render(); }
+    });
+    lab.appendChild(inp); box.appendChild(lab);
+  });
+  function divs(n){ var r=[],i; n=Math.abs(n); if(n===0) return [1]; for(i=1;i<=n;i++) if(n%i===0) r.push(i); return r; }
+  function f(x){ return co.a*x*x*x+co.b*x*x+co.c*x+co.d; }
+  function cands(){
+    if(co.a===0) return [];
+    var out=[], P=divs(co.d), Q=divs(co.a);
+    P.forEach(function(p){ Q.forEach(function(q){
+      if(p/q===Math.round(p/q)){ out.push(p/q); out.push(-p/q); }
+    });});
+    out=out.filter(function(v,i){ return out.indexOf(v)===i; });
+    out.sort(function(x,y){ return Math.abs(x)-Math.abs(y)||x-y; });
+    return out.slice(0,12);
+  }
+  function eqHTML(){
+    return leadC(co.a)+'<span class="v">x</span><sup>3</sup>'+
+      (co.b?signedC(co.b)+'<span class="v">x</span><sup>2</sup>':"")+
+      (co.c?signedC(co.c)+'<span class="v">x</span>':"")+(co.d?signed(co.d,0):"")+" = 0";
+  }
+  function render(){
+    var cb=$("cand9"); cb.innerHTML="";
+    var lab=document.createElement("span");
+    lab.style.cssText="font:500 12px 'IBM Plex Mono',monospace;color:var(--ink-2);margin-right:4px";
+    lab.textContent="후보근 α:";
+    cb.appendChild(lab);
+    var list=cands();
+    if(!list.length){
+      var w=document.createElement("span"); w.className="chip neg"; w.textContent="x³의 계수가 0이면 삼차방정식이 아닙니다";
+      cb.appendChild(w);
+    }
+    list.forEach(function(v){
+      var b=document.createElement("button");
+      b.className="act ghost"; b.textContent=(v<0?"−":"")+Math.abs(v);
+      b.style.cssText+="padding:6px 11px;font-family:'IBM Plex Mono',monospace";
+      if(Math.abs(f(v))<1e-9){ b.style.borderColor="var(--pos)"; b.style.color="var(--pos)"; }
+      if(picked===v){ b.style.background="var(--accent)"; b.style.color="#fff"; b.style.borderColor="var(--accent)"; }
+      b.addEventListener("click",function(){ picked=v; render(); });
+      cb.appendChild(b);
+    });
+    var auto=document.createElement("button");
+    auto.className="act"; auto.textContent="맞는 근 자동 찾기";
+    auto.style.cssText+="padding:6px 12px";
+    auto.addEventListener("click",function(){
+      var hit=cands().filter(function(v){ return Math.abs(f(v))<1e-9; });
+      picked=hit.length?hit[0]:null; render();
+    });
+    cb.appendChild(auto);
+
+    var t=$("t9");
+    if(picked===null){
+      t.innerHTML="<tr><td style='color:var(--ink-3)'>후보근을 하나 눌러보세요. 초록 테두리가 실제로 나누어떨어지는 값입니다.</td></tr>";
+      $("r9").innerHTML='<span class="step"><span class="cap">방정식</span>'+eqHTML()+'</span>'+
+        '<span class="step"><span class="cap">후보근</span>&plusmn; '+frac("상수항 "+neg(co.d)+"의 약수","최고차항 "+neg(co.a)+"의 약수")+'</span>';
+      return;
+    }
+    var al=picked, k=[co.a,co.b,co.c,co.d], mul=[null], res=[k[0]], i;
+    for(i=1;i<4;i++){ mul.push(res[i-1]*al); res.push(k[i]+mul[i]); }
+    var rem=res[3];
+    function cells(arr,cls){ return arr.map(function(v){ return "<td"+(cls?" class='"+cls+"'":"")+">"+(v===null?"":neg(fmt(v,3)))+"</td>"; }).join(""); }
+    t.innerHTML=
+      "<tr><td class='hd' rowspan='3' style='vertical-align:middle;font-size:16px;width:62px'>"+neg(al)+"</td>"+cells(k)+"</tr>"+
+      "<tr>"+cells(mul)+"</tr>"+
+      "<tr style='border-top:2px solid var(--ink-2)'>"+
+        "<td class='sol' style='color:var(--accent-ink);font-weight:600'>"+neg(res[0])+"</td>"+
+        "<td class='sol' style='color:var(--accent-ink);font-weight:600'>"+neg(res[1])+"</td>"+
+        "<td class='sol' style='color:var(--accent-ink);font-weight:600'>"+neg(res[2])+"</td>"+
+        "<td style='color:"+(Math.abs(rem)<1e-9?"var(--pos)":"var(--neg)")+";font-weight:600'>"+neg(fmt(rem,3))+"</td></tr>";
+    var out='<span class="step"><span class="cap">방정식</span>'+eqHTML()+'</span>'+
+      '<span class="step"><span class="cap">대입</span><span class="v">f</span>('+par(al,0)+') = <span class="num">'+neg(fmt(f(al),3))+'</span> &nbsp;'+
+        (Math.abs(rem)<1e-9?'<span class="chip pos">= 0 → 인수정리 성립</span>':'<span class="chip neg">≠ 0 → 나누어떨어지지 않음</span>')+'</span>';
+    if(Math.abs(rem)<1e-9){
+      var A=res[0],B=res[1],C=res[2], D2=B*B-4*A*C;
+      var quad=leadC(A)+'<span class="v">x</span><sup>2</sup>'+(B?signedC(B)+'<span class="v">x</span>':"")+(C?signed(C,0):"");
+      out+='<span class="step"><span class="cap">인수분해</span>('+'<span class="v">x</span>'+signed(-al,0)+')('+quad+') = 0</span>'+
+        '<span class="step"><span class="cap">남은 이차식</span>'+quad+
+        ' = 0, &nbsp;<span class="v">D</span> = <span class="num">'+neg(D2)+'</span></span>'+
+        rootsBlock(A,B,C);
+      var all=[al];
+      if(D2>=0){ var r=Math.sqrt(D2); all.push((-B+r)/(2*A)); if(D2>0) all.push((-B-r)/(2*A)); }
+      out+='<span class="step"><span class="cap">전체 해</span><span class="v">x</span> = <span class="hl"><span class="num">'+
+        neg(all.map(function(v){ return fmt(v,3); }).join(", "))+'</span></span>'+
+        (D2<0?' <span style="font-family:\'IBM Plex Sans KR\';font-size:11.5px;color:var(--ink-3)">+ 허근 2개</span>':"")+'</span>';
+    }else{
+      out+='<span class="step"><span class="cap">다음 단계</span>다른 후보근을 눌러보세요. 나머지가 <span class="num">0</span>이 되어야 인수가 됩니다.</span>';
+    }
+    $("r9").innerHTML=out;
+  }
+  render();
+})();
+
+/* ═══ 10. 시그마 ═════════════════════════════════════════ */
+(function(){
+  var host=$("s10"), W=520,H=390,p=1,n=6;
+  var svg=el("svg",{viewBox:"0 0 "+W+" "+H,class:"stage-svg","aria-label":"시그마 막대그래프"},host);
+  var art=el("g",{},svg);
+  bind("i10n","o10n",function(v){ n=v; draw(); },0);
+  segGroup("g10",function(d){ p=parseInt(d.p,10); draw(); });
+  function draw(){
+    while(art.firstChild) art.removeChild(art.firstChild);
+    var padL=40,padR=18,padB=34,padT=26;
+    var w=(W-padL-padR)/n, i;
+    var vals=[],sum=0;
+    for(i=1;i<=n;i++){ vals.push(Math.pow(i,p)); sum+=Math.pow(i,p); }
+    var top=(p===1)?(n+1):Math.pow(n,p);
+    var sc=(H-padB-padT)/top;
+    el("line",{x1:padL-6,y1:H-padB,x2:W-padR+4,y2:H-padB,class:"axis-l"},art);
+    for(i=1;i<=n;i++){
+      var h=Math.pow(i,p)*sc, x=padL+(i-1)*w;
+      if(p===1){ /* 뒤집어 올린 짝 막대: 합쳐서 (n+1) 높이의 직사각형 */
+        var gh=(n+1-i)*sc;
+        el("rect",{x:x+1.5,y:H-padB-h-gh,width:w-3,height:gh,
+          style:"fill:var(--signal);opacity:.20"},art);
+      }
+      el("rect",{x:x+1.5,y:H-padB-h,width:w-3,height:h,
+        style:"fill:var(--accent);opacity:.85"},art);
+      if(n<=12) txt(el("text",{x:x+w/2,y:H-padB+14,class:"tick","text-anchor":"middle"},art),String(i));
+    }
+    if(p===1){
+      el("rect",{x:padL,y:H-padB-(n+1)*sc,width:W-padL-padR,height:(n+1)*sc,
+        fill:"none",style:"stroke:var(--signal);stroke-width:1.4;stroke-dasharray:5 4"},art);
+      txt(el("text",{x:padL+4,y:H-padB-(n+1)*sc-8,class:"lab-s",style:"fill:var(--signal)"},art),
+        "직사각형 "+n+" × "+(n+1)+" = "+(n*(n+1))+" 의 절반");
+    }else{
+      txt(el("text",{x:padL+4,y:padT-8,class:"lab-s",style:"fill:var(--ink-2)"},art),
+        "각 막대의 높이 = k"+(p===2?"²":"³"));
+    }
+    txt(el("text",{x:padL-10,y:H-padB+4,class:"tick","text-anchor":"end"},art),"0");
+    txt(el("text",{x:padL-10,y:H-padB-top*sc+4,class:"tick","text-anchor":"end"},art),String(fmt(top,0)));
+    var f1=n*(n+1)/2, f2=n*(n+1)*(2*n+1)/6, f3=f1*f1;
+    var cur=(p===1?f1:p===2?f2:f3);
+    var formula=(p===1)
+      ? frac('<span class="v">n</span>(<span class="v">n</span>+1)',"2")+' = '+frac(n+'&middot;'+(n+1),"2")
+      : (p===2)
+      ? frac('<span class="v">n</span>(<span class="v">n</span>+1)(2<span class="v">n</span>+1)',"6")+' = '+frac(n+'&middot;'+(n+1)+'&middot;'+(2*n+1),"6")
+      : '('+frac('<span class="v">n</span>(<span class="v">n</span>+1)',"2")+')<sup>2</sup> = ('+frac(n+'&middot;'+(n+1),"2")+')<sup>2</sup>';
+    $("r10").innerHTML=
+      '<span class="step"><span class="cap">식</span>&Sigma;<span class="sq">k=1</span><sup>'+n+'</sup> <span class="v">k</span>'+(p>1?"<sup>"+p+"</sup>":"")+
+        ' = 1'+(p>1?"<sup>"+p+"</sup>":"")+' + 2'+(p>1?"<sup>"+p+"</sup>":"")+' + &hellip; + '+n+(p>1?"<sup>"+p+"</sup>":"")+'</span>'+
+      '<span class="step"><span class="cap">공식</span>'+formula+' = <span class="hl"><span class="num">'+cur+'</span></span></span>'+
+      '<span class="step"><span class="cap">직접 더한 값</span><span class="num">'+sum+'</span> '+
+        (sum===cur?'<span class="chip pos">일치</span>':'')+'</span>'+
+      '<span class="step"><span class="cap">성질 확인</span>&Sigma;(3<span class="v">k</span>+2) = 3&Sigma;<span class="v">k</span> + 2&middot;<span class="v">n</span> = 3&middot;<span class="num">'+f1+'</span> + 2&middot;<span class="num">'+n+'</span> = <span class="hl2"><span class="num">'+(3*f1+2*n)+'</span></span></span>'+
+      (p===3?'<span class="step"><span class="cap">외우는 법</span>&Sigma;<span class="v">k</span><sup>3</sup> = (&Sigma;<span class="v">k</span>)<sup>2</sup> = <span class="num">'+f1+'</span><sup>2</sup> = <span class="num">'+f3+'</span></span>':"");
+  }
+  draw();
+})();
+
+/* ═══ 11. 정삼각형 ═══════════════════════════════════════ */
+(function(){
+  var P=plane($("s11"),{xmin:-7.5,xmax:7.5,ymin:-7.5,ymax:7.5,W:460,H:460,tick:2,label:"정삼각형"});
+  var art=P.layer();
+  var a=6, show="h";
+  bind("i11a","o11a",function(v){ a=v; draw(); },1);
+  segGroup("g11",function(d){ show=d.show; draw(); });
+  function coefRad(k){ return (Math.abs(k-1)<1e-9?"":'<span class="num">'+fmt(k,3)+'</span>')+rad('<span class="num">3</span>'); }
+  function draw(){
+    P.wipe(art);
+    var R=a/Math.sqrt(3), r=R/2, h=a*Math.sqrt(3)/2, S=a*a*Math.sqrt(3)/4;
+    var V=[90,210,330].map(function(deg){
+      var t=deg*Math.PI/180; return {x:R*Math.cos(t),y:R*Math.sin(t)};
+    });
+    var A=V[0],B=V[1],C=V[2], M={x:0,y:B.y};
+    if(show==="c"){
+      el("ellipse",{cx:P.X(0),cy:P.Y(0),rx:P.Lx(R),ry:P.Ly(R),fill:"none",
+        style:"stroke:var(--signal);stroke-width:1.6;stroke-dasharray:5 4"},art);
+      el("ellipse",{cx:P.X(0),cy:P.Y(0),rx:P.Lx(r),ry:P.Ly(r),fill:"none",
+        style:"stroke:var(--pos);stroke-width:1.6"},art);
+    }
+    el("path",{d:"M "+P.X(A.x)+" "+P.Y(A.y)+" L "+P.X(B.x)+" "+P.Y(B.y)+" L "+P.X(C.x)+" "+P.Y(C.y)+" Z",
+      style:"fill:var(--accent);fill-opacity:.10;stroke:var(--accent);stroke-width:2.4"},art);
+    if(show==="h"){
+      el("path",{d:"M "+P.X(A.x)+" "+P.Y(A.y)+" L "+P.X(M.x)+" "+P.Y(M.y)+" L "+P.X(C.x)+" "+P.Y(C.y)+" Z",
+        style:"fill:var(--signal);fill-opacity:.13;stroke:none"},art);
+      el("line",{x1:P.X(A.x),y1:P.Y(A.y),x2:P.X(M.x),y2:P.Y(M.y),class:"hypo"},art);
+      rightAngle(art,P,M.x,M.y,1,0,0,1,10);
+      txt(el("text",{x:P.X(0)-9,y:P.Y((A.y+M.y)/2),class:"lab-s",style:"fill:var(--signal)","text-anchor":"end"},art),"h = "+fmt(h,2));
+      txt(el("text",{x:P.X((M.x+C.x)/2),y:P.Y(M.y)+16,class:"lab-s"},art),"a/2 = "+fmt(a/2,2));
+      txt(el("text",{x:P.X(A.x)+14,y:P.Y(A.y)+22,class:"lab-s"},art),"30°");
+      txt(el("text",{x:P.X(C.x)-30,y:P.Y(C.y)-9,class:"lab-s"},art),"60°");
+    }else{
+      el("circle",{cx:P.X(0),cy:P.Y(0),r:4,style:"fill:var(--ink-2)"},art);
+      txt(el("text",{x:P.X(0)+8,y:P.Y(0)+15,class:"lab-s"},art),"무게중심=내심=외심");
+      el("line",{x1:P.X(0),y1:P.Y(0),x2:P.X(0),y2:P.Y(R),style:"stroke:var(--signal);stroke-width:1.8"},art);
+      el("line",{x1:P.X(0),y1:P.Y(0),x2:P.X(0),y2:P.Y(-r),style:"stroke:var(--pos);stroke-width:1.8"},art);
+      txt(el("text",{x:P.X(0)+8,y:P.Y(R/2),class:"lab-s",style:"fill:var(--signal)"},art),"R = "+fmt(R,2));
+      txt(el("text",{x:P.X(0)+8,y:P.Y(-r/2),class:"lab-s",style:"fill:var(--pos)"},art),"r = "+fmt(r,2));
+    }
+    txt(el("text",{x:P.X((B.x+C.x)/2),y:P.Y(B.y)+(show==="h"?31:16),class:"lab-s",style:"fill:var(--ink-2)"},art),"a = "+fmt(a,1));
+    $("r11").innerHTML=
+      '<span class="step"><span class="cap">한 변</span><span class="v">a</span> = <span class="num">'+fmt(a,1)+'</span></span>'+
+      '<span class="step"><span class="cap">높이</span><span class="v">h</span> = '+frac(rad("3"),"2")+'&middot;<span class="num">'+fmt(a,1)+'</span> = '+coefRad(a/2)+' ≈ <span class="hl"><span class="num">'+fmt(h,3)+'</span></span></span>'+
+      '<span class="step"><span class="cap">넓이</span><span class="v">S</span> = '+frac(rad("3"),"4")+'&middot;<span class="num">'+fmt(a,1)+'</span><sup>2</sup> = '+coefRad(a*a/4)+' ≈ <span class="hl"><span class="num">'+fmt(S,3)+'</span></span></span>'+
+      '<span class="step"><span class="cap">내접원</span><span class="v">r</span> = '+frac("1","3")+'<span class="v">h</span> = '+coefRad(a/6)+' ≈ <span class="num">'+fmt(r,3)+'</span></span>'+
+      '<span class="step"><span class="cap">외접원</span><span class="v">R</span> = '+frac("2","3")+'<span class="v">h</span> = 2<span class="v">r</span> = '+coefRad(a/3)+' ≈ <span class="num">'+fmt(R,3)+'</span></span>';
+  }
+  draw();
+})();
+})();
+</script>
