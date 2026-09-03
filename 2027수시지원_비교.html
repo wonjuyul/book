@@ -1,0 +1,658 @@
+<title>2027 생명계열 수시 지원표</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&display=swap">
+<style>
+  :root{
+    --paper:#F1F4EC;
+    --surface:#FCFDFA;
+    --sunk:#E8EDE1;
+    --ink:#16201A;
+    --muted:#5B6A5E;
+    --faint:#8A9A8C;
+    --line:#D4DECE;
+    --rule:#B9C7B2;
+    --jong:#1F5C3A;
+    --jong-bg:#E2EDE3;
+    --gyo:#2C4A78;
+    --gyo-bg:#E1E8F2;
+    --signal:#9E3B22;
+    --signal-bg:#F5E3DC;
+    --shadow:0 1px 2px rgba(22,32,26,.06);
+    --pick:#6E4E12;
+    --pick-bg:#F2EAD6;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#12160F; --surface:#1A1F18; --sunk:#141911;
+      --ink:#E7EDE3; --muted:#9DAC9E; --faint:#77876F;
+      --line:#2C3529; --rule:#3B4637;
+      --jong:#7CC59A; --jong-bg:#1D2E23;
+      --gyo:#93B7E4; --gyo-bg:#1A2431;
+      --signal:#E28F74; --signal-bg:#33201A;
+      --pick:#D9BC79; --pick-bg:#2C2617;
+      --shadow:0 1px 2px rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#12160F; --surface:#1A1F18; --sunk:#141911;
+    --ink:#E7EDE3; --muted:#9DAC9E; --faint:#77876F;
+    --line:#2C3529; --rule:#3B4637;
+    --jong:#7CC59A; --jong-bg:#1D2E23;
+    --gyo:#93B7E4; --gyo-bg:#1A2431;
+    --signal:#E28F74; --signal-bg:#33201A;
+    --pick:#D9BC79; --pick-bg:#2C2617;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    font-size:15px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px 96px}
+
+  /* ---------- masthead ---------- */
+  header.top{
+    padding:56px 0 28px;
+    border-bottom:2px solid var(--rule);
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .eyebrow{
+    font-size:11.5px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--faint);
+  }
+  h1{
+    font-family:"Gowun Batang",Georgia,serif; font-weight:700;
+    font-size:clamp(30px,5vw,46px); line-height:1.2; margin:0; text-wrap:balance;
+    letter-spacing:-.01em;
+  }
+  .standfirst{max-width:60ch; color:var(--muted); margin:0; font-size:15.5px}
+  .standfirst strong{color:var(--ink); font-weight:600}
+
+  .meta{
+    display:flex; flex-wrap:wrap; gap:8px 28px; padding-top:6px;
+    font-size:12.5px; color:var(--muted);
+  }
+  .meta b{color:var(--ink); font-weight:600}
+
+  /* ---------- sections ---------- */
+  section{padding-top:52px}
+  h2{
+    font-family:"Gowun Batang",Georgia,serif; font-weight:700;
+    font-size:24px; margin:0 0 6px; letter-spacing:-.005em;
+  }
+  .sub{color:var(--muted); font-size:13.5px; margin:0 0 20px; max-width:64ch}
+
+  /* ---------- tables ---------- */
+  .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:3px; background:var(--surface)}
+  table{border-collapse:collapse; width:100%; font-size:13.5px; min-width:640px}
+  th,td{padding:9px 12px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top}
+  thead th{
+    background:var(--sunk); font-weight:600; font-size:11.5px; letter-spacing:.05em;
+    color:var(--muted); white-space:nowrap; border-bottom:1px solid var(--rule);
+  }
+  tbody tr:last-child td{border-bottom:none}
+  td.n,th.n{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+  td.dept{font-weight:500; white-space:nowrap}
+  tr.here td{background:var(--pick-bg)}
+  tr.here td.dept{font-weight:700; color:var(--pick)}
+  tr.sum td{background:var(--sunk); font-weight:600}
+  .dash{color:var(--faint)}
+
+  /* ---------- chips ---------- */
+  .chip{
+    display:inline-block; padding:1px 7px; border-radius:2px;
+    font-size:11px; font-weight:600; letter-spacing:.02em; white-space:nowrap;
+  }
+  .chip.jong{background:var(--jong-bg); color:var(--jong)}
+  .chip.gyo{background:var(--gyo-bg); color:var(--gyo)}
+  .chip.min{background:var(--signal-bg); color:var(--signal)}
+  .chip.none{background:transparent; color:var(--faint); padding-left:0}
+
+  /* ---------- candidate table ---------- */
+  .cand td{padding:11px 12px}
+  .cand .idx{
+    font-family:"Gowun Batang",Georgia,serif; font-size:17px; font-weight:700;
+    color:var(--faint); width:1%; padding-right:4px;
+  }
+  .cand .big{
+    font-family:"Gowun Batang",Georgia,serif; font-size:21px; font-weight:700;
+    line-height:1.1; color:var(--ink);
+  }
+  .cand .big span{font-size:12px; font-weight:400; color:var(--muted); font-family:inherit}
+  .uni{font-size:11.5px; color:var(--muted); display:block; letter-spacing:.02em}
+  .maj{font-weight:600}
+
+  /* ---------- schedule ---------- */
+  .sched{display:grid; grid-template-columns:repeat(auto-fit,minmax(185px,1fr)); background:var(--surface); border:1px solid var(--line); border-top-width:0; border-left-width:0; border-radius:3px; overflow:hidden}
+  .slot{background:var(--surface); padding:14px 16px; display:flex; flex-direction:column; gap:3px; border-top:1px solid var(--line); border-left:1px solid var(--line)}
+  .slot .when{font-family:"Gowun Batang",Georgia,serif; font-size:19px; font-weight:700; font-variant-numeric:tabular-nums}
+  .slot .what{font-size:12.5px; color:var(--muted)}
+  .slot.flag{background:var(--pick-bg)}
+  .slot.flag .when{color:var(--pick)}
+
+  /* ---------- university blocks ---------- */
+  .uni-block{
+    border-top:1px solid var(--rule); padding-top:26px; margin-top:34px;
+  }
+  .uni-head{display:flex; flex-wrap:wrap; align-items:baseline; gap:8px 14px; margin-bottom:4px}
+  .uni-head .num{
+    font-family:"Gowun Batang",Georgia,serif; font-size:13px; font-weight:700;
+    color:var(--surface); background:var(--ink); border-radius:2px;
+    width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center;
+    align-self:center; flex:none;
+  }
+  .uni-head h3{
+    font-family:"Gowun Batang",Georgia,serif; font-size:20px; font-weight:700; margin:0;
+  }
+  .uni-head .campus{font-size:12.5px; color:var(--muted)}
+  .track{color:var(--muted); font-size:13.5px; margin:0 0 16px}
+  .track b{color:var(--ink); font-weight:600}
+
+  .facts{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    background:var(--surface); border:1px solid var(--line);
+    border-top-width:0; border-left-width:0;
+    border-radius:3px; overflow:hidden; margin-bottom:18px;
+  }
+  .fact{background:var(--surface); padding:12px 14px; border-top:1px solid var(--line); border-left:1px solid var(--line)}
+  .fact dt{font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); margin-bottom:3px}
+  .fact dd{margin:0; font-size:14px; font-weight:500; line-height:1.4}
+  .fact dd .num{font-family:"Gowun Batang",Georgia,serif; font-size:24px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums}
+  .fact.lead{background:var(--pick-bg)}
+  .fact.lead dd .num{color:var(--pick)}
+
+  .tbl-cap{font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); margin:22px 0 7px}
+
+  .note{
+    border-left:2px solid var(--signal); background:var(--signal-bg);
+    padding:10px 14px; margin:16px 0 0; font-size:13px; color:var(--ink); border-radius:0 3px 3px 0;
+  }
+  .note b{color:var(--signal)}
+
+  /* ---------- takeaways ---------- */
+  ul.points{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:3px; overflow:hidden}
+  ul.points li{background:var(--surface); padding:13px 16px; font-size:14px}
+  ul.points li b{font-weight:600}
+
+  /* ---------- sources ---------- */
+  .src{margin-top:14px; font-size:13px}
+  .src ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px}
+  .src li{display:flex; flex-wrap:wrap; gap:4px 10px; align-items:baseline}
+  .src .f{font-weight:500}
+  .src a{color:var(--gyo); text-decoration:none; border-bottom:1px solid var(--line); word-break:break-all}
+  .src a:hover{border-bottom-color:var(--gyo)}
+  a:focus-visible,summary:focus-visible{outline:2px solid var(--jong); outline-offset:2px}
+
+  footer{margin-top:56px; padding-top:18px; border-top:1px solid var(--line); font-size:12.5px; color:var(--faint)}
+</style>
+
+<div class="wrap">
+
+<header class="top">
+  <div class="eyebrow">2027학년도 수시모집 · 생명 / 식물 계열</div>
+  <h1>생명계열 수시 지원 후보 7곳</h1>
+  <p class="standfirst">각 대학 입학처가 배포한 <strong>2027학년도 수시모집요강 PDF 원문</strong>에서 뽑은 모집인원표입니다. 수시 지원은 6회 제한이므로 아래 7곳 중 <strong>한 곳을 덜어내야 합니다.</strong></p>
+  <div class="meta">
+    <span>대학 <b>6곳</b> · 모집단위 <b>7개</b></span>
+    <span>원서접수 <b>2026. 9. 7.(월) ~ 9. 11.(금)</b></span>
+    <span>기준 <b>공식 모집요강 원문</b></span>
+  </div>
+</header>
+
+<section>
+  <h2>한눈에 보기</h2>
+  <p class="sub">모집인원은 해당 전형 하나만의 인원입니다. 수능최저가 있는 세 칸은 실질 경쟁률이 표면 경쟁률보다 낮게 형성되는 경향이 있습니다.</p>
+  <div class="scroll">
+    <table class="cand">
+      <thead>
+        <tr>
+          <th></th><th>모집단위</th><th>전형</th><th class="n">모집인원</th><th>전형방법</th><th>수능최저</th><th>면접일</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="idx">1</td>
+          <td><span class="uni">중앙대 다빈치</span><span class="maj">생명자원공학부 식물생명공학</span></td>
+          <td><span class="chip jong">학종</span> CAU탐구형인재</td>
+          <td class="n"><span class="big">7<span>명</span></span></td>
+          <td>1단계 서류 100%<span class="uni">3.5배수 → 1단계 70 + 면접 30</span></td>
+          <td><span class="chip none">없음</span></td>
+          <td>12. 6.(일)</td>
+        </tr>
+        <tr>
+          <td class="idx">2</td>
+          <td><span class="uni">강원대 춘천</span><span class="maj">생물자원과학부</span></td>
+          <td><span class="chip jong">학종</span> 미래인재면접</td>
+          <td class="n"><span class="big">7<span>명</span></span></td>
+          <td>1단계 서류 100%<span class="uni">3배수 → 서류 60 + 면접 40</span></td>
+          <td><span class="chip none">없음</span></td>
+          <td>11. 27.(금)</td>
+        </tr>
+        <tr>
+          <td class="idx">3</td>
+          <td><span class="uni">강원대 강릉</span><span class="maj">식물생명과학과</span></td>
+          <td><span class="chip gyo">교과</span> 일반교과Ⅰ</td>
+          <td class="n"><span class="big">9<span>명</span></span></td>
+          <td>학생부교과 100%<span class="uni">일괄합산</span></td>
+          <td><span class="chip none">없음</span></td>
+          <td class="dash">없음</td>
+        </tr>
+        <tr>
+          <td class="idx">4</td>
+          <td><span class="uni">건국대 글로컬</span><span class="maj">생명공학과</span></td>
+          <td><span class="chip jong">학종</span> Cogito자기추천</td>
+          <td class="n"><span class="big">26<span>명</span></span></td>
+          <td>1단계 서류 100%<span class="uni">3배수 → 1단계 70 + 면접 30</span></td>
+          <td><span class="chip none">없음</span></td>
+          <td>11. 28.(토)~29.(일)</td>
+        </tr>
+        <tr>
+          <td class="idx">5</td>
+          <td><span class="uni">한경국립대 안성</span><span class="maj">응용생명공학과</span></td>
+          <td><span class="chip jong">학종</span> 잠재력우수자</td>
+          <td class="n"><span class="big">8<span>명</span></span></td>
+          <td>서류평가 100%<span class="uni">인성 30 / 학업 30 / 진로 40</span></td>
+          <td><span class="chip none">없음</span></td>
+          <td class="dash">없음</td>
+        </tr>
+        <tr>
+          <td class="idx">6</td>
+          <td><span class="uni">한경국립대 안성</span><span class="maj">원예생명공학과</span></td>
+          <td><span class="chip gyo">교과</span> 일반전형</td>
+          <td class="n"><span class="big">10<span>명</span></span></td>
+          <td>학생부교과 100%<span class="uni">전교과 · 학년 구분 없음</span></td>
+          <td><span class="chip min">2합 8</span></td>
+          <td class="dash">없음</td>
+        </tr>
+        <tr>
+          <td class="idx">7</td>
+          <td><span class="uni">경북대</span><span class="maj">응용생명과학부</span></td>
+          <td><span class="chip gyo">교과</span> 교과우수자<br><span class="chip jong">학종</span> 일반학생</td>
+          <td class="n"><span class="big">13<span>명</span></span><br><span class="big">9<span>명</span></span></td>
+          <td>교과 80 + 서류 20<br>서류평가 100%</td>
+          <td><span class="chip min">2합 6</span><br><span class="chip min">2합 7</span></td>
+          <td class="dash">없음</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note"><b>경북대는 전형을 아직 못 정하신 상태</b>라 교과·학종 두 줄로 나눠 적었습니다. 어느 쪽이든 수시 6회 중 1회만 씁니다.</div>
+</section>
+
+<section>
+  <h2>일정</h2>
+  <p class="sub">면접이 있는 세 곳의 날짜가 서로 겹치지 않습니다. 강원대 춘천(금)과 건국대 글로컬(토·일)은 하루 간격이라 이동만 확인하면 됩니다.</p>
+
+  <p class="tbl-cap">원서접수 마감</p>
+  <div class="sched">
+    <div class="slot flag"><span class="when">9. 8. → 9. 11.</span><span class="what">중앙대 — 화요일 10시 시작, <b>혼자 하루 늦게 열림</b></span></div>
+    <div class="slot"><span class="when">9. 7. → 9. 11.</span><span class="what">강원대 춘천 · 강릉원주 — 20:00 / 서류 9.14</span></div>
+    <div class="slot"><span class="when">9. 7. → 9. 11.</span><span class="what">건국대 글로컬 — 19:00 / 서류 9.14</span></div>
+    <div class="slot"><span class="when">9. 7. → 9. 11.</span><span class="what">한경국립대 — 18:00 / 서류 등기 9.16</span></div>
+    <div class="slot"><span class="when">9. 7. → 9. 11.</span><span class="what">경북대 — <b>16:00 마감, 가장 이름</b></span></div>
+  </div>
+
+  <p class="tbl-cap">면접일</p>
+  <div class="sched">
+    <div class="slot"><span class="when">11. 27. 금</span><span class="what">강원대 춘천 · 미래인재면접</span></div>
+    <div class="slot"><span class="when">11. 28.~29.</span><span class="what">건국대 글로컬 · Cogito — 시간대 선착순 신청</span></div>
+    <div class="slot"><span class="when">12. 6. 일</span><span class="what">중앙대 · 탐구형인재 (1단계 발표 11.26)</span></div>
+    <div class="slot"><span class="when">면접 없음</span><span class="what">강원대 강릉 · 한경대 2곳 · 경북대</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>대학별 상세</h2>
+  <p class="sub">지원하려는 전형의 인원, 같은 학과의 교과·학종 전체 인원, 그리고 같은 단과대학 안에서 생명·식물로 이어지는 학과들을 함께 실었습니다.</p>
+
+  <!-- 1 중앙대 -->
+  <div class="uni-block">
+    <div class="uni-head">
+      <span class="num">1</span>
+      <h3>중앙대학교 생명자원공학부 식물생명공학전공</h3>
+      <span class="campus">다빈치캠퍼스 · 생명공학대학 · 자연계열</span>
+    </div>
+    <p class="track"><b>학생부종합 CAU탐구형인재</b> — 1단계 서류 100%(3.5배수) → 2단계 1단계 성적 70% + 면접 30%</p>
+    <dl class="facts">
+      <div class="fact lead"><dt>지원 전형</dt><dd><span class="num">7</span> 명</dd></div>
+      <div class="fact"><dt>입학정원</dt><dd><span class="num">60</span> 명</dd></div>
+      <div class="fact"><dt>학종 합계</dt><dd><span class="num">24</span> 명</dd></div>
+      <div class="fact"><dt>교과</dt><dd>전공개방모집</dd></div>
+      <div class="fact"><dt>수능최저</dt><dd>없음</dd></div>
+    </dl>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>구분</th><th>전형</th><th class="n">인원</th></tr></thead>
+        <tbody>
+          <tr class="here"><td><span class="chip jong">학종</span></td><td class="dept">탐구형인재</td><td class="n">7</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">융합형인재</td><td class="n">6</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">성장형인재</td><td class="n">5</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">기회균형</td><td class="n">6</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">지역균형</td><td class="n">생명공학대학 65명 통합선발</td></tr>
+          <tr class="sum"><td>수시 계</td><td class="dept">정시 22명 (가군)</td><td class="n">24</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">학생부교과 지역균형은 <b>전공개방모집</b>이라 식물생명공학 개별 인원이 없습니다. 생명공학대학 65명을 통합 선발한 뒤 합격자 발표 때 희망 전공을 고르는 구조입니다.</div>
+
+    <p class="tbl-cap">생명 · 식물 관련 추가 학과 — 다빈치 생명공학대학 (입학정원 325명)</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>모집단위</th><th class="n">입학정원</th><th class="n">탐구형</th><th class="n">융합형</th><th class="n">성장형</th><th class="n">기회균형</th><th class="n">수시 계</th><th class="n">정시</th></tr></thead>
+        <tbody>
+          <tr class="here"><td class="dept">생명자원공학부 식물생명공학</td><td class="n">60</td><td class="n">7</td><td class="n">6</td><td class="n">5</td><td class="n">6</td><td class="n">24</td><td class="n">22</td></tr>
+          <tr><td class="dept">생명자원공학부 동물생명공학</td><td class="n">66</td><td class="n">10</td><td class="n">9</td><td class="n">5</td><td class="n">6</td><td class="n">30</td><td class="n">25</td></tr>
+          <tr><td class="dept">시스템생명공학과</td><td class="n">60</td><td class="n">10</td><td class="n">6</td><td class="n">4</td><td class="n">6</td><td class="n">26</td><td class="n">22</td></tr>
+          <tr><td class="dept">식품공학부 식품공학</td><td class="n">89</td><td class="n">10</td><td class="n">12</td><td class="n">5</td><td class="n">7</td><td class="n">36</td><td class="n">35</td></tr>
+          <tr><td class="dept">식품공학부 식품영양학</td><td class="n">50</td><td class="n dash">–</td><td class="n">10</td><td class="n">4</td><td class="n">6</td><td class="n">20</td><td class="n">20</td></tr>
+          <tr><td class="dept">자연과학대 생명과학과 <span class="uni">서울캠퍼스</span></td><td class="n">49</td><td class="n">12</td><td class="n dash">–</td><td class="n">2</td><td class="n">6</td><td class="n">20</td><td class="n">20</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2 강원대 춘천 -->
+  <div class="uni-block">
+    <div class="uni-head">
+      <span class="num">2</span>
+      <h3>강원대학교 생물자원과학부</h3>
+      <span class="campus">춘천캠퍼스 · 농업생명과학대학 · 식물의학전공 / 식물자원응용과학전공 · 교직</span>
+    </div>
+    <p class="track"><b>학생부종합 미래인재면접전형</b> — 1단계 서류 100%(3배수 이내) → 2단계 서류 60% + 면접 40%</p>
+    <dl class="facts">
+      <div class="fact lead"><dt>지원 전형</dt><dd><span class="num">7</span> 명</dd></div>
+      <div class="fact"><dt>입학정원</dt><dd><span class="num">43</span> 명</dd></div>
+      <div class="fact"><dt>학종 합계</dt><dd><span class="num">18</span> 명</dd></div>
+      <div class="fact"><dt>교과 합계</dt><dd><span class="num">20</span> 명</dd></div>
+      <div class="fact"><dt>수능최저</dt><dd>미적용</dd></div>
+    </dl>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>구분</th><th>전형</th><th class="n">인원</th></tr></thead>
+        <tbody>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">미래인재서류</td><td class="n">9</td></tr>
+          <tr class="here"><td><span class="chip jong">학종</span></td><td class="dept">미래인재면접</td><td class="n">7</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">기회균형</td><td class="n">2</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">일반교과</td><td class="n">11</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">지역교과 <span class="uni">강원지역 고교</span></td><td class="n">9</td></tr>
+          <tr><td>정원외</td><td class="dept">농어촌학생 · 특성화고교졸업자</td><td class="n">2 · 2</td></tr>
+          <tr class="sum"><td>수시 계</td><td class="dept">2027 총모집 47명 (정시 5명)</td><td class="n">42</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="tbl-cap">생명 · 식물 관련 추가 학과 — 춘천 농업생명과학대학</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>모집단위</th><th class="n">입학정원</th><th class="n">미래인재<br>서류</th><th class="n">미래인재<br>면접</th><th class="n">영농<br>창업</th><th class="n">기회<br>균형</th><th class="n">일반<br>교과</th><th class="n">지역<br>교과</th><th class="n">수시 계</th></tr></thead>
+        <tbody>
+          <tr class="here"><td class="dept">생물자원과학부</td><td class="n">43</td><td class="n">9</td><td class="n">7</td><td class="n dash">–</td><td class="n">2</td><td class="n">11</td><td class="n">9</td><td class="n">42</td></tr>
+          <tr><td class="dept">원예학과 <span class="uni">교직</span></td><td class="n">24</td><td class="n">3</td><td class="n">3</td><td class="n">5</td><td class="n">1</td><td class="n">5</td><td class="n">4</td><td class="n">24</td></tr>
+          <tr><td class="dept">식품생명공학과</td><td class="n">33</td><td class="n">8</td><td class="n">4</td><td class="n dash">–</td><td class="n">2</td><td class="n">6</td><td class="n">4</td><td class="n">29</td></tr>
+          <tr><td class="dept">바이오시스템공학과</td><td class="n">22</td><td class="n">5</td><td class="n">3</td><td class="n dash">–</td><td class="n">1</td><td class="n">5</td><td class="n">3</td><td class="n">21</td></tr>
+          <tr><td class="dept">생명 · 환경융합학부</td><td class="n">53</td><td class="n">12</td><td class="n">8</td><td class="n dash">–</td><td class="n">3</td><td class="n">15</td><td class="n">7</td><td class="n">51</td></tr>
+          <tr><td class="dept">농업생명과학대학 자유전공학과</td><td class="n">26</td><td class="n dash">–</td><td class="n dash">–</td><td class="n dash">–</td><td class="n dash">–</td><td class="n">13</td><td class="n">8</td><td class="n">21</td></tr>
+          <tr><td class="dept">식품자원경제학과 <span class="uni">인문사회</span></td><td class="n">28</td><td class="n">6</td><td class="n">3</td><td class="n dash">–</td><td class="n">1</td><td class="n">8</td><td class="n">5</td><td class="n">25</td></tr>
+          <tr><td class="dept">스마트팜농산업학과</td><td class="n">6</td><td class="dash" colspan="6">평생학습자 6 · 재직자 9 — 성인학습자 전용 학과</td><td class="n">15</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3 강원대 강릉 -->
+  <div class="uni-block">
+    <div class="uni-head">
+      <span class="num">3</span>
+      <h3>강원대학교 식물생명과학과</h3>
+      <span class="campus">강릉캠퍼스 · 생명과학대학</span>
+    </div>
+    <p class="track"><b>학생부교과 일반교과Ⅰ전형</b> — 학생부교과 100% 일괄합산 (1,000점 만점, 최저 280점)</p>
+    <dl class="facts">
+      <div class="fact lead"><dt>지원 전형</dt><dd><span class="num">9</span> 명</dd></div>
+      <div class="fact"><dt>입학정원</dt><dd><span class="num">25</span> 명</dd></div>
+      <div class="fact"><dt>교과 합계</dt><dd><span class="num">14</span> 명</dd></div>
+      <div class="fact"><dt>학종 합계</dt><dd><span class="num">10</span> 명</dd></div>
+      <div class="fact"><dt>수능최저</dt><dd>미적용</dd></div>
+    </dl>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>구분</th><th>전형</th><th class="n">인원</th></tr></thead>
+        <tbody>
+          <tr class="here"><td><span class="chip gyo">교과</span></td><td class="dept">일반교과Ⅰ</td><td class="n">9</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">지역교과Ⅰ <span class="uni">강원지역 고교 전 교육과정 이수</span></td><td class="n">5</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">미래인재서류Ⅰ</td><td class="n">8</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">기회균형Ⅰ</td><td class="n">2</td></tr>
+          <tr class="sum"><td>정원내 계</td><td class="dept">특수교육대상자 선발 대상 모집단위</td><td class="n">24</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">식물생명과학과에는 <b>미래인재면접Ⅰ 전형이 없습니다.</b> 이 학과의 학생부종합은 서류형(미래인재서류Ⅰ)뿐이라 면접 준비가 필요 없는 대신 학생부 서류 하나로 갈립니다.</div>
+
+    <p class="tbl-cap">생명 · 식물 관련 추가 학과 — 강릉 생명과학대학</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>모집단위</th><th class="n">입학정원</th><th class="n">미래인재<br>서류Ⅰ</th><th class="n">지역인재<br>서류</th><th class="n">기회<br>균형Ⅰ</th><th class="n">일반<br>교과Ⅰ</th><th class="n">지역<br>교과Ⅰ</th><th class="n">정원내 계</th></tr></thead>
+        <tbody>
+          <tr class="here"><td class="dept">식물생명과학과</td><td class="n">25</td><td class="n">8</td><td class="n dash">–</td><td class="n">2</td><td class="n">9</td><td class="n">5</td><td class="n">24</td></tr>
+          <tr><td class="dept">수산생명의학과</td><td class="n">21</td><td class="n">6</td><td class="n dash">–</td><td class="n">2</td><td class="n">9</td><td class="n">2</td><td class="n">19</td></tr>
+          <tr><td class="dept">해양융합과학과 <span class="uni">교직</span></td><td class="n">89</td><td class="n">29</td><td class="n">5</td><td class="n">2</td><td class="n">34</td><td class="n">14</td><td class="n">84</td></tr>
+          <tr><td class="dept">식품영양학과 <span class="uni">교직</span></td><td class="n">26</td><td class="n">7</td><td class="n dash">–</td><td class="n">2</td><td class="n">10</td><td class="n">5</td><td class="n">24</td></tr>
+          <tr><td class="dept">환경조경학과</td><td class="n">25</td><td class="n">7</td><td class="n">5</td><td class="n">2</td><td class="n">9</td><td class="n dash">–</td><td class="n">23</td></tr>
+          <tr><td class="dept">생명과학대학 자유전공학과</td><td class="n">25</td><td class="n">6</td><td class="n dash">–</td><td class="n">2</td><td class="n">12</td><td class="n">5</td><td class="n">25</td></tr>
+          <tr><td class="dept">생명과학과 <span class="uni">글로컬 통합학과 · 춘천 소속</span></td><td class="n">18</td><td class="n">3</td><td class="n">3</td><td class="n">2</td><td class="n">6</td><td class="n">4</td><td class="n">18</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4 건국대 글로컬 -->
+  <div class="uni-block">
+    <div class="uni-head">
+      <span class="num">4</span>
+      <h3>건국대학교 생명공학과</h3>
+      <span class="campus">글로컬캠퍼스 · 의료생명대학 · 자연계</span>
+    </div>
+    <p class="track"><b>학생부종합 Cogito자기추천전형</b> — 1단계 서류 100%(3배수) → 2단계 1단계 성적 70% + 면접 30%, 블라인드 확인 면접</p>
+    <dl class="facts">
+      <div class="fact lead"><dt>지원 전형</dt><dd><span class="num">26</span> 명</dd></div>
+      <div class="fact"><dt>입학정원</dt><dd><span class="num">47</span> 명</dd></div>
+      <div class="fact"><dt>학종 합계</dt><dd><span class="num">26</span> 명</dd></div>
+      <div class="fact"><dt>교과 합계</dt><dd><span class="num">17</span> 명</dd></div>
+      <div class="fact"><dt>수능최저</dt><dd>적용 안 함</dd></div>
+    </dl>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>구분</th><th>전형</th><th class="n">인원</th></tr></thead>
+        <tbody>
+          <tr class="here"><td><span class="chip jong">학종</span></td><td class="dept">Cogito자기추천</td><td class="n">26</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">교과우수</td><td class="n">14</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">지역인재(교과)</td><td class="n">3</td></tr>
+          <tr><td>정원외</td><td class="dept">농어촌학생 · 기초생활 및 차상위</td><td class="n">1 · 2</td></tr>
+          <tr class="sum"><td>정원내 수시 계</td><td class="dept">1단계 발표 11.19 · 면접 11.28~29</td><td class="n">43</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">7곳 중 <b>모집인원이 가장 많습니다(26명).</b> 면접일은 시간대 선착순 신청이라, 다른 대학 일정과 겹치지 않게 발표 직후 바로 잡는 편이 안전합니다.</div>
+
+    <p class="tbl-cap">생명 · 식물 관련 추가 학과 — 글로컬캠퍼스</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>모집단위</th><th class="n">입학정원</th><th class="n">Cogito<br>자기추천</th><th class="n">교과<br>우수</th><th class="n">지역인재<br>(교과)</th></tr></thead>
+        <tbody>
+          <tr class="here"><td class="dept">의료생명대 생명공학과</td><td class="n">47</td><td class="n">26</td><td class="n">14</td><td class="n">3</td></tr>
+          <tr><td class="dept">의료생명대 바이오의약학과</td><td class="n">47</td><td class="n">26</td><td class="n">14</td><td class="n">2</td></tr>
+          <tr><td class="dept">의료생명대 식품영양학과</td><td class="n">36</td><td class="n">14</td><td class="n">16</td><td class="n">2</td></tr>
+          <tr><td class="dept">과학기술대 바이오메디컬공학과</td><td class="n">66</td><td class="n">28</td><td class="n">27</td><td class="n">3</td></tr>
+          <tr><td class="dept">과학기술대 녹색기술융합학과</td><td class="n">40</td><td class="n">14</td><td class="n">18</td><td class="n">2</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5·6 한경국립대 -->
+  <div class="uni-block">
+    <div class="uni-head">
+      <span class="num">5</span>
+      <h3>한경국립대학교 응용생명공학과</h3>
+      <span class="campus">안성캠퍼스 · 생명자원과학대학</span>
+    </div>
+    <p class="track"><b>학생부종합 잠재력우수자전형</b> — 서류평가 100% 일괄합산 · 면접 없음 · 인성 30% / 학업역량 30% / 진로역량 40%</p>
+    <dl class="facts">
+      <div class="fact lead"><dt>지원 전형</dt><dd><span class="num">8</span> 명</dd></div>
+      <div class="fact"><dt>입학정원</dt><dd><span class="num">19</span> 명</dd></div>
+      <div class="fact"><dt>학종 합계</dt><dd><span class="num">9</span> 명</dd></div>
+      <div class="fact"><dt>교과 합계</dt><dd><span class="num">7</span> 명</dd></div>
+      <div class="fact"><dt>수능최저</dt><dd>없음</dd></div>
+    </dl>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>구분</th><th>전형</th><th class="n">인원</th></tr></thead>
+        <tbody>
+          <tr class="here"><td><span class="chip jong">학종</span></td><td class="dept">잠재력우수자</td><td class="n">8</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">사회통합</td><td class="n">1</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">일반전형(안성)</td><td class="n">6</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">지역균형선발</td><td class="n">1</td></tr>
+          <tr><td>정원외</td><td class="dept">농어촌학생</td><td class="n">1</td></tr>
+          <tr class="sum"><td>정원내 계</td><td class="dept"></td><td class="n">16</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="uni-block">
+    <div class="uni-head">
+      <span class="num">6</span>
+      <h3>한경국립대학교 원예생명공학과</h3>
+      <span class="campus">안성캠퍼스 · 생명자원과학대학</span>
+    </div>
+    <p class="track"><b>학생부교과 일반전형(안성)</b> — 학생부교과 100%, 전교과 반영 · 학년별 비율 구분 없음</p>
+    <dl class="facts">
+      <div class="fact lead"><dt>지원 전형</dt><dd><span class="num">10</span> 명</dd></div>
+      <div class="fact"><dt>입학정원</dt><dd><span class="num">27</span> 명</dd></div>
+      <div class="fact"><dt>교과 합계</dt><dd><span class="num">12</span> 명</dd></div>
+      <div class="fact"><dt>학종 합계</dt><dd><span class="num">10</span> 명</dd></div>
+      <div class="fact"><dt>수능최저</dt><dd>2개 영역 합 <b>8</b></dd></div>
+    </dl>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>구분</th><th>전형</th><th class="n">인원</th></tr></thead>
+        <tbody>
+          <tr class="here"><td><span class="chip gyo">교과</span></td><td class="dept">일반전형(안성)</td><td class="n">10</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">지역균형선발</td><td class="n">2</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">잠재력우수자</td><td class="n">8</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">사회통합</td><td class="n">2</td></tr>
+          <tr><td>정원외</td><td class="dept">농어촌학생 · 기초생활수급자등</td><td class="n">1 · 1</td></tr>
+          <tr class="sum"><td>정원내 계</td><td class="dept"></td><td class="n">22</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><b>수능최저 2합 8 확인했습니다.</b> 국어 · 수학 · 영어 · 탐구(사탐/과탐 중 상위 1개) 4개 영역 중 성적우수 <b>2개 영역 등급 합 8 이내</b>, 직업탐구는 미반영. 여기에 더해 <b>수학 미적분 또는 기하 응시자는 취득 등급에서 2등급을 감산</b>합니다(4등급 → 2등급으로 계산, 수학이 반영 2개 영역에 포함될 때만). 자연계열 모집단위라 이 감산이 적용됩니다.</div>
+
+    <p class="tbl-cap">생명 · 식물 관련 추가 학과 — 안성 생명자원과학대학</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>모집단위</th><th class="n">입학정원</th><th class="n">교과<br>일반전형</th><th class="n">지역균형<br>선발</th><th class="n">잠재력<br>우수자</th><th class="n">사회<br>통합</th><th class="n">정원내 계</th></tr></thead>
+        <tbody>
+          <tr class="here"><td class="dept">원예생명공학과</td><td class="n">27</td><td class="n">10</td><td class="n">2</td><td class="n">8</td><td class="n">2</td><td class="n">22</td></tr>
+          <tr class="here"><td class="dept">응용생명공학과</td><td class="n">19</td><td class="n">6</td><td class="n">1</td><td class="n">8</td><td class="n">1</td><td class="n">16</td></tr>
+          <tr><td class="dept">식물생명환경학과</td><td class="n">40</td><td class="n">11</td><td class="n">4</td><td class="n">13</td><td class="n">4</td><td class="n">32</td></tr>
+          <tr><td class="dept">조경학과</td><td class="n">28</td><td class="n">8</td><td class="n">2</td><td class="n">11</td><td class="n">2</td><td class="n">23</td></tr>
+          <tr><td class="dept">동물생명과학과</td><td class="n">25</td><td class="n">7</td><td class="n">2</td><td class="n">9</td><td class="n">2</td><td class="n">20</td></tr>
+          <tr><td class="dept">동물응용과학과</td><td class="n">24</td><td class="n">7</td><td class="n">2</td><td class="n">9</td><td class="n">2</td><td class="n">20</td></tr>
+          <tr><td class="dept">식품영양학과</td><td class="n">17</td><td class="n">6</td><td class="n">1</td><td class="n">6</td><td class="n">1</td><td class="n">14</td></tr>
+          <tr><td class="dept">지역자원시스템공학과</td><td class="n">19</td><td class="n">6</td><td class="n">1</td><td class="n">8</td><td class="n">1</td><td class="n">16</td></tr>
+          <tr><td class="dept">식품생명공학과 <span class="uni">공과대학</span></td><td class="n">46</td><td class="n">14</td><td class="n">4</td><td class="n">15</td><td class="n">4</td><td class="n">37</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7 경북대 -->
+  <div class="uni-block">
+    <div class="uni-head">
+      <span class="num">7</span>
+      <h3>경북대학교 응용생명과학부</h3>
+      <span class="campus">농업생명과학대학 · 자연계열</span>
+    </div>
+    <p class="track">전형을 정하지 않으셔서 <b>교과우수자</b>와 <b>학종 일반학생</b> 양쪽을 함께 정리했습니다. 두 전형 모두 면접이 없고, 대신 <b>수능최저가 있습니다.</b></p>
+    <dl class="facts">
+      <div class="fact lead"><dt>교과우수자</dt><dd><span class="num">13</span> 명</dd></div>
+      <div class="fact lead"><dt>학종 일반학생</dt><dd><span class="num">9</span> 명</dd></div>
+      <div class="fact"><dt>수시 합계</dt><dd><span class="num">44</span> 명</dd></div>
+      <div class="fact"><dt>교과 합계</dt><dd><span class="num">21</span> 명</dd></div>
+      <div class="fact"><dt>학종 합계</dt><dd><span class="num">14</span> 명</dd></div>
+    </dl>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>구분</th><th>전형</th><th class="n">인원</th><th>전형방법</th></tr></thead>
+        <tbody>
+          <tr class="here"><td><span class="chip gyo">교과</span></td><td class="dept">교과우수자</td><td class="n">13</td><td>학생부교과 400점(80%) + 서류평가(교과이수충실도) 100점(20%)</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">지역인재</td><td class="n">7</td><td>교과우수자와 동일</td></tr>
+          <tr><td><span class="chip gyo">교과</span></td><td class="dept">사회통합</td><td class="n">1</td><td></td></tr>
+          <tr class="here"><td><span class="chip jong">학종</span></td><td class="dept">일반학생</td><td class="n">9</td><td>서류평가 100%(500점) 일괄합산 · 면접 없음</td></tr>
+          <tr><td><span class="chip jong">학종</span></td><td class="dept">지역인재</td><td class="n">5</td><td></td></tr>
+          <tr><td>논술</td><td class="dept">논술(AAT)</td><td class="n">4</td><td></td></tr>
+          <tr class="sum"><td>수시 합계</td><td class="dept">정원내 39 + 정원외 5</td><td class="n">44</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note"><b>수능최저 — 농업생명과학대학 기준.</b> 교과우수자 · 지역인재 · 논술은 국어 · 수학 · 영어 · 탐구(1과목) 중 <b>상위 2개 영역 등급 합 6 이내</b>, 한국사 응시. 학종 일반학생은 여기서 1등급 하향해 <b>상위 2개 영역 등급 합 7 이내</b>. 탐구는 2과목을 응시하고 상위 1과목만 반영합니다.</div>
+
+    <p class="tbl-cap">생명 · 식물 관련 추가 학과 — 농업생명과학대학</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>모집단위</th><th class="n">수시<br>합계</th><th class="n">정원내</th><th class="n">교과<br>우수자</th><th class="n">지역인재<br>(교과)</th><th class="n">사회<br>통합</th><th class="n">학종<br>일반학생</th><th class="n">학종<br>지역인재</th><th class="n">논술<br>(AAT)</th></tr></thead>
+        <tbody>
+          <tr class="here"><td class="dept">응용생명과학부</td><td class="n">44</td><td class="n">39</td><td class="n">13</td><td class="n">7</td><td class="n">1</td><td class="n">9</td><td class="n">5</td><td class="n">4</td></tr>
+          <tr><td class="dept">식물의학과</td><td class="n">23</td><td class="n">20</td><td class="n">6</td><td class="n">6</td><td class="n">1</td><td class="n">4</td><td class="n dash">–</td><td class="n">3</td></tr>
+          <tr><td class="dept">원예과학과 <span class="uni">영농창업인재 10명</span></td><td class="n">24</td><td class="n">21</td><td class="n">5</td><td class="n">5</td><td class="n">1</td><td class="n dash">–</td><td class="n dash">–</td><td class="n dash">–</td></tr>
+          <tr><td class="dept">식품공학부</td><td class="n">70</td><td class="n">64</td><td class="n">25</td><td class="n">8</td><td class="n">2</td><td class="n">15</td><td class="n">9</td><td class="n">5</td></tr>
+          <tr><td class="dept">산림과학 · 조경학부</td><td class="n">52</td><td class="n">48</td><td class="n">16</td><td class="n">7</td><td class="n">2</td><td class="n">12</td><td class="n">5</td><td class="n">5</td></tr>
+          <tr><td class="dept">바이오섬유소재학과</td><td class="n">21</td><td class="n">19</td><td class="n">12</td><td class="n dash">–</td><td class="n">1</td><td class="n">3</td><td class="n dash">–</td><td class="n">3</td></tr>
+          <tr><td class="dept">농업토목공학과</td><td class="n">21</td><td class="n">19</td><td class="n">7</td><td class="n">4</td><td class="n">1</td><td class="n">3</td><td class="n dash">–</td><td class="n">3</td></tr>
+          <tr><td class="dept">스마트생물산업기계공학과</td><td class="n">26</td><td class="n">24</td><td class="n">10</td><td class="n">6</td><td class="n">1</td><td class="n">3</td><td class="n dash">–</td><td class="n">3</td></tr>
+          <tr><td class="dept">농업생명과학대학 자율학부</td><td class="n">29</td><td class="n">28</td><td class="n">13</td><td class="n">5</td><td class="n dash">–</td><td class="n">4</td><td class="n">3</td><td class="n">3</td></tr>
+          <tr><td class="dept">식품자원경제학과 <span class="uni">인문</span></td><td class="n">25</td><td class="n">22</td><td class="n">9</td><td class="n dash">–</td><td class="n">1</td><td class="n">9</td><td class="n dash">–</td><td class="n">3</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>하나를 덜어낼 때 볼 것</h2>
+  <p class="sub">최종 판단은 접수 마감일 실시간 경쟁률을 보고 하시겠지만, 그때 흔들리는 폭 자체가 칸마다 다릅니다.</p>
+  <ul class="points">
+    <li><b>모집인원 7명인 두 곳</b>(중앙대 식물생명공학, 강원대 춘천 생물자원과학부)은 지원자 몇 명만 더 몰려도 경쟁률이 크게 튑니다. 마감일 경쟁률에 가장 민감한 칸입니다.</li>
+    <li><b>건국대 글로컬 Cogito는 26명</b>으로 7곳 중 가장 많습니다. 같은 지원자 수가 몰려도 경쟁률 체감이 가장 완만합니다.</li>
+    <li><b>수능최저가 있는 세 칸</b>(한경대 원예생명공학 2합 8, 경북대 교과 2합 6 · 학종 2합 7)은 표면 경쟁률이 높아도 최저 미충족으로 빠지는 인원이 있어 실질 경쟁률이 낮아집니다. 마감일 숫자만 보고 빼면 손해일 수 있습니다.</li>
+    <li>한경대 원예생명공학 교과는 <b>미적분 · 기하 응시 시 2등급 감산</b>이 붙어, 수학 등급이 애매해도 2합 8을 맞추기 쉬운 편입니다.</li>
+    <li><b>한경국립대 두 학과는 각각 1회씩, 총 2회를 씁니다.</b> 6회 중 3분의 1을 한 대학에 쓰는 구성이 맞는지가 판단 포인트입니다.</li>
+    <li>중앙대만 <b>9월 8일(화) 10시</b>에 접수가 열립니다. 나머지 5곳이 9월 7일(월)에 시작하므로, 다른 곳 경쟁률을 하루 더 보고 중앙대를 결정할 수 있습니다.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>원본 모집요강</h2>
+  <p class="sub">아래 PDF 원문에서 직접 추출한 수치입니다. 저장소 <code>모집요강/</code> 폴더에 원본이 함께 들어 있습니다.</p>
+  <div class="src">
+    <ul>
+      <li><span class="f">중앙대학교</span> <a href="https://admission.cau.ac.kr/">admission.cau.ac.kr</a></li>
+      <li><span class="f">강원대학교 춘천 · 삼척</span> <a href="https://www.kangwon.ac.kr/admission/conts/1120/web.do">kangwon.ac.kr/admission/conts/1120</a></li>
+      <li><span class="f">강원대학교 강릉 · 원주</span> <a href="https://www.kangwon.ac.kr/admission/conts/1121/web.do">kangwon.ac.kr/admission/conts/1121</a></li>
+      <li><span class="f">건국대학교 글로컬</span> <a href="https://enter.kku.ac.kr/mojib/?m_type=SUSI">enter.kku.ac.kr/mojib</a></li>
+      <li><span class="f">한경국립대학교</span> <a href="https://ipsi.hknu.ac.kr/mojib/mojib.php?m_type=SUSI">ipsi.hknu.ac.kr/mojib</a></li>
+      <li><span class="f">경북대학교</span> <a href="https://ipsi1.knu.ac.kr/mojib/?m_type=SUSI">ipsi1.knu.ac.kr/mojib</a></li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  모집인원은 요강 발표 이후 학사구조 개편 등으로 변경될 수 있습니다. 원서접수 직전 각 대학 입학처의 최종 공지를 한 번 더 확인하세요.
+</footer>
+
+</div>
