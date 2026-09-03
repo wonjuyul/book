@@ -165,6 +165,12 @@
   .fact.lead{background:var(--pick-bg)}
   .fact.lead dd .num{color:var(--pick)}
 
+  .chip.year{background:var(--sunk); color:var(--muted)}
+  .chip.hot{background:var(--signal-bg); color:var(--signal)}
+  .chip.cool{background:var(--jong-bg); color:var(--jong)}
+  td.strong{font-weight:700}
+  .legend{display:flex; flex-wrap:wrap; gap:6px 18px; font-size:12px; color:var(--muted); margin:10px 0 0}
+  .legend b{color:var(--ink); font-weight:600}
   .tbl-cap{font-size:11.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); margin:22px 0 7px}
 
   .note{
@@ -195,11 +201,11 @@
 <header class="top">
   <div class="eyebrow">2027학년도 수시모집 · 생명 / 식물 계열</div>
   <h1>생명계열 수시 지원 후보 7곳</h1>
-  <p class="standfirst">각 대학 입학처가 배포한 <strong>2027학년도 수시모집요강 PDF 원문</strong>에서 뽑은 모집인원표입니다. 수시 지원은 6회 제한이므로 아래 7곳 중 <strong>한 곳을 덜어내야 합니다.</strong></p>
+  <p class="standfirst">각 대학 입학처가 배포한 <strong>2027학년도 수시모집요강</strong>과 <strong>직전 입시결과</strong> 원문에서 뽑았습니다. 수시 지원은 6회 제한이므로 아래 7곳 중 <strong>한 곳을 덜어내야 합니다.</strong></p>
   <div class="meta">
     <span>대학 <b>6곳</b> · 모집단위 <b>7개</b></span>
     <span>원서접수 <b>2026. 9. 7.(월) ~ 9. 11.(금)</b></span>
-    <span>기준 <b>공식 모집요강 원문</b></span>
+    <span>입결 <b>2026학년도 기준</b></span>
   </div>
 </header>
 
@@ -624,14 +630,122 @@
 </section>
 
 <section>
+  <h2>직전 입시결과</h2>
+  <p class="sub">각 대학이 공개한 <b>2026학년도 입학전형 결과</b> 원문에서 뽑았습니다. 건국대 글로컬은 3개년, 한경국립대는 2개년, 나머지는 2026학년도 한 해만 공개합니다.</p>
+
+  <div class="scroll">
+    <table>
+      <thead>
+        <tr><th></th><th>모집단위 / 전형</th><th class="n">2026 모집</th><th class="n">지원</th><th class="n">경쟁률</th><th class="n">실질 경쟁률</th><th>추합(충원)</th><th>최종등록 성적</th></tr>
+      </thead>
+      <tbody>
+        <tr class="here"><td class="idx">1</td><td class="dept">중앙대 식물생명공학 <span class="uni">학종 탐구형인재</span></td><td class="n">6</td><td class="n">102</td><td class="n strong">17.0</td><td class="n dash">–</td><td>충원율 66.7%</td><td>50%컷 <b>3.25</b> / 70%컷 4.85</td></tr>
+        <tr class="here"><td class="idx">2</td><td class="dept">강원대 춘천 생물자원과학부 <span class="uni">학종 미래인재면접</span></td><td class="n">7</td><td class="n">57</td><td class="n strong">8.1</td><td class="n dash">–</td><td>최종후보 <b>2번</b></td><td>등록 평균 <b>4.27</b> / 50%컷 4.24</td></tr>
+        <tr class="here"><td class="idx">3</td><td class="dept">강원대 강릉 식물생명과학과 <span class="uni">교과 일반교과Ⅰ</span></td><td class="n">9</td><td class="n">77</td><td class="n strong">8.6</td><td class="n dash">–</td><td>최종후보 <b>6번</b></td><td>등록 평균 <b>3.73</b> / 50%컷 3.81</td></tr>
+        <tr class="here"><td class="idx">4</td><td class="dept">건국대 글로컬 생명공학과 <span class="uni">학종 Cogito자기추천</span></td><td class="n">26</td><td class="n">130</td><td class="n strong">5.0</td><td class="n dash">–</td><td>최종추합 <b>13번</b></td><td>50%컷 <b>4.44</b> / 70%컷 4.73</td></tr>
+        <tr class="here"><td class="idx">5</td><td class="dept">한경대 응용생명공학 <span class="uni">학종 잠재력우수자</span></td><td class="n">8</td><td class="n">56</td><td class="n strong">7.0</td><td class="n dash">–</td><td>충원 <b>21번</b> (2.63배)</td><td>등록 평균 <b>4.47</b> / 최저 4.88</td></tr>
+        <tr class="here"><td class="idx">6</td><td class="dept">한경대 원예생명공학 <span class="uni">교과 일반전형</span></td><td class="n">19</td><td class="n">139</td><td class="n strong">7.3</td><td class="n">약 3.4</td><td>충원 <b>10번</b> (0.53배)</td><td>등록 평균 <b>4.88</b> / 최저 5.28</td></tr>
+        <tr class="here"><td class="idx">7</td><td class="dept">경북대 응용생명과학부 <span class="uni">교과우수자</span></td><td class="n">18</td><td class="n">209</td><td class="n strong">11.6</td><td class="n strong">6.8</td><td>추합 <b>21번</b> (11명)</td><td>입학자 평균 <b>2.54</b> / 70% 2.59</td></tr>
+        <tr class="here"><td class="idx">7</td><td class="dept">경북대 응용생명과학부 <span class="uni">학종 일반학생</span></td><td class="n">7</td><td class="n">316</td><td class="n strong">45.1</td><td class="n strong">25.4</td><td>추합 <b>0명</b></td><td>입학자 평균 <b>4.24</b> / 70% 4.09</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="legend"><span><b>실질 경쟁률</b> 수능최저 충족자만 센 경쟁률</span><span><b>추합</b> 추가합격이 돌아간 마지막 순번</span><span><b>50%컷</b> 최종등록자의 중위 등급</span></p>
+
+  <div class="note"><b>경북대 학종 일반학생은 추가합격이 한 명도 없었습니다.</b> 최초합격자 7명 전원이 등록했습니다. 경쟁률 45.1:1은 수능최저(2합 7)로 316명 중 178명만 남아 실질 25.4:1이 되지만, 그 관문을 넘어도 <b>최초합이 아니면 기회가 없다</b>는 뜻입니다.</div>
+
+  <p class="tbl-cap">중앙대 식물생명공학 · 2026 전형별</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>전형</th><th class="n">모집</th><th class="n">지원</th><th class="n">경쟁률</th><th class="n">충원율</th><th class="n">지원자 평균</th><th class="n">합격자 평균</th><th class="n">등록 50%컷</th><th class="n">등록 70%컷</th></tr></thead>
+      <tbody>
+        <tr class="here"><td class="dept"><span class="chip jong">학종</span> 탐구형인재</td><td class="n">6</td><td class="n">102</td><td class="n">17.0</td><td class="n">66.7%</td><td class="n">4.21</td><td class="n">4.29</td><td class="n strong">3.25</td><td class="n">4.85</td></tr>
+        <tr><td class="dept"><span class="chip jong">학종</span> 융합형인재</td><td class="n">7</td><td class="n">103</td><td class="n">14.7</td><td class="n">157.1%</td><td class="n">3.50</td><td class="n">3.15</td><td class="n">3.15</td><td class="n">3.21</td></tr>
+        <tr><td class="dept"><span class="chip gyo">교과</span> 지역균형 <span class="uni">생명공학대학 전공개방</span></td><td class="n">65</td><td class="n">219</td><td class="n">3.4</td><td class="n">163.1%</td><td class="n">2.70</td><td class="n">2.43</td><td class="n">2.49</td><td class="n">2.67</td></tr>
+        <tr><td class="dept">논술</td><td class="n">6</td><td class="n">54</td><td class="n">9.0</td><td class="n">16.7%</td><td class="n">5.15</td><td class="n">4.71</td><td class="n dash" colspan="2">논술 원점수 지원 19.3 → 합격 27.1</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">탐구형의 <b>50%컷 3.25와 70%컷 4.85 사이가 1.6등급이나 벌어집니다.</b> 7곳 중 서류·면접으로 뒤집히는 폭이 가장 큰 칸입니다. 반대로 융합형은 3.15~3.21로 촘촘합니다.</div>
+
+  <p class="tbl-cap">강원대 두 캠퍼스 · 2026 전형별</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>캠퍼스 / 전형</th><th class="n">모집</th><th class="n">지원</th><th class="n">경쟁률</th><th class="n">최종후보 순위</th><th class="n">최초합 평균</th><th class="n">등록 평균</th><th class="n">등록 50%컷</th><th class="n">등록 최저</th></tr></thead>
+      <tbody>
+        <tr class="here"><td class="dept">춘천 생물자원과학부 <span class="uni">미래인재면접</span></td><td class="n">7</td><td class="n">57</td><td class="n">8.14</td><td class="n strong">2</td><td class="n">4.12</td><td class="n strong">4.27</td><td class="n">4.24</td><td class="n">4.87</td></tr>
+        <tr><td class="dept">춘천 생물자원과학부 <span class="uni">미래인재서류</span></td><td class="n">9</td><td class="n">104</td><td class="n">11.56</td><td class="n">13</td><td class="n">3.43</td><td class="n">3.75</td><td class="n">3.64</td><td class="n">4.40</td></tr>
+        <tr><td class="dept">춘천 생물자원과학부 <span class="uni">일반교과</span></td><td class="n">11</td><td class="n">84</td><td class="n">7.64</td><td class="n">14</td><td class="n">3.06</td><td class="n">3.29</td><td class="n">3.30</td><td class="n">3.56</td></tr>
+        <tr><td class="dept">춘천 생물자원과학부 <span class="uni">지역교과</span></td><td class="n">9</td><td class="n">53</td><td class="n">5.89</td><td class="n">2</td><td class="n">3.67</td><td class="n">3.74</td><td class="n">3.83</td><td class="n">3.95</td></tr>
+        <tr class="here"><td class="dept">강릉 식물생명과학과 <span class="uni">일반교과Ⅰ</span></td><td class="n">9</td><td class="n">77</td><td class="n">8.56</td><td class="n strong">6</td><td class="n">3.43</td><td class="n strong">3.73</td><td class="n">3.81</td><td class="n">4.38</td></tr>
+        <tr><td class="dept">강릉 식물생명과학과 <span class="uni">지역교과Ⅰ</span></td><td class="n">5</td><td class="n">22</td><td class="n">4.40</td><td class="n">9</td><td class="n">4.10</td><td class="n">4.76</td><td class="n">4.84</td><td class="n">5.50</td></tr>
+        <tr><td class="dept">강릉 식물생명과학과 <span class="uni">미래인재서류Ⅰ</span></td><td class="n">8</td><td class="n">44</td><td class="n">5.50</td><td class="n">6</td><td class="n">5.59</td><td class="n">5.60</td><td class="n">5.51</td><td class="n">6.54</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note"><b>춘천 미래인재면접의 면접이 실제로 당락을 가릅니다.</b> 80점 만점에 면접 대상 21명(3배수) 중 3명 결시, 평균 58.67점, 최고 80점 · 최저 39점. 추가합격은 2번까지만 돌았습니다 — 면접까지 치른 지원자는 잘 빠지지 않는다는 뜻입니다.</div>
+
+  <p class="tbl-cap">건국대 글로컬 생명공학과 · 3개년 추이</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>전형</th><th>학년도</th><th class="n">모집</th><th class="n">지원</th><th class="n">경쟁률</th><th class="n">50%컷</th><th class="n">70%컷</th><th class="n">최종추합 번호</th></tr></thead>
+      <tbody>
+        <tr class="here"><td class="dept" rowspan="3"><span class="chip jong">학종</span> Cogito자기추천</td><td><span class="chip year">2026</span></td><td class="n">26</td><td class="n">130</td><td class="n strong">5.0</td><td class="n strong">4.44</td><td class="n">4.73</td><td class="n">13</td></tr>
+        <tr class="here"><td><span class="chip year">2025</span></td><td class="n">26</td><td class="n">123</td><td class="n">4.7</td><td class="n">4.33</td><td class="n">4.61</td><td class="n">16</td></tr>
+        <tr class="here"><td><span class="chip year">2024</span></td><td class="n">33</td><td class="n">117</td><td class="n">3.5</td><td class="n">4.51</td><td class="n">5.06</td><td class="n">30</td></tr>
+        <tr><td class="dept" rowspan="3"><span class="chip gyo">교과</span> 교과우수</td><td><span class="chip year">2026</span></td><td class="n">14</td><td class="n">98</td><td class="n">7.0</td><td class="n">3.50</td><td class="n">3.62</td><td class="n strong">44</td></tr>
+        <tr><td><span class="chip year">2025</span></td><td class="n">15</td><td class="n">89</td><td class="n">5.9</td><td class="n">3.59</td><td class="n">3.74</td><td class="n">35</td></tr>
+        <tr><td><span class="chip year">2024</span></td><td class="n">20</td><td class="n">92</td><td class="n">4.6</td><td class="n">3.61</td><td class="n">3.81</td><td class="n">28</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">Cogito 경쟁률이 <b>3년 연속 올랐지만</b>(3.5 → 4.7 → 5.0) 컷은 4.3~4.5로 거의 그대로입니다. 지원자가 늘어도 합격선이 밀리지 않은 칸입니다.</div>
+
+  <p class="tbl-cap">한경국립대 두 학과 · 2개년</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>전형</th><th>모집단위</th><th>학년도</th><th class="n">모집</th><th class="n">지원</th><th class="n">경쟁률</th><th class="n">등록 평균</th><th class="n">등록 최저</th><th class="n">충원 순위</th><th class="n">수능최저 충족</th></tr></thead>
+      <tbody>
+        <tr class="here"><td class="dept" rowspan="2"><span class="chip jong">학종</span> 잠재력우수자</td><td class="dept">응용생명공학</td><td><span class="chip year">2026</span></td><td class="n">8</td><td class="n">56</td><td class="n strong">7.0</td><td class="n strong">4.47</td><td class="n">4.88</td><td class="n">21 (2.63배)</td><td class="n dash">해당없음</td></tr>
+        <tr class="here"><td class="dept">응용생명공학</td><td><span class="chip year">2025</span></td><td class="n">8</td><td class="n">45</td><td class="n">5.6</td><td class="n">4.38</td><td class="n">5.07</td><td class="n">10 (1.3배)</td><td class="n dash">해당없음</td></tr>
+        <tr><td class="dept" rowspan="2"><span class="chip jong">학종</span> 잠재력우수자</td><td class="dept">원예생명공학</td><td><span class="chip year">2026</span></td><td class="n">8</td><td class="n">44</td><td class="n">5.5</td><td class="n">4.82</td><td class="n">5.61</td><td class="n">20 (2.50배)</td><td class="n dash">해당없음</td></tr>
+        <tr><td class="dept">원예생명공학</td><td><span class="chip year">2025</span></td><td class="n">8</td><td class="n">35</td><td class="n">4.4</td><td class="n">4.58</td><td class="n">4.98</td><td class="n">10 (1.3배)</td><td class="n dash">해당없음</td></tr>
+        <tr class="here"><td class="dept" rowspan="2"><span class="chip gyo">교과</span> 일반전형</td><td class="dept">원예생명공학</td><td><span class="chip year">2026</span></td><td class="n">19</td><td class="n">139</td><td class="n strong">7.3</td><td class="n strong">4.88</td><td class="n">5.28</td><td class="n">10 (0.53배)</td><td class="n strong">65명 · 46.8%</td></tr>
+        <tr class="here"><td class="dept">원예생명공학</td><td><span class="chip year">2025</span></td><td class="n">19</td><td class="n">60</td><td class="n">3.2</td><td class="n">5.50</td><td class="n">6.52</td><td class="n">7 (0.4배)</td><td class="n">27명 · 45.0%</td></tr>
+        <tr><td class="dept" rowspan="2"><span class="chip gyo">교과</span> 일반전형</td><td class="dept">응용생명공학</td><td><span class="chip year">2026</span></td><td class="n">11</td><td class="n">73</td><td class="n">6.6</td><td class="n">3.81</td><td class="n">4.20</td><td class="n">17 (1.55배)</td><td class="n">58명 · 79.5%</td></tr>
+        <tr><td class="dept">응용생명공학</td><td><span class="chip year">2025</span></td><td class="n">11</td><td class="n">72</td><td class="n">6.5</td><td class="n">4.17</td><td class="n">5.28</td><td class="n">28 (2.5배)</td><td class="n">53명 · 73.6%</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note"><b>원예생명공학 교과의 수능최저 충족률이 2년 연속 45~47%입니다.</b> 지원자 139명 중 65명만 2합 8을 넘겼습니다. 표면 7.3:1이 실질 3.4:1 수준으로 내려가고, 최종등록 최저가 5.28(2026) · 6.52(2025)까지 열렸습니다. 2026 학과명은 <span class="chip year">전공</span>, 2027은 <span class="chip year">학과</span>로 바뀌었지만 같은 계보입니다.</div>
+
+  <p class="tbl-cap">경북대 응용생명과학부 · 2026 전형별</p>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>전형</th><th class="n">모집</th><th class="n">지원</th><th class="n">경쟁률</th><th class="n">최저 통과</th><th class="n">실질 경쟁률</th><th class="n">추합 번호</th><th class="n">추합 인원</th><th class="n">입학자 평균</th><th class="n">70%</th></tr></thead>
+      <tbody>
+        <tr class="here"><td class="dept"><span class="chip gyo">교과</span> 교과우수자</td><td class="n">18</td><td class="n">209</td><td class="n">11.6</td><td class="n">123</td><td class="n strong">6.8</td><td class="n">21</td><td class="n">11</td><td class="n strong">2.54</td><td class="n">2.59</td></tr>
+        <tr><td class="dept"><span class="chip gyo">교과</span> 지역인재</td><td class="n">6</td><td class="n">70</td><td class="n">11.7</td><td class="n">36</td><td class="n">6.0</td><td class="n">3</td><td class="n">3</td><td class="n">2.75</td><td class="n">2.77</td></tr>
+        <tr class="here"><td class="dept"><span class="chip jong">학종</span> 일반학생</td><td class="n">7</td><td class="n">316</td><td class="n strong">45.1</td><td class="n">178</td><td class="n strong">25.4</td><td class="n strong">0</td><td class="n strong">0</td><td class="n strong">4.24</td><td class="n">4.09</td></tr>
+        <tr><td class="dept"><span class="chip jong">학종</span> 지역인재</td><td class="n">4</td><td class="n">46</td><td class="n">11.5</td><td class="n dash">–</td><td class="n dash">–</td><td class="n">2</td><td class="n">2</td><td class="n">3.56</td><td class="n">2.96</td></tr>
+        <tr><td class="dept">논술(AAT) <span class="uni">자연1</span></td><td class="n">4</td><td class="n">35</td><td class="n">8.8</td><td class="n">17</td><td class="n">4.3</td><td class="n">0</td><td class="n">0</td><td class="n">학생부 3.85</td><td class="n">논술 126.6</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note"><b>경북대는 교과와 학종의 성격이 정반대입니다.</b> 교과우수자는 2.5등급대 싸움에 추합이 21번까지 돌지만, 학종 일반학생은 4.2등급대인데 추합이 0명입니다. 내신이 3등급 아래라면 학종 쪽이 현실적인 칸입니다.</div>
+</section>
+
+<section>
   <h2>하나를 덜어낼 때 볼 것</h2>
-  <p class="sub">최종 판단은 접수 마감일 실시간 경쟁률을 보고 하시겠지만, 그때 흔들리는 폭 자체가 칸마다 다릅니다.</p>
+  <p class="sub">모집요강의 모집인원과 직전 입결을 함께 놓고 보면, 마감일 경쟁률에 흔들리는 폭이 칸마다 다릅니다.</p>
   <ul class="points">
-    <li><b>모집인원 7명인 두 곳</b>(중앙대 식물생명공학, 강원대 춘천 생물자원과학부)은 지원자 몇 명만 더 몰려도 경쟁률이 크게 튑니다. 마감일 경쟁률에 가장 민감한 칸입니다.</li>
-    <li><b>건국대 글로컬 Cogito는 26명</b>으로 7곳 중 가장 많습니다. 같은 지원자 수가 몰려도 경쟁률 체감이 가장 완만합니다.</li>
-    <li><b>수능최저가 있는 세 칸</b>(한경대 원예생명공학 2합 8, 경북대 교과 2합 6 · 학종 2합 7)은 표면 경쟁률이 높아도 최저 미충족으로 빠지는 인원이 있어 실질 경쟁률이 낮아집니다. 마감일 숫자만 보고 빼면 손해일 수 있습니다.</li>
-    <li>한경대 원예생명공학 교과는 <b>미적분 · 기하 응시 시 2등급 감산</b>이 붙어, 수학 등급이 애매해도 2합 8을 맞추기 쉬운 편입니다.</li>
-    <li><b>한경국립대 두 학과는 각각 1회씩, 총 2회를 씁니다.</b> 6회 중 3분의 1을 한 대학에 쓰는 구성이 맞는지가 판단 포인트입니다.</li>
+    <li><b>모집인원 7명인 두 곳</b>(중앙대 식물생명공학, 강원대 춘천 생물자원과학부)은 지원자 몇 명만 더 몰려도 경쟁률이 크게 튑니다. 마감일 숫자에 가장 민감한 칸입니다.</li>
+    <li><b>수능최저가 있는 세 칸은 표면 경쟁률이 과장돼 보입니다.</b> 한경대 원예생명공학 교과는 2년 연속 지원자의 45~47%만 2합 8을 넘겼고, 경북대는 교과 209명 중 123명 · 학종 316명 중 178명만 최저를 통과했습니다. 마감일 경쟁률만 보고 이 칸을 빼면 손해입니다.</li>
+    <li><b>경북대 학종은 추가합격이 0명이었습니다.</b> 최초합 7명 전원 등록. 실질 25.4:1을 뚫어도 예비번호를 받으면 끝이라는 뜻이라, 다른 칸보다 확률 계산이 냉정해야 합니다.</li>
+    <li><b>강원대 춘천은 추합이 2번까지만 돌았습니다.</b> 면접 평균 58.67/80에 결시 3명 — 면접 준비량이 그대로 합불로 이어지는 칸입니다. 반대로 건국대 글로컬(13번), 한경대 학종(21번)은 후보 이동이 활발했습니다.</li>
+    <li><b>중앙대 탐구형은 50%컷 3.25, 70%컷 4.85</b>로 그 사이가 1.6등급 벌어집니다. 내신이 애매해도 서류·면접으로 뒤집힌 사례가 가장 많은 칸이자, 반대로 내신이 좋아도 안심할 수 없는 칸입니다.</li>
+    <li><b>강원대 강릉 교과는 수능최저가 없어 표면이 곧 실질입니다.</b> 등록 50%컷 3.81 · 최저 4.38로, 7곳 중 결과 예측이 가장 쉬운 칸입니다.</li>
+    <li><b>한경국립대 두 학과는 6회 중 2회를 한 대학에 씁니다.</b> 응용생명공학 학종(등록 평균 4.47)과 원예생명공학 교과(등록 평균 4.88)는 등급대가 비슷해, 둘 다 남길지 하나를 뺄지가 실질적인 선택지입니다.</li>
     <li>중앙대만 <b>9월 8일(화) 10시</b>에 접수가 열립니다. 나머지 5곳이 9월 7일(월)에 시작하므로, 다른 곳 경쟁률을 하루 더 보고 중앙대를 결정할 수 있습니다.</li>
   </ul>
 </section>
@@ -649,10 +763,22 @@
       <li><span class="f">경북대학교</span> <a href="https://ipsi1.knu.ac.kr/mojib/?m_type=SUSI">ipsi1.knu.ac.kr/mojib</a></li>
     </ul>
   </div>
+
+  <p class="tbl-cap">입시결과 원문</p>
+  <div class="src">
+    <ul>
+      <li><span class="f">중앙대 2026 수시 입시결과</span> <a href="https://admission.cau.ac.kr/">admission.cau.ac.kr</a> · 비카우스 뉴스 수시편</li>
+      <li><span class="f">강원대 춘천 2026 입시결과</span> <a href="https://admission.kangwon.ac.kr/">admission.kangwon.ac.kr</a> · 전 전형 엑셀(면접 점수 포함)</li>
+      <li><span class="f">강원대 강릉·원주 2026 입시결과</span> <a href="https://www.gwnu.ac.kr/iphak/">gwnu.ac.kr/iphak</a> · 전 전형 엑셀</li>
+      <li><span class="f">건국대 글로컬 2024~2026 3개년</span> <a href="https://enter.kku.ac.kr/rate/">enter.kku.ac.kr/rate</a></li>
+      <li><span class="f">한경국립대 2025~2026</span> <a href="https://ipsi.hknu.ac.kr/result/result.php">ipsi.hknu.ac.kr/result</a></li>
+      <li><span class="f">경북대 2026 전형결과</span> <a href="https://ipsi1.knu.ac.kr/notice/?m_type=SUSI">ipsi1.knu.ac.kr/notice</a> · 학종 지원 가이드북</li>
+    </ul>
+  </div>
 </section>
 
 <footer>
-  모집인원은 요강 발표 이후 학사구조 개편 등으로 변경될 수 있습니다. 원서접수 직전 각 대학 입학처의 최종 공지를 한 번 더 확인하세요.
+  모집인원은 요강 발표 이후 학사구조 개편 등으로 변경될 수 있습니다. 원서접수 직전 각 대학 입학처의 최종 공지를 한 번 더 확인하세요. 입시결과는 그해 지원자 분포가 만든 결과일 뿐 합격선을 보장하지 않으며, 한경국립대처럼 학과 구조가 바뀐 곳은 연도 간 직접 비교에 주의가 필요합니다.
 </footer>
 
 </div>
