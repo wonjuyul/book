@@ -10,6 +10,6 @@ for uni, pdf_path, sections in UNIS:
         toc.append([2, sub, page])
         page += 1
 d.set_toc(toc)
-out = '이미지_원본/2027수시_전형상세_고해상도(6개대학).pdf'
+out = '이미지_원본/2027수시_전형상세_고해상도(7개대학).pdf'
 d.save(out)
 print('saved', out, d.page_count)
