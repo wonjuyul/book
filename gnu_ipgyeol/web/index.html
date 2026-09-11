@@ -1,0 +1,563 @@
+<title>경상국립대 농생대 수시 입결</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --ground: #faf9f4;
+    --panel: #ffffff;
+    --ink: #1b1e16;
+    --ink-2: #575c4c;
+    --ink-3: #83887a;
+    --rule: #e3e1d5;
+    --rule-soft: #eeece2;
+    --accent: #4a5a33;
+    --accent-soft: #eef0e4;
+    --series-1: #2a78d6;
+    --series-2: #eb6834;
+    --series-3: #1baf7a;
+    --grid: #e8e6da;
+    --shadow: 0 1px 2px rgba(27, 30, 22, .05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground: #14170f;
+      --panel: #1b1e16;
+      --ink: #f2f1e6;
+      --ink-2: #b3b7a6;
+      --ink-3: #8b9080;
+      --rule: #2f3428;
+      --rule-soft: #262b20;
+      --accent: #a8bd7f;
+      --accent-soft: #242a1a;
+      --series-1: #3987e5;
+      --series-2: #d95926;
+      --series-3: #199e70;
+      --grid: #2b3024;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground: #14170f;
+    --panel: #1b1e16;
+    --ink: #f2f1e6;
+    --ink-2: #b3b7a6;
+    --ink-3: #8b9080;
+    --rule: #2f3428;
+    --rule-soft: #262b20;
+    --accent: #a8bd7f;
+    --accent-soft: #242a1a;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --grid: #2b3024;
+    --shadow: none;
+  }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: "IBM Plex Sans KR", system-ui, -apple-system, "Apple SD Gothic Neo", sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 56px 72px;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  h1, h2, h3 { font-family: "Gowun Batang", "Nanum Myeongjo", serif; font-weight: 700; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.25; letter-spacing: -.01em; }
+  h2 { font-size: 24px; line-height: 1.35; }
+  h3 { font-size: 16px; font-weight: 400; }
+  p { margin: 0; }
+
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .lede { color: var(--ink-2); max-width: 62ch; font-size: 16px; }
+
+  header { display: flex; flex-direction: column; gap: 14px; }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .chip {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 3px 11px;
+    background: var(--panel);
+  }
+
+  section { display: flex; flex-direction: column; gap: 20px; }
+  .section-head { display: flex; flex-direction: column; gap: 6px; border-top: 2px solid var(--ink); padding-top: 14px; }
+  .section-head .note { color: var(--ink-3); font-size: 13px; }
+
+  .charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  @media (max-width: 720px) { .charts { grid-template-columns: 1fr; } }
+  figure {
+    margin: 0;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    padding: 18px 16px 14px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  figcaption { display: flex; flex-direction: column; gap: 2px; }
+  figcaption .t { font-weight: 600; font-size: 15px; }
+  figcaption .s { font-size: 12.5px; color: var(--ink-3); }
+  .chart { position: relative; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--ink-2); }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .swatch { width: 16px; height: 3px; border-radius: 2px; display: inline-block; }
+  .tip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink);
+    box-shadow: 0 4px 14px rgba(20, 23, 15, .14);
+    min-width: 128px;
+    opacity: 0;
+    transition: opacity .12s ease;
+  }
+  .tip.on { opacity: 1; }
+  .tip b { font-family: "IBM Plex Mono", monospace; font-weight: 500; }
+  .tip .row { display: flex; justify-content: space-between; gap: 12px; }
+  .tip .row i { font-style: normal; color: var(--ink-2); display: inline-flex; align-items: center; gap: 5px; }
+  .tip .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+  .dept { display: flex; flex-direction: column; gap: 16px; }
+  .dept h2 small { font-family: "IBM Plex Sans KR", sans-serif; font-size: 13px; font-weight: 400; color: var(--ink-3); margin-left: 8px; }
+  .tablecard { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
+  .tablecard > h3 {
+    font-family: "IBM Plex Sans KR", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--rule-soft);
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+  .scroller { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th, td { padding: 9px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rule-soft); }
+  th { font-size: 12px; font-weight: 500; color: var(--ink-3); text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  #t-source th:last-child, #t-source td:last-child { text-align: left; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num { font-family: "IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  td.key { font-family: "IBM Plex Mono", monospace; color: var(--ink); }
+  td.best { font-weight: 500; }
+  .muted { color: var(--ink-3); }
+  .unit-tag { font-size: 11px; color: var(--ink-3); margin-left: 6px; }
+
+  .notes { display: flex; flex-direction: column; gap: 10px; }
+  .notes li { color: var(--ink-2); }
+  ul { margin: 0; padding-left: 1.15em; display: flex; flex-direction: column; gap: 8px; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+  footer { color: var(--ink-3); font-size: 12.5px; border-top: 1px solid var(--rule); padding-top: 16px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">경상국립대학교 입학안내 공개자료</p>
+    <h1>농학과 · 원예과학부 · 식물의학과<br>수시 입결 7개년</h1>
+    <p class="lede">
+      경상국립대학교가 학년도별로 공개한 수시모집 입학결과에서 농업생명과학대학 세 모집단위의
+      학생부교과(일반전형)과 학생부종합(일반전형) 수치만 뽑아 2020학년도부터 2026학년도까지 이어 붙였습니다.
+      모든 값은 최종등록자(입학생) 기준입니다.
+    </p>
+    <div class="meta">
+      <span class="chip">2020–2026학년도</span>
+      <span class="chip">3개 모집단위</span>
+      <span class="chip">교과 · 종합 일반전형</span>
+      <span class="chip">40개 행</span>
+    </div>
+  </header>
+
+  <section>
+    <div class="section-head">
+      <h2>학생부등급 추이</h2>
+      <p class="note">등록자 학생부등급 평균. 위로 갈수록 상위 등급이며, 두 그래프는 같은 눈금(3.0–5.5)을 씁니다.</p>
+    </div>
+    <div class="charts">
+      <figure>
+        <figcaption>
+          <span class="t">학생부교과 일반전형</span>
+          <span class="s">등록자 등급 평균</span>
+        </figcaption>
+        <div class="chart" id="chart-gyogwa"></div>
+      </figure>
+      <figure>
+        <figcaption>
+          <span class="t">학생부종합 일반전형</span>
+          <span class="s">등록자 등급 평균</span>
+        </figcaption>
+        <div class="chart" id="chart-jonghap"></div>
+      </figure>
+    </div>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--series-1)"></i>농학과</span>
+      <span><i class="swatch" style="background:var(--series-2)"></i>원예과학부(2021학년도 원예학과)</span>
+      <span><i class="swatch" style="background:var(--series-3)"></i>식물의학과</span>
+      <span class="muted">2020학년도 농학·원예는 ‘농업식물과학과’로 통합 모집되어 선이 2021학년도에서 시작합니다.</span>
+    </div>
+  </section>
+
+  <section class="dept" id="dept-nong">
+    <div class="section-head">
+      <h2>농학과 <small>2020학년도는 농업식물과학과(농학·원예 통합)</small></h2>
+    </div>
+    <div class="tablecard">
+      <h3>학생부교과 일반전형</h3>
+      <div class="scroller"><table id="t-nong-gyogwa"></table></div>
+    </div>
+    <div class="tablecard">
+      <h3>학생부종합 일반전형</h3>
+      <div class="scroller"><table id="t-nong-jonghap"></table></div>
+    </div>
+  </section>
+
+  <section class="dept" id="dept-won">
+    <div class="section-head">
+      <h2>원예과학부 <small>2021학년도까지 원예학과, 2022학년도 학부 개편</small></h2>
+    </div>
+    <div class="tablecard">
+      <h3>학생부교과 일반전형</h3>
+      <div class="scroller"><table id="t-won-gyogwa"></table></div>
+    </div>
+    <div class="tablecard">
+      <h3>학생부종합 일반전형</h3>
+      <div class="scroller"><table id="t-won-jonghap"></table></div>
+    </div>
+  </section>
+
+  <section class="dept" id="dept-sik">
+    <div class="section-head">
+      <h2>식물의학과 <small>7개년 모두 두 전형 모두 선발</small></h2>
+    </div>
+    <div class="tablecard">
+      <h3>학생부교과 일반전형</h3>
+      <div class="scroller"><table id="t-sik-gyogwa"></table></div>
+    </div>
+    <div class="tablecard">
+      <h3>학생부종합 일반전형</h3>
+      <div class="scroller"><table id="t-sik-jonghap"></table></div>
+    </div>
+  </section>
+
+  <section class="notes">
+    <div class="section-head">
+      <h2>읽을 때 주의할 점</h2>
+    </div>
+    <ul>
+      <li>학생부등급은 대학 자체 환산 방식으로 산출한 값이고, 80컷은 등록자를 성적순으로 세웠을 때 80% 지점의 값입니다.</li>
+      <li>환산점수 산출식은 학년도·전형별로 달라 연도 간 직접 비교에 쓰면 안 됩니다. 추세는 학생부등급으로 보세요.</li>
+      <li>학생부종합은 2023학년도부터 등급 평균만 공개하고 등급 80컷과 환산점수를 공개하지 않습니다.</li>
+      <li>원예과학부는 2025·2026학년도 학생부종합 일반전형을 선발하지 않았습니다. 같은 기간 교과 일반 모집인원은 40명으로 가장 큽니다.</li>
+      <li>모집인원보다 최종등록인원이 적은 해는 결원이 정시로 이월된 경우입니다.</li>
+      <li>여기 실린 전형은 일반전형뿐입니다. 지역인재·농어촌·기초생활 등 다른 전형 값은 원자료에 따로 있습니다.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>원자료</h2>
+      <p class="note">학년도별 공개 파일 원본. 2020–2022학년도는 엑셀, 2023–2026학년도는 PDF입니다.</p>
+    </div>
+    <div class="tablecard">
+      <div class="scroller"><table id="t-source"></table></div>
+    </div>
+  </section>
+
+  <footer>
+    출처: 경상국립대학교 입학안내 수시모집 입학결과. 2026학년도 자료까지 반영했습니다.
+  </footer>
+</div>
+
+<script>
+  const G = "gyogwa", J = "jonghap";
+  // [학년도, 모집인원, 지원인원, 경쟁률, 최종등록, 충원최종예비, 등급평균, 등급80컷, 환산평균, 환산80컷]
+  const DATA = {
+    nong: {
+      name: "농학과", color: "var(--series-1)", hex: "#2a78d6",
+      gyogwa: [
+        [2020, 22, 99, "4.50:1", 21, 26, 3.62, 4.29, 960.76, 950.65, "농업식물과학과"],
+        [2021, 11, 62, "5.64:1", 11, 14, 4.39, 4.65, 949.08, 945.29],
+        [2022, 13, 104, "8.00:1", 12, 28, 3.61, 3.96, 961.32, 956.27],
+        [2023, 13, 41, "3.15:1", 13, 21, 3.74, 4.04, 958.97, 954.55],
+        [2024, 12, 47, "3.92:1", 11, 24, 3.79, 4.36, 958.23, 949.68],
+        [2025, 12, 52, "4.33:1", 11, 15, 4.25, 4.71, 950.01, 944.61],
+        [2026, 12, 56, "4.67:1", 12, 15, 4.07, 4.24, 954.09, 951.55]
+      ],
+      jonghap: [
+        [2020, 8, 42, "5.25:1", 8, 11, 4.01, null, 984.23, 979.20, "농업식물과학과"],
+        [2021, 4, 41, "10.25:1", 3, 7, 3.57, null, 967.84, 965.60],
+        [2022, 4, 37, "9.25:1", 3, 9, 4.79, null, 970.82, 969.95],
+        [2023, 4, 38, "9.50:1", 4, 11, 4.49, null, null, null],
+        [2024, 4, 33, "8.25:1", 4, 6, 4.77, null, null, null],
+        [2025, 4, 30, "7.50:1", 4, 7, 4.61, null, null, null],
+        [2026, 4, 35, "8.75:1", 4, 5, 4.75, null, null, null]
+      ]
+    },
+    won: {
+      name: "원예", color: "var(--series-2)", hex: "#eb6834",
+      gyogwa: [
+        [2021, 10, 48, "4.80:1", 7, 10, 4.92, 5.21, 941.07, 936.84, "원예학과"],
+        [2022, 37, 243, "6.57:1", 37, 65, 4.14, 4.57, 953.60, 946.45],
+        [2023, 38, 141, "3.71:1", 37, 56, 4.12, 4.65, 953.23, 945.27],
+        [2024, 37, 151, "4.08:1", 35, 55, 4.00, 4.73, 955.07, 944.15],
+        [2025, 40, 160, "4.00:1", 39, 49, 5.09, 5.65, 938.73, 930.10],
+        [2026, 40, 360, "9.00:1", 38, 48, 4.46, 4.89, 945.94, 941.66]
+      ],
+      jonghap: [
+        [2021, 3, 25, "8.33:1", 2, 4, 3.77, null, 960.90, 961.10, "원예학과"],
+        [2022, 5, 57, "11.40:1", 4, 9, 4.77, null, 969.84, 967.95],
+        [2023, 5, 77, "15.40:1", 5, 3, 4.10, null, null, null],
+        [2024, 5, 29, "5.80:1", 5, 14, 4.96, null, null, null],
+        [2025, null, null, null, null, null, null, null, null, null, "미선발"],
+        [2026, null, null, null, null, null, null, null, null, null, "미선발"]
+      ]
+    },
+    sik: {
+      name: "식물의학과", color: "var(--series-3)", hex: "#1baf7a",
+      gyogwa: [
+        [2020, 8, 47, "5.88:1", 4, 8, 3.97, 3.95, 955.46, 955.74],
+        [2021, 8, 33, "4.13:1", 5, 10, 3.97, 4.24, 955.42, 951.45],
+        [2022, 10, 46, "4.60:1", 10, 20, 3.16, 3.39, 968.03, 964.63],
+        [2023, 10, 32, "3.20:1", 9, 15, 4.30, 5.93, 950.49, 926.10],
+        [2024, 10, 89, "8.90:1", 8, 14, 4.13, 4.40, 953.10, 949.12],
+        [2025, 10, 49, "4.90:1", 9, 20, 3.84, 4.12, 957.51, 953.36],
+        [2026, 10, 37, "3.70:1", 10, 23, 4.40, 4.92, 949.22, 941.21]
+      ],
+      jonghap: [
+        [2020, 6, 18, "3.00:1", 6, 4, 4.14, null, 986.72, 988.05],
+        [2021, 4, 14, "3.50:1", 4, 4, 4.32, null, 985.34, 985.25],
+        [2022, 5, 31, "6.20:1", 5, 3, 4.37, null, 992.99, 991.40],
+        [2023, 5, 31, "6.20:1", 5, 15, 4.38, null, null, null],
+        [2024, 7, 46, "6.57:1", 5, 7, 4.18, null, null, null],
+        [2025, 5, 24, "4.80:1", 5, 3, 4.72, null, null, null],
+        [2026, 5, 30, "6.00:1", 4, 2, 4.02, null, null, null]
+      ]
+    }
+  };
+
+  const YEARS = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
+  const ORDER = ["nong", "won", "sik"];
+  const fmt = v => (v === null || v === undefined) ? "–" : v;
+  const g2 = v => (v === null || v === undefined) ? "–" : v.toFixed(2);
+  const s2 = v => (v === null || v === undefined) ? "–" : v.toFixed(2);
+
+  /* ---------- charts ---------- */
+  const NS = "http://www.w3.org/2000/svg";
+  const el = (tag, attrs) => {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  };
+
+  function drawChart(host, mode) {
+    const W = 430, H = 260, m = { t: 16, r: 62, b: 30, l: 34 };
+    const yMin = 3.0, yMax = 5.5;
+    const x = y => m.l + (y - 2020) * (W - m.l - m.r) / 6;
+    const yPos = g => m.t + (g - yMin) * (H - m.t - m.b) / (yMax - yMin);
+
+    const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img" });
+    svg.appendChild(el("title", {})).textContent =
+      (mode === G ? "학생부교과" : "학생부종합") + " 일반전형 등록자 학생부등급 평균 추이";
+
+    for (let g = 3.0; g <= 5.5001; g += 0.5) {
+      svg.appendChild(el("line", { x1: m.l, x2: W - m.r, y1: yPos(g), y2: yPos(g), stroke: "var(--grid)", "stroke-width": 1 }));
+      const lab = el("text", { x: m.l - 8, y: yPos(g) + 4, "text-anchor": "end", fill: "var(--ink-3)", "font-size": 10.5, "font-family": "IBM Plex Mono, monospace" });
+      lab.textContent = g.toFixed(1);
+      svg.appendChild(lab);
+    }
+    YEARS.forEach(yr => {
+      const lab = el("text", { x: x(yr), y: H - m.b + 18, "text-anchor": "middle", fill: "var(--ink-3)", "font-size": 10.5, "font-family": "IBM Plex Mono, monospace" });
+      lab.textContent = String(yr).slice(2);
+      svg.appendChild(lab);
+    });
+
+    const ends = [];
+    ORDER.forEach(key => {
+      const d = DATA[key];
+      const pts = d[mode]
+        .filter(r => r[6] !== null && r[10] !== "농업식물과학과")
+        .map(r => [r[0], r[6]]);
+      if (!pts.length) return;
+      const path = pts.map((p, i) => `${i ? "L" : "M"}${x(p[0])} ${yPos(p[1])}`).join(" ");
+      svg.appendChild(el("path", { d: path, fill: "none", stroke: d.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+      pts.forEach(p => {
+        svg.appendChild(el("circle", { cx: x(p[0]), cy: yPos(p[1]), r: 4.5, fill: d.color, stroke: "var(--panel)", "stroke-width": 2 }));
+      });
+      const last = pts[pts.length - 1];
+      ends.push({ d, last, y: yPos(last[1]) });
+    });
+
+    // 끝점 라벨이 겹치지 않도록 위에서부터 최소 간격을 확보한다.
+    ends.sort((a, b) => a.y - b.y);
+    ends.forEach((e, i) => { if (i && e.y - ends[i - 1].y < 28) e.y = ends[i - 1].y + 28; });
+    ends.forEach(e => {
+      const lx = x(e.last[0]) + 10;
+      const name = el("text", { x: lx, y: e.y + 2, fill: "var(--ink-2)", "font-size": 11, "font-family": "IBM Plex Sans KR, sans-serif" });
+      name.textContent = e.d.name;
+      svg.appendChild(name);
+      const val = el("text", { x: lx, y: e.y + 15, fill: "var(--ink-3)", "font-size": 10.5, "font-family": "IBM Plex Mono, monospace" });
+      val.textContent = e.last[1].toFixed(2);
+      svg.appendChild(val);
+      svg.appendChild(el("line", {
+        x1: x(e.last[0]) + 5, x2: lx - 3,
+        y1: yPos(e.last[1]), y2: e.y - 2,
+        stroke: e.d.color, "stroke-width": 1, opacity: .5
+      }));
+    });
+
+    const cross = el("line", { x1: 0, x2: 0, y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-width": 1, "stroke-dasharray": "3 3", opacity: 0 });
+    svg.appendChild(cross);
+
+    host.appendChild(svg);
+    const tip = document.createElement("div");
+    tip.className = "tip";
+    host.appendChild(tip);
+
+    const hit = el("rect", { x: m.l - 16, y: 0, width: W - m.l - m.r + 32, height: H, fill: "transparent" });
+    svg.appendChild(hit);
+
+    function show(evt) {
+      const box = svg.getBoundingClientRect();
+      const px = (evt.clientX - box.left) / box.width * W;
+      let yr = YEARS[0], best = Infinity;
+      YEARS.forEach(v => { const dd = Math.abs(x(v) - px); if (dd < best) { best = dd; yr = v; } });
+      const rows = ORDER.map(key => {
+        const d = DATA[key];
+        const r = d[mode].find(rr => rr[0] === yr);
+        if (!r) return "";
+        const v = r[6] === null ? (r[10] === "미선발" ? "미선발" : "–") : r[6].toFixed(2);
+        const comp = r[3] === null ? "" : ` · ${r[3]}`;
+        return `<div class="row"><i><span class="dot" style="background:${d.hex}"></span>${d.name}</i><b>${v}${comp}</b></div>`;
+      }).join("");
+      tip.innerHTML = `<div class="row"><i>${yr}학년도</i></div>${rows}`;
+      tip.classList.add("on");
+      cross.setAttribute("x1", x(yr));
+      cross.setAttribute("x2", x(yr));
+      cross.setAttribute("opacity", 1);
+      const left = Math.min(Math.max(x(yr) / W * box.width - 80, 4), box.width - 168);
+      tip.style.left = left + "px";
+      tip.style.top = "6px";
+    }
+    function hide() { tip.classList.remove("on"); cross.setAttribute("opacity", 0); }
+    svg.addEventListener("pointermove", show);
+    svg.addEventListener("pointerleave", hide);
+  }
+
+  drawChart(document.getElementById("chart-gyogwa"), G);
+  drawChart(document.getElementById("chart-jonghap"), J);
+
+  /* ---------- tables ---------- */
+  const HEAD_G = ["학년도", "모집", "지원", "경쟁률", "최종등록", "충원최종예비", "등급 평균", "등급 80컷", "환산 평균", "환산 80컷"];
+  const HEAD_J = ["학년도", "모집", "지원", "경쟁률", "최종등록", "충원최종예비", "등급 평균", "환산 평균", "환산 80컷"];
+
+  function renderTable(id, rows, mode) {
+    const table = document.getElementById(id);
+    const head = mode === G ? HEAD_G : HEAD_J;
+    const thead = document.createElement("thead");
+    const tr = document.createElement("tr");
+    head.forEach(h => { const th = document.createElement("th"); th.textContent = h; tr.appendChild(th); });
+    thead.appendChild(tr);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    rows.forEach(r => {
+      const t = document.createElement("tr");
+      const cells = mode === G
+        ? [r[0] + "학년도", r[1], r[2], r[3], r[4], r[5], g2(r[6]), g2(r[7]), s2(r[8]), s2(r[9])]
+        : [r[0] + "학년도", r[1], r[2], r[3], r[4], r[5], g2(r[6]), s2(r[8]), s2(r[9])];
+      cells.forEach((c, i) => {
+        const td = document.createElement("td");
+        td.className = i === 0 ? "key" : "num";
+        td.textContent = c === null || c === undefined ? "–" : c;
+        if (c === null || c === undefined) td.classList.add("muted");
+        if (c === "–" || c === null) td.classList.add("muted");
+        t.appendChild(td);
+      });
+      if (r[10]) {
+        const note = document.createElement("span");
+        note.className = "unit-tag";
+        note.textContent = r[10];
+        t.firstChild.appendChild(note);
+      }
+      if (r[10] === "미선발") t.classList.add("muted");
+      tbody.appendChild(t);
+    });
+    table.appendChild(tbody);
+  }
+
+  renderTable("t-nong-gyogwa", DATA.nong.gyogwa, G);
+  renderTable("t-nong-jonghap", DATA.nong.jonghap, J);
+  renderTable("t-won-gyogwa", DATA.won.gyogwa, G);
+  renderTable("t-won-jonghap", DATA.won.jonghap, J);
+  renderTable("t-sik-gyogwa", DATA.sik.gyogwa, G);
+  renderTable("t-sik-jonghap", DATA.sik.jonghap, J);
+
+  const SOURCES = [
+    [2020, "엑셀", "https://www.gnu.ac.kr/new/cm/cntnts/cntntsView.do?mi=5003&cntntsId=2866"],
+    [2021, "엑셀", "https://www.gnu.ac.kr/new/cm/cntnts/cntntsView.do?mi=4996&cntntsId=2862"],
+    [2022, "엑셀", "https://www.gnu.ac.kr/new/cm/cntnts/cntntsView.do?mi=10920&cntntsId=5299"],
+    [2023, "PDF", "https://www.gnu.ac.kr/new/cm/cntnts/cntntsView.do?mi=13223&cntntsId=6234"],
+    [2024, "PDF", "https://new.gnu.ac.kr/new/cm/cntnts/cntntsView.do?mi=17447&cntntsId=7958"],
+    [2025, "PDF", "https://new.gnu.ac.kr/new/cm/cntnts/cntntsView.do?mi=19078&cntntsId=8709"],
+    [2026, "PDF", "https://new.gnu.ac.kr/new/cm/cntnts/cntntsView.do?mi=48029&cntntsId=21841"]
+  ];
+  (function () {
+    const table = document.getElementById("t-source");
+    const thead = document.createElement("thead");
+    const tr = document.createElement("tr");
+    ["학년도", "형식", "공개 페이지"].forEach(h => { const th = document.createElement("th"); th.textContent = h; tr.appendChild(th); });
+    thead.appendChild(tr);
+    table.appendChild(thead);
+    const tbody = document.createElement("tbody");
+    SOURCES.forEach(([yr, kind, url]) => {
+      const t = document.createElement("tr");
+      const c1 = document.createElement("td"); c1.className = "key"; c1.textContent = yr + "학년도";
+      const c2 = document.createElement("td"); c2.textContent = kind;
+      const c3 = document.createElement("td");
+      const a = document.createElement("a");
+      a.href = url; a.target = "_blank"; a.rel = "noopener";
+      a.textContent = "입학안내 " + yr + "학년도 수시 입학결과";
+      c3.appendChild(a);
+      t.append(c1, c2, c3);
+      tbody.appendChild(t);
+    });
+    table.appendChild(tbody);
+  })();
+</script>
