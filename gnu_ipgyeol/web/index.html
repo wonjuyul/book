@@ -111,6 +111,22 @@
   .section-head { display: flex; flex-direction: column; gap: 6px; border-top: 2px solid var(--ink); padding-top: 14px; }
   .section-head .note { color: var(--ink-3); font-size: 13px; }
 
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .switch { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; background: var(--panel); padding: 2px; }
+  .switch button {
+    font: inherit;
+    font-size: 13px;
+    color: var(--ink-2);
+    background: none;
+    border: 0;
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+  }
+  .switch button.on { background: var(--accent-soft); color: var(--ink); font-weight: 600; }
+  .switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .ctl-note { font-size: 12.5px; color: var(--ink-3); }
+  .empty { display: flex; align-items: center; justify-content: center; min-height: 150px; text-align: center; color: var(--ink-3); font-size: 13px; padding: 0 12px; }
   .charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
   @media (max-width: 720px) { .charts { grid-template-columns: 1fr; } }
   figure {
@@ -207,21 +223,32 @@
 
   <section>
     <div class="section-head">
-      <h2>학생부등급 추이</h2>
-      <p class="note">등록자 학생부등급 평균. 위로 갈수록 상위 등급이며, 두 그래프는 같은 눈금(3.0–5.5)을 씁니다.</p>
+      <h2>입결 추이</h2>
+      <p class="note">등록자 성적을 학생부등급으로도, 상위 누적 백분위(%)로도 볼 수 있습니다. 두 그래프는 같은 눈금을 쓰고, 위로 갈수록 성적이 높습니다.</p>
+    </div>
+    <div class="controls" role="group" aria-label="그래프 표시 설정">
+      <div class="switch" id="unit-switch">
+        <button type="button" id="unit-grade" class="on" aria-pressed="true">학생부등급</button>
+        <button type="button" id="unit-pct" aria-pressed="false">상위 누적 %</button>
+      </div>
+      <div class="switch" id="metric-switch">
+        <button type="button" id="metric-avg" class="on" aria-pressed="true">평균</button>
+        <button type="button" id="metric-cut" aria-pressed="false">80컷</button>
+      </div>
+      <span class="ctl-note" id="ctl-note"></span>
     </div>
     <div class="charts">
       <figure>
         <figcaption>
           <span class="t">학생부교과 일반전형</span>
-          <span class="s">등록자 등급 평균</span>
+          <span class="s" id="cap-gyogwa">등록자 등급 평균</span>
         </figcaption>
         <div class="chart" id="chart-gyogwa"></div>
       </figure>
       <figure>
         <figcaption>
           <span class="t">학생부종합 일반전형</span>
-          <span class="s">등록자 등급 평균</span>
+          <span class="s" id="cap-jonghap">등록자 등급 평균</span>
         </figcaption>
         <div class="chart" id="chart-jonghap"></div>
       </figure>
@@ -232,6 +259,11 @@
       <span><i class="swatch" style="background:var(--series-3)"></i>식물의학과</span>
       <span class="muted">2020학년도 농학·원예는 ‘농업식물과학과’로 통합 모집되어 선이 2021학년도에서 시작합니다.</span>
     </div>
+    <div class="tablecard">
+      <h3>등급 ↔ 상위 누적 백분위 환산 기준</h3>
+      <div class="scroller"><table id="t-cum"></table></div>
+    </div>
+    <p class="note muted">환산은 9등급제 표준 누적비율(1등급 4%, 2등급 11%, 3등급 23%, 4등급 40%, 5등급 60%, 6등급 77% …)을 등급 사이에서 직선 보간한 값입니다. 대학이 발표한 값이 아니라 등급을 읽기 쉽게 바꾼 근사치이고, 실제 지원자 분포와는 다릅니다.</p>
   </section>
 
   <section class="dept" id="dept-nong">
@@ -386,20 +418,66 @@
     return n;
   };
 
+  /* 9등급제 표준 누적비율. 등급 사이는 직선 보간한다. */
+  const CUM = { 1: 4, 2: 11, 3: 23, 4: 40, 5: 60, 6: 77, 7: 89, 8: 96, 9: 100 };
+  function cumPct(g) {
+    if (g === null || g === undefined) return null;
+    const lo = Math.max(1, Math.min(8, Math.floor(g)));
+    const hi = lo + 1;
+    return CUM[lo] + (g - lo) * (CUM[hi] - CUM[lo]);
+  }
+  const pctText = g => cumPct(g) === null ? "–" : "상위 " + cumPct(g).toFixed(1) + "%";
+
+  const STATE = { unit: "grade", metric: "avg" };
+  const AXIS = {
+    grade: {
+      avg: { min: 3.0, max: 5.5, step: 0.5 },
+      cut: { min: 3.0, max: 6.0, step: 0.5 },
+      fmt: v => v.toFixed(1), name: "학생부등급"
+    },
+    pct: {
+      avg: { min: 20, max: 65, step: 5 },
+      cut: { min: 20, max: 80, step: 5 },
+      fmt: v => v + "%", name: "상위 누적 %"
+    }
+  };
+  const axis = () => Object.assign({}, AXIS[STATE.unit][STATE.metric], {
+    fmt: AXIS[STATE.unit].fmt, name: AXIS[STATE.unit].name
+  });
+  const toUnit = g => STATE.unit === "pct" ? cumPct(g) : g;
+  const valText = g => STATE.unit === "pct" ? cumPct(g).toFixed(1) + "%" : g.toFixed(2);
+
+  function seriesFor(key, mode) {
+    const col = STATE.metric === "avg" ? 6 : 7;
+    return DATA[key][mode]
+      .filter(r => r[col] !== null && r[10] !== "농업식물과학과")
+      .map(r => [r[0], r[col]]);
+  }
+
   function drawChart(host, mode) {
-    const W = 430, H = 260, m = { t: 16, r: 62, b: 30, l: 34 };
-    const yMin = 3.0, yMax = 5.5;
+    host.textContent = "";
+    const hasData = ORDER.some(k => seriesFor(k, mode).length);
+    if (!hasData) {
+      const p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = "학생부종합 전형은 등급 80컷을 공개하지 않습니다. ‘평균’으로 보세요.";
+      host.appendChild(p);
+      return;
+    }
+
+    const W = 430, H = 260, m = { t: 16, r: 66, b: 30, l: 40 };
+    const ax = axis();
     const x = y => m.l + (y - 2020) * (W - m.l - m.r) / 6;
-    const yPos = g => m.t + (g - yMin) * (H - m.t - m.b) / (yMax - yMin);
+    const yPos = v => m.t + (v - ax.min) * (H - m.t - m.b) / (ax.max - ax.min);
 
     const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img" });
     svg.appendChild(el("title", {})).textContent =
-      (mode === G ? "학생부교과" : "학생부종합") + " 일반전형 등록자 학생부등급 평균 추이";
+      `${mode === G ? "학생부교과" : "학생부종합"} 일반전형 등록자 ${STATE.metric === "avg" ? "성적 평균" : "80컷"} 추이 (${ax.name})`;
 
-    for (let g = 3.0; g <= 5.5001; g += 0.5) {
-      svg.appendChild(el("line", { x1: m.l, x2: W - m.r, y1: yPos(g), y2: yPos(g), stroke: "var(--grid)", "stroke-width": 1 }));
-      const lab = el("text", { x: m.l - 8, y: yPos(g) + 4, "text-anchor": "end", fill: "var(--ink-3)", "font-size": 10.5, "font-family": "IBM Plex Mono, monospace" });
-      lab.textContent = g.toFixed(1);
+    for (let v = ax.min; v <= ax.max + 1e-6; v += ax.step) {
+      svg.appendChild(el("line", { x1: m.l, x2: W - m.r, y1: yPos(v), y2: yPos(v), stroke: "var(--grid)", "stroke-width": 1 }));
+      const lab = el("text", { x: m.l - 8, y: yPos(v) + 4, "text-anchor": "end", fill: "var(--ink-3)", "font-size": 10.5, "font-family": "IBM Plex Mono, monospace" });
+      lab.textContent = ax.fmt(Math.round(v * 100) / 100);
       svg.appendChild(lab);
     }
     YEARS.forEach(yr => {
@@ -411,33 +489,31 @@
     const ends = [];
     ORDER.forEach(key => {
       const d = DATA[key];
-      const pts = d[mode]
-        .filter(r => r[6] !== null && r[10] !== "농업식물과학과")
-        .map(r => [r[0], r[6]]);
+      const pts = seriesFor(key, mode);
       if (!pts.length) return;
-      const path = pts.map((p, i) => `${i ? "L" : "M"}${x(p[0])} ${yPos(p[1])}`).join(" ");
+      const path = pts.map((p, i) => `${i ? "L" : "M"}${x(p[0])} ${yPos(toUnit(p[1]))}`).join(" ");
       svg.appendChild(el("path", { d: path, fill: "none", stroke: d.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
       pts.forEach(p => {
-        svg.appendChild(el("circle", { cx: x(p[0]), cy: yPos(p[1]), r: 4.5, fill: d.color, stroke: "var(--panel)", "stroke-width": 2 }));
+        svg.appendChild(el("circle", { cx: x(p[0]), cy: yPos(toUnit(p[1])), r: 4.5, fill: d.color, stroke: "var(--panel)", "stroke-width": 2 }));
       });
       const last = pts[pts.length - 1];
-      ends.push({ d, last, y: yPos(last[1]) });
+      ends.push({ d, last, y: yPos(toUnit(last[1])) });
     });
 
     // 끝점 라벨이 겹치지 않도록 위에서부터 최소 간격을 확보한다.
     ends.sort((a, b) => a.y - b.y);
-    ends.forEach((e, i) => { if (i && e.y - ends[i - 1].y < 28) e.y = ends[i - 1].y + 28; });
+    ends.forEach((e, i) => { if (i && e.y - ends[i - 1].y < 32) e.y = ends[i - 1].y + 32; });
     ends.forEach(e => {
       const lx = x(e.last[0]) + 10;
       const name = el("text", { x: lx, y: e.y + 2, fill: "var(--ink-2)", "font-size": 11, "font-family": "IBM Plex Sans KR, sans-serif" });
       name.textContent = e.d.name;
       svg.appendChild(name);
       const val = el("text", { x: lx, y: e.y + 15, fill: "var(--ink-3)", "font-size": 10.5, "font-family": "IBM Plex Mono, monospace" });
-      val.textContent = e.last[1].toFixed(2);
+      val.textContent = valText(e.last[1]);
       svg.appendChild(val);
       svg.appendChild(el("line", {
         x1: x(e.last[0]) + 5, x2: lx - 3,
-        y1: yPos(e.last[1]), y2: e.y - 2,
+        y1: yPos(toUnit(e.last[1])), y2: e.y - 2,
         stroke: e.d.color, "stroke-width": 1, opacity: .5
       }));
     });
@@ -458,20 +534,24 @@
       const px = (evt.clientX - box.left) / box.width * W;
       let yr = YEARS[0], best = Infinity;
       YEARS.forEach(v => { const dd = Math.abs(x(v) - px); if (dd < best) { best = dd; yr = v; } });
+      const col = STATE.metric === "avg" ? 6 : 7;
       const rows = ORDER.map(key => {
         const d = DATA[key];
         const r = d[mode].find(rr => rr[0] === yr);
         if (!r) return "";
-        const v = r[6] === null ? (r[10] === "미선발" ? "미선발" : "–") : r[6].toFixed(2);
-        const comp = r[3] === null ? "" : ` · ${r[3]}`;
-        return `<div class="row"><i><span class="dot" style="background:${d.hex}"></span>${d.name}</i><b>${v}${comp}</b></div>`;
+        let v;
+        if (r[10] === "미선발") v = "미선발";
+        else if (r[10] === "농업식물과학과") v = "통합 모집";
+        else if (r[col] === null) v = "–";
+        else v = r[col].toFixed(2) + "등급 · " + cumPct(r[col]).toFixed(1) + "%";
+        return `<div class="row"><i><span class="dot" style="background:${d.hex}"></span>${d.name}</i><b>${v}</b></div>`;
       }).join("");
       tip.innerHTML = `<div class="row"><i>${yr}학년도</i></div>${rows}`;
       tip.classList.add("on");
       cross.setAttribute("x1", x(yr));
       cross.setAttribute("x2", x(yr));
       cross.setAttribute("opacity", 1);
-      const left = Math.min(Math.max(x(yr) / W * box.width - 80, 4), box.width - 168);
+      const left = Math.min(Math.max(x(yr) / W * box.width - 90, 4), Math.max(4, box.width - 190));
       tip.style.left = left + "px";
       tip.style.top = "6px";
     }
@@ -480,12 +560,63 @@
     svg.addEventListener("pointerleave", hide);
   }
 
-  drawChart(document.getElementById("chart-gyogwa"), G);
-  drawChart(document.getElementById("chart-jonghap"), J);
+  function render() {
+    drawChart(document.getElementById("chart-gyogwa"), G);
+    drawChart(document.getElementById("chart-jonghap"), J);
+    const metric = STATE.metric === "avg" ? "평균" : "80컷";
+    const unit = STATE.unit === "grade" ? "등급" : "상위 누적 %";
+    document.getElementById("cap-gyogwa").textContent = `등록자 ${metric} · ${unit}`;
+    document.getElementById("cap-jonghap").textContent = `등록자 ${metric} · ${unit}`;
+    document.getElementById("ctl-note").textContent = STATE.metric === "avg"
+      ? "80컷은 등록자를 성적순으로 세웠을 때 80% 지점의 값입니다."
+      : "80컷은 학생부교과만 공개됩니다.";
+  }
+
+  function bind(groupId, ids, key) {
+    ids.forEach(([id, value]) => {
+      document.getElementById(id).addEventListener("click", () => {
+        STATE[key] = value;
+        document.querySelectorAll(`#${groupId} button`).forEach(b => {
+          const on = b.id === id;
+          b.classList.toggle("on", on);
+          b.setAttribute("aria-pressed", String(on));
+        });
+        render();
+      });
+    });
+  }
+  bind("unit-switch", [["unit-grade", "grade"], ["unit-pct", "pct"]], "unit");
+  bind("metric-switch", [["metric-avg", "avg"], ["metric-cut", "cut"]], "metric");
+  render();
+
+  (function () {
+    const table = document.getElementById("t-cum");
+    const thead = document.createElement("thead");
+    const r1 = document.createElement("tr");
+    const r2 = document.createElement("tr");
+    const h0 = document.createElement("th"); h0.textContent = "학생부등급";
+    r1.appendChild(h0);
+    const c0 = document.createElement("td"); c0.className = "key"; c0.textContent = "상위 누적";
+    r2.appendChild(c0);
+    [3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0].forEach(g => {
+      const th = document.createElement("th"); th.textContent = g.toFixed(1);
+      r1.appendChild(th);
+      const td = document.createElement("td"); td.className = "num";
+      td.textContent = cumPct(g).toFixed(1) + "%";
+      r2.appendChild(td);
+    });
+    thead.appendChild(r1);
+    table.appendChild(thead);
+    const tbody = document.createElement("tbody");
+    tbody.appendChild(r2);
+    table.appendChild(tbody);
+  })();
+
 
   /* ---------- tables ---------- */
-  const HEAD_G = ["학년도", "모집", "지원", "경쟁률", "최종등록", "충원최종예비", "등급 평균", "등급 80컷", "환산 평균", "환산 80컷"];
-  const HEAD_J = ["학년도", "모집", "지원", "경쟁률", "최종등록", "충원최종예비", "등급 평균", "환산 평균", "환산 80컷"];
+  const HEAD_G = ["학년도", "모집", "지원", "경쟁률", "최종등록", "충원최종예비", "등급 평균", "상위 누적%", "등급 80컷", "환산 평균", "환산 80컷"];
+  const HEAD_J = ["학년도", "모집", "지원", "경쟁률", "최종등록", "충원최종예비", "등급 평균", "상위 누적%", "환산 평균", "환산 80컷"];
+  const pctCell = g => (g === null || g === undefined) ? "–" : cumPct(g).toFixed(1) + "%";
 
   function renderTable(id, rows, mode) {
     const table = document.getElementById(id);
@@ -500,8 +631,8 @@
     rows.forEach(r => {
       const t = document.createElement("tr");
       const cells = mode === G
-        ? [r[0] + "학년도", r[1], r[2], r[3], r[4], r[5], g2(r[6]), g2(r[7]), s2(r[8]), s2(r[9])]
-        : [r[0] + "학년도", r[1], r[2], r[3], r[4], r[5], g2(r[6]), s2(r[8]), s2(r[9])];
+        ? [r[0] + "학년도", r[1], r[2], r[3], r[4], r[5], g2(r[6]), pctCell(r[6]), g2(r[7]), s2(r[8]), s2(r[9])]
+        : [r[0] + "학년도", r[1], r[2], r[3], r[4], r[5], g2(r[6]), pctCell(r[6]), s2(r[8]), s2(r[9])];
       cells.forEach((c, i) => {
         const td = document.createElement("td");
         td.className = i === 0 ? "key" : "num";
