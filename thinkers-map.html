@@ -17,6 +17,7 @@
   --e-inherit:#4E7580; --e-critique:#A8382C; --e-oppose:#8C3F5E;
   --e-similar:#63805E; --e-compare:#8A8578;
   --node-label:#1B1A17; --node-halo:#EFEEE9;
+  --lim:#9A7405; --lim-soft:rgba(154,116,5,.13); --lim-line:rgba(154,116,5,.45);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
@@ -34,6 +35,7 @@
     --e-inherit:#8FBBC6; --e-critique:#E0745C; --e-oppose:#D28AAE;
     --e-similar:#9BBF95; --e-compare:#847F72;
     --node-label:#EDEAE1; --node-halo:#171612;
+    --lim:#E0B84E; --lim-soft:rgba(224,184,78,.15); --lim-line:rgba(224,184,78,.46);
   }
 }
 :root[data-theme="dark"]{
@@ -51,6 +53,7 @@
   --e-inherit:#8FBBC6; --e-critique:#E0745C; --e-oppose:#D28AAE;
   --e-similar:#9BBF95; --e-compare:#847F72;
   --node-label:#EDEAE1; --node-halo:#171612;
+  --lim:#E0B84E; --lim-soft:rgba(224,184,78,.15); --lim-line:rgba(224,184,78,.46);
 }
 
 *{box-sizing:border-box}
@@ -257,6 +260,26 @@ button.rel-item .why{font-size:.755rem; line-height:1.6; text-wrap:pretty}
   font-family:"IBM Plex Mono",monospace; font-size:.58rem; letter-spacing:.06em; white-space:nowrap;
   padding:.08rem .26rem; border:1px dashed var(--rule-2); border-radius:2px; color:var(--ink-3);
 }
+.lim-tag{
+  font-family:"IBM Plex Mono",monospace; font-size:.58rem; letter-spacing:.06em; white-space:nowrap;
+  padding:.08rem .26rem; border:1px dashed var(--lim-line); border-radius:2px;
+  color:var(--lim); background:var(--lim-soft);
+}
+ol.core li.lim{
+  background:var(--lim-soft); border-left:2px solid var(--lim-line);
+  margin-left:-.5rem; padding-left:1.9rem; padding-top:.16rem; padding-bottom:.2rem; padding-right:.35rem;
+}
+ol.core li.lim::before{left:.46rem; color:var(--lim)}
+ol.core li .lim-tag{margin-left:.35rem; vertical-align:.08em}
+button.rel-item.lim{border-left-style:dashed}
+button.tbtn.lim{border-color:var(--lim-line); background:var(--lim-soft)}
+button.tbtn.lim .ti{color:var(--lim)}
+.badge.lim{color:var(--lim); border-color:var(--lim-line); background:var(--lim-soft)}
+.chip.srcchip .swatch{background:var(--lim)}
+.limnote{
+  font-size:.76rem; line-height:1.62; color:var(--ink-3); margin:.7rem 0 0;
+  padding:.55rem .65rem; background:var(--lim-soft); border-left:2px solid var(--lim-line);
+}
 .tbtns{display:flex; flex-direction:column; gap:.3rem}
 button.tbtn{
   display:flex; align-items:center; gap:.5rem; width:100%; text-align:left; font:inherit; cursor:pointer;
@@ -362,6 +385,7 @@ tbody tr:hover th,tbody tr:hover td{background:var(--paper)}
 <div class="toolbar">
   <div class="fgroup" id="unit-filters"><span class="flabel">대단원</span></div>
   <div class="fgroup" id="rel-filters"><span class="flabel">관계</span></div>
+  <div class="fgroup" id="src-filters"><span class="flabel">출처</span></div>
   <button class="chip reset" id="reset" type="button">전체 초기화</button>
 </div>
 
@@ -416,7 +440,10 @@ const NODES = [
     '"삶도 모르는데 어찌 죽음을 알겠느냐" — 경험적으로 알 수 없는 사후세계에 소극적. 육체적 생명보다 문화적·도덕적 생명이 중요하다(조문도석사가의, 살신성인).',
     '덕치(德治)와 무위지치 — 무위지치는 도가만의 것이 아니다. "무위를 통해 다스리는 자는 순임금이 아닌가"(북극성 비유).',
     '화이부동(和而不同) — 군자는 도덕 원칙을 지키면서 주변과 조화를 이루고, 소인은 원칙을 버리고 남과 같아지는 데 급급하다.',
-    '예악(禮樂) — "시로써 일어나고, 예로써 자립하며, 악(樂)으로써 인격을 완성한다."'
+    '예악(禮樂) — "시로써 일어나고, 예로써 자립하며, 악(樂)으로써 인격을 완성한다."',
+    {lim:1,t:'충서(忠恕) — "나 자신을 대하듯 다른 사람을 대하라." 타인에 대한 존중과 배려를 강조한다.'},
+    {lim:1,t:'대동 사회(大同社會) — 인륜이 구현되고 모두가 더불어 잘 사는 도덕적 사회. 만민이 평등하게 대우받고 재화가 공평하게 분배되는 이상 사회다.'},
+    {lim:1,t:'효의 실천 — 불감훼상(부모에게 물려받은 신체를 훼손하지 않음, 효의 시작) → 입신양명(성공하여 이름을 떨침, 효의 완성). 양지(정신적 공경)와 봉양(물질적 봉양) 중에서는 양지가 봉양보다 앞선다.'}
   ]},
 { id:'mencius', name:'맹자', sub:'孟子', group:'ru', school:'유가', units:[1,2,3],
   tagline:'사단(四端)을 사덕으로 확충하는 성선설',
@@ -441,7 +468,8 @@ const NODES = [
   core:[
     '생업에 의한 물질적 풍요가 도덕적 생활의 기초라고 본다.',
     '능력을 기준으로 관직을 부여해야 한다.',
-    '『목민심서』 — 청렴은 목민관의 본래 직무이자 모든 선의 근원이며 모든 덕의 뿌리다.'
+    '『목민심서』 — 청렴은 목민관의 본래 직무이자 모든 선의 근원이며 모든 덕의 뿌리다.',
+    {lim:1,t:'국가의 역할 — 애민(愛民) 정신으로 분쟁이 일어났을 때 현명하게 해결해 주어야 한다.'}
   ]},
 /* ── 도가 ───────────────────────────────────────────── */
 { id:'laozi', name:'노자', sub:'老子', group:'dao', school:'도가', units:[1,4],
@@ -451,7 +479,8 @@ const NODES = [
     '유약(柔弱)·겸허·부쟁(不爭)의 강조 — 상선약수(上善若水). "세상의 가장 부드러운 것이 가장 강한 것을 이긴다."',
     '무위이무불위(無爲而無不爲) — 무위야말로 최상의 다스림이다. 소극적 태도를 강조하면서도 그것이 결국 상대를 이기는 길이라 본다.',
     '천지불인(天地不仁) — 하늘은 목적도 의지도 없는 무목적적 존재다. 성인은 불인(不仁)하다.',
-    '불상현(不尙賢) — 지식인의 주장이 혼란의 원인이므로 현인을 숭상하지 않는다. 불언지교(不言之敎).'
+    '불상현(不尙賢) — 지식인의 주장이 혼란의 원인이므로 현인을 숭상하지 않는다. 불언지교(不言之敎).',
+    {lim:1,t:'소국과민(小國寡民) — 영토가 작고 인구가 적으며 백성들의 삶이 소박하고 순수한 사회. 무위(無爲)의 다스림이 이루어지는 노자의 이상 사회다.'}
   ]},
 { id:'zhuangzi', name:'장자', sub:'莊子', group:'dao', school:'도가', units:[1,2,4,5,6],
   tagline:'좌망·심재 — 시비선악의 분별을 버려라',
@@ -490,7 +519,10 @@ const NODES = [
     '자타불이(自他不二)의 자각에서 만물에 대한 사랑(자비)이 생긴다.',
     '삼법인(제행무상·제법무아·일체개고)과 사성제(고·집·멸·도), 수행법은 삼학(계·정·혜)이다.',
     '모든 집착은 무명(無明)에서 비롯되어 고통의 원인이 된다(집제).',
-    '윤회는 모든 중생에 적용되며, 업이 남아 있는 한 육도를 계속 돈다. 불살생(不殺生)의 계율에 따라 자신의 생명도 해쳐서는 안 된다.'
+    '윤회는 모든 중생에 적용되며, 업이 남아 있는 한 육도를 계속 돈다. 불살생(不殺生)의 계율에 따라 자신의 생명도 해쳐서는 안 된다.',
+    {lim:1,t:'평등적 세계관 — 살아 있는 모든 존재는 불성(佛性)을 가지며 존엄하고 평등하다.'},
+    {lim:1,t:'주체적 인간관 — 인간의 삶에서 나타나는 모든 현상은 인간 스스로 행한 것에 상응하는 결과이며, 누구나 수행(계·정·혜)을 통해 주체적으로 진리에 대한 깨달음을 얻을 수 있다. 고통과 번뇌에서 벗어나면 열반(涅槃)의 경지에 도달한다.'},
+    {lim:1,t:'음식 윤리(발우공양) — 음식을 먹는 것은 단순히 건강이나 보신만을 위한 것이 아니라 수행의 연장이다.'}
   ]},
 { id:'wonhyo', name:'원효', sub:'元曉', group:'bud', school:'불교(화쟁)', units:[6],
   tagline:'화쟁(和諍) — 더 높은 차원에서 하나로 종합한다',
@@ -521,14 +553,17 @@ const NODES = [
     '덕은 (성품의) 상태이고 행복은 활동이다 — 덕을 소유만 하고 활동하지 않으면 목적을 달성할 수 없다.',
     '목적론적 자연관 — 모든 자연 존재는 목적을 가지며 그 목적은 완전성이다.',
     '정의 = 전체적 정의(법 준수) + 부분적 정의(분배적 정의는 기하학적 비례 = 덕에 따른 분배 / 시정적 정의는 산술적 비례).',
-    '인간은 정치적 동물 — 대화와 토론은 구성원 간 자격이 대등할 때만 가능하다. 자아실현적 직업관의 대표.'
+    '인간은 정치적 동물 — 대화와 토론은 구성원 간 자격이 대등할 때만 가능하다. 자아실현적 직업관의 대표.',
+    {lim:1,t:'자연의 위계 — 모든 생명체는 고유한 목적(고유한 선)을 가진다. 인간은 행복을 위해(영양+감각+이성), 동물은 인간을 위해(영양+감각), 식물은 동물과 인간을 위해(영양) 존재한다 — 동물과 식물은 도구적 목적을 갖는다.'},
+    {lim:1,t:'일반적 정의는 준법으로서의 정의이며 덕 있는 시민의 선결 조건이다. 국가 권위는 인간의 정치적 본성에 따라 자연스럽게 형성된 것이다.'}
   ]},
 { id:'epicurus', name:'에피쿠로스', sub:'Epikouros', group:'anc', school:'원자론·쾌락주의', units:[2],
   tagline:'죽음은 아무것도 아니다 — 원자의 해체일 뿐',
   core:[
     '모든 존재는 원자로 구성되며 영혼도 예외가 아니므로 죽음은 원자의 해체일 뿐 사후세계는 없다.',
     '죽음 후에는 감각 능력이 사라지므로 고통을 느낄 수도 없다 — 따라서 죽음은 두려워할 대상이 아니다.',
-    '원자는 흩어질 뿐 완전히 사라지지 않는다. 선의 본질이 사후에 드러난다거나 현세의 삶이 사후에 영향을 준다는 관념은 부정한다.'
+    '원자는 흩어질 뿐 완전히 사라지지 않는다. 선의 본질이 사후에 드러난다거나 현세의 삶이 사후에 영향을 준다는 관념은 부정한다.',
+    {lim:1,t:'쾌락의 역설 — 절제 없는 쾌락은 고통을 유발할 뿐이다.'}
   ]},
 { id:'stoics', name:'스토아학파', sub:'Stoicism', group:'anc', school:'자연법·세계시민주의', units:[1,6],
   tagline:'우주의 로고스가 곧 자연법이다',
@@ -543,7 +578,9 @@ const NODES = [
     '아리스토텔레스의 영혼론과 스토아의 자연법 사상을 결합해 자연법을 정밀하게 체계화했다.',
     '자연법의 제1원리는 "선을 추구하고 악을 피하라"이다(홉스의 "평화를 추구하라"는 제1 자연법과 구별).',
     '자살 반대 3논거 — ① 자기보존의 자연적 성향을 거스름, ② 공동체의 부분인 자신을 훼손함, ③ 생명을 주관하는 신의 권능을 침해함.',
-    '자연의 위계 — 식물은 동물을 위해, 동물은 인간을 위해 존재한다(인간중심주의). 신 중심의 직업소명 관념이 루터·칼뱅으로 이어진다.'
+    '자연의 위계 — 식물은 동물을 위해, 동물은 인간을 위해 존재한다(인간중심주의). 신 중심의 직업소명 관념이 루터·칼뱅으로 이어진다.',
+    {lim:1,t:'자연법 — 모든 인간에게 자연적으로 주어져 있는 보편적인 법이며 불문성·영구불변성·보편타당성·인식가능성을 지닌다. 인간에게는 자기 보존, 번식, 이성, 사회성, 진리 인식의 본성이 있다.'},
+    {lim:1,t:'동물 — 동물은 도덕적으로 고려받을 권리를 갖고 있지 않으며 신의 섭리에 따라 인간의 이용을 위하여 운명지어졌다. 다만 인간이 동물에게 가지는 동정심이 동료 인간들에게 동정심을 가지게 하는 데 기여할 수 있다.'}
   ]},
 /* ── 근대 ───────────────────────────────────────────── */
 { id:'descartes', name:'데카르트', sub:'René Descartes', group:'mod', school:'기계론', units:[2,4],
@@ -551,7 +588,8 @@ const NODES = [
   core:[
     '이분법적 세계관 — 인간(정신)과 자연(물질)을 나누고, 자연은 의식 없는 단순한 물질이자 기계라고 본다.',
     '동물은 자동인형(기계)이므로 고통을 느끼지 못한다고 보아 동물실험을 정당화한다.',
-    '"자연의 주인이자 소유자" — 인간중심주의적 자연관의 근대적 정식화.'
+    '"자연의 주인이자 소유자" — 인간중심주의적 자연관의 근대적 정식화.',
+    {lim:1,t:'도덕적 지위의 판단 기준은 의식이다 — 사유하고 의식이 있는 인간만이 유일하게 도덕적 지위를 가진다. 자율적인 인간과 달리 자연은 자유 의지가 없으며 타율적이다.'}
   ]},
 { id:'bacon', name:'베이컨', sub:'Francis Bacon', group:'mod', school:'경험론', units:[2,4],
   tagline:'아는 것이 힘이다 — 자연은 정복의 대상',
@@ -600,7 +638,8 @@ const NODES = [
     '자연 상태는 평화로우나 특수의지 때문에 전쟁 상태가 된다. 자연권은 일반의지에 전부 양도된다.',
     '주권은 국민에게 있으며 공화제·직접민주제를 지향한다. 주권이 침탈되면 저항할 수 있다.',
     '사유재산은 자연 상태 말기에 발생하며, 묵시적 동의와 법의 지배를 인정한다.',
-    '사형 찬성 — 계약 시 생명을 양도했으므로 계약 위반자는 "내부의 배신자"이자 "국가의 적"이다. 근거는 응보가 아니라 사회계약이다.'
+    '사형 찬성 — 계약 시 생명을 양도했으므로 계약 위반자는 "내부의 배신자"이자 "국가의 적"이다. 근거는 응보가 아니라 사회계약이다.',
+    {lim:1,t:'주권은 양도될 수도, 대표될 수도, 분할될 수도 없다 — 일반 의지는 주권의 행사다.'}
   ]},
 { id:'hume', name:'흄', sub:'David Hume', group:'mod', school:'도덕감정론', units:[1],
   tagline:'유용성 있는 행위가 호의적 감정을 낳는다',
@@ -612,7 +651,8 @@ const NODES = [
     '공산주의 사회는 생산수단의 사회적 소유로 착취가 사라진 사회이며, "능력에 따라 일하고 필요에 따라 분배한다"가 원칙이다.',
     '모든 분업을 반대한 것이 아니다 — 반대한 것은 공장 내 분업과 도시·농촌 분리이며 산업 간 사회적 분업은 공산주의에서도 필요하다.',
     '현대 기술 자체는 긍정한다 — 문제는 자본가의 전유이지 기술이 아니다.',
-    '종교는 인간 소외의 결과물이자 "인민의 아편" — 지배계급에는 체제유지 기능을, 피지배계급에는 고통의 표현이자 저항의 기능을 한다.'
+    '종교는 인간 소외의 결과물이자 "인민의 아편" — 지배계급에는 체제유지 기능을, 피지배계급에는 고통의 표현이자 저항의 기능을 한다.',
+    {lim:1,t:'국가 권위의 정당성 — 공공재와 혜택의 관점. 국가로부터 받는 이익과 혜택을 근거로 국가의 권위에 복종해야 하며, 그 이익과 혜택이 사라진다면 정치적 의무를 다할 필요가 없다.'}
   ]},
 { id:'weber', name:'베버', sub:'Max Weber', group:'mod', school:'사회학', units:[3,4],
   tagline:'프로테스탄트 윤리에서 자본주의 정신으로',
@@ -629,7 +669,8 @@ const NODES = [
   core:[
     '사회계약 시 생명은 양도되지 않았다 — "자신의 생명을 빼앗을 권능을 타인에게 기꺼이 양도할 자가 세상에 있겠는가."',
     '형벌은 강도보다 지속성이 중요하므로 사형이 아니라 종신노역형이 효과적이다(사회계약설 + 공리주의).',
-    '죄형법정주의를 인정한다. 베카리아의 "일반의사"는 루소의 일반의지가 아니라 전체의지에 해당한다.'
+    '죄형법정주의를 인정한다. 베카리아의 "일반의사"는 루소의 일반의지가 아니라 전체의지에 해당한다.',
+    {lim:1,t:'사형제 폐지의 다섯 논거 — ① 공리적: 사형은 범죄 예방 효과가 미흡하고 종신 노역형이 더 이상적인 효과가 있다 ② 계약론적: 생명권은 양도가 불가능하며 침해할 수 없는 권리다 ③ 인간 존엄성: 사형은 인간의 존엄성을 훼손하는 형벌이다 ④ 인도주의적: 사형제는 비인도주의적인 사법 살인이다 ⑤ 죄형 법정주의: 처벌은 반드시 실정법에 근거하여 시행되어야 한다.'}
   ]},
 /* ── 근대 규범윤리 ──────────────────────────────────── */
 { id:'kant', name:'칸트', sub:'Immanuel Kant', group:'norm', school:'의무론', units:[1,2,3,4,5,6],
@@ -642,7 +683,13 @@ const NODES = [
     '자살은 원칙적으로 반대(정언명령 위반 + 자기보존 의무 위반)하되 도덕적 완성을 위한 자살은 인정한다.',
     '동물에 대한 의무는 직접적 의무가 아니라 인간성에 대한 간접적 의무다.',
     '형벌은 그 자체로 정당화된다 — "형벌 법칙은 정언명령"이며 살인에는 사형이라는 동종성의 원리가 적용된다.',
-    '영구평화론 — 공화적 체제, 평화연맹(세계국가가 아니다), 세계시민법(방문권=환대권, 체류권은 아니다).'
+    '영구평화론 — 공화적 체제, 평화연맹(세계국가가 아니다), 세계시민법(방문권=환대권, 체류권은 아니다).',
+    {lim:1,t:'윤리적 의사 결정 3단계 — ① 해당 준칙을 보편 진술로 바꾼다 ② 그 진술을 정언 명령과 비교하여 검토한다 ③ 정언 명령에 부합하면 도덕 법칙으로 받아들이고 부합하지 못하면 거부한다.'},
+    {lim:1,t:'자살 — 고통에서 벗어나기 위해 자신의 생명과 인격을 수단으로 삼는 행위이며, 자율적 인간으로서의 의무와 자기애(self-love)에 위배된다. 자연법적 관점과 정언 명령적 관점 모두에 부합할 수 없다.'},
+    {lim:1,t:'사형 — 동해(同害) 보복적 응보주의. 사형과 인격 존중 원리는 양립 가능하며 사형은 살인자의 고통받는 인격을 해방한다. 범죄 예방 효과를 논하는 공리주의적 정당화는 인간을 수단시하는 것이다.'},
+    {lim:1,t:'영구 평화론 확정 조항 — ① 개별 주권 국가의 정치 체제는 공화 정체 ② 보편적 우호에 기초한 세계 시민법(국제법)의 제정 ③ 국제법의 강화 ④ 국제 연맹 창설. 단일한 세계 정부의 수립을 주장한 것은 아니다.'},
+    {lim:1,t:'영구 평화론 예비 조항 — 전쟁의 화근을 유보한 채 맺은 평화 조약 반대, 상비군의 조만간 완전 폐지, 대외적 분쟁과 관련한 국채 발행 금지, 타국에 대한 폭력적 간섭 금지, 독립 국가가 상속·교환·매매·증여로 다른 국가의 소유가 될 수 없음, 장래의 상호 신뢰를 불가능하게 만드는 적대 행위(암살자 고용, 항복 조약 파기, 반역 선동) 금지.'},
+    {lim:1,t:'미학 — 미(美)와 선(善)은 유사하므로 미는 선의 상징이다. 미는 도덕성의 실현에 기여하지만, 미와 예술이 도덕적 판단에 종속된 것은 아니다.'}
   ]},
 { id:'bentham', name:'벤담', sub:'Jeremy Bentham', group:'norm', school:'양적 공리주의', units:[1,2,3,4],
   tagline:'최대 다수의 최대 행복 — 쾌락은 양으로 계산된다',
@@ -652,7 +699,9 @@ const NODES = [
     '"고통의 부재 = 쾌락"이므로 고통의 최소화도 벤담에 부합한다. 개개인의 쾌락의 합이 곧 사회 전체의 쾌락이다.',
     '이익 평등 고려 — "한 사람은 오직 한 사람으로만 계산한다." 타인의 이익에 가중치를 두는 것은 이 원칙에 반한다.',
     '"고려해야 하는 것은 이성이 아니라 고통을 느낄 수 있는가이다" — 동물중심주의의 근거가 된다.',
-    '형벌의 목적은 범죄 예방이며, 예방 효과가 없으면 형벌은 불필요하다. 입법 원리와 도덕 원리 모두 유용성 원리로 삼는다.'
+    '형벌의 목적은 범죄 예방이며, 예방 효과가 없으면 형벌은 불필요하다. 입법 원리와 도덕 원리 모두 유용성 원리로 삼는다.',
+    {lim:1,t:'형벌은 고통을 야기하지만 더 큰 고통을 예방하기 위한 "필요악"이며, 형벌의 고통은 범죄로부터 얻는 이익의 크기보다 커야 한다.'},
+    {lim:1,t:'고전적 공리주의인 행위 공리주의(유용성의 원리를 개별 행위에 직접 적용)는 개별 행위의 결과를 정확하게 예측할 수 없어 보편화되기 어렵고, 행위마다 유용성을 판단해야 하므로 비효율적이라는 한계가 있다 — 이에 규칙과 행위의 일치 여부로 선악을 판단하는 현대의 규칙 공리주의가 등장한다.'}
   ]},
 { id:'mill', name:'밀', sub:'John Stuart Mill', group:'norm', school:'질적 공리주의', units:[1,2,5,6],
   tagline:'쾌락에는 질적 차이가 있다',
@@ -660,7 +709,8 @@ const NODES = [
     '질적 공리주의 — 쾌락의 질적 차이를 인정한다. 다만 최대 다수의 최대 행복이라는 기준과 결과주의는 벤담과 공유한다.',
     '인간은 누구나 오류 가능성이 있는 존재이며, 이를 검증하기 위해 토론이 필요하다.',
     '"오늘날 여성의 본성이라고 알려져 있는 것들은 확실히 인위적으로 만들어 낸 것이다" — 여성에게 같은 기회를 주는 것이 유용성 원리에도 부합한다.',
-    '표현의 자유와 대중문화의 자율성을 옹호하는 자유주의자이자 공리주의자다.'
+    '표현의 자유와 대중문화의 자율성을 옹호하는 자유주의자이자 공리주의자다.',
+    {lim:1,t:'해악의 원리 — 국가는 시민이 타인에게 해악을 끼칠 경우를 제외하고는 기본적 자유를 보장해야 한다. 타인에게 해악을 끼치는 경우 그의 자유는 제한될 수 있다.'}
   ]},
 { id:'macintyre', name:'매킨타이어', sub:'Alasdair MacIntyre', group:'norm', school:'공동체주의 덕윤리', units:[1,3,4],
   tagline:'덕은 관행에 내재하는 선을 이루는 데 필요한 성품이다',
@@ -679,14 +729,18 @@ const NODES = [
     '집단 간 관계에서 정의는 집단 간 힘의 균형으로 정의된다. 이성으로 집단이기주의를 해결할 수는 없다.',
     '강제력의 이중성 — 지배집단이 가지면 불의의 원인이지만 피지배집단이 행사하면(시민불복종·파업) 정의 실현의 수단이 된다.',
     '해결책은 설득·조정 + 강제력 + 선의지의 병용이며 윤리적 동기주의와 결과주의를 함께 취한다.',
-    '제도 개선을 통한 정의 실현은 국내 정치에서만 가능하고 국제정치는 항구적 무정부 상태다 — 이중 도덕 기준(현실주의).'
+    '제도 개선을 통한 정의 실현은 국내 정치에서만 가능하고 국제정치는 항구적 무정부 상태다 — 이중 도덕 기준(현실주의).',
+    {lim:1,t:'개인 간 관계는 합리성과 도덕성의 문제이지만 집단 간 관계는 힘의 비율의 문제이므로 정치적 문제다 — 집단의 사회 부정의 문제는 집단 간 힘의 불균형에 의해서 발생한다.'},
+    {lim:1,t:'강제력은 선의지의 통제를 받아야 하며 합리적·도덕적 요소에 부합해야 한다. 이기심·폭력 같은 비합리적 수단은 사회 위험 요소이자 폭력의 악순환으로 이어져 안정적 정의가 아닌 일시적 방법에 그친다.'}
   ]},
 { id:'morgenthau', name:'모겐소', sub:'Hans Morgenthau', group:'just', school:'고전적 현실주의', units:[6],
   tagline:'국제정치는 힘과 이익이 결정한다',
   core:[
     '고전적 현실주의 — 국제관계의 결정적 요소는 힘과 이익이지만 도덕규범도 작용하며 필요하다.',
     '정치인에게는 이타심 발휘와 자국 이익 추구 사이의 균형 의식이 필요하다.',
-    '지도자의 도덕성을 중시하되 힘·이익에 비해 부차적으로 본다.'
+    '지도자의 도덕성을 중시하되 힘·이익에 비해 부차적으로 본다.',
+    {lim:1,t:'현실주의 — 인간은 이기적 존재이며 국가는 자국의 이익만을 추구한다. 국제 관계는 국가를 통제할 상위 권위체가 없는 무정부 상태이므로 분쟁 해결을 위해서는 세력 균형을 이루어야 한다.'},
+    {lim:1,t:'한계 — 국제기구와 비정부 기구 등 다양한 행위 주체와 이들이 미치는 영향력을 간과하여 국제 관계의 협력을 잘 설명하지 못한다.'}
   ]},
 { id:'rawls', name:'롤스', sub:'John Rawls', group:'just', school:'공정으로서의 정의', units:[2,3,5,6],
   tagline:'무지의 베일 아래에서 합의되는 것이 정의의 원칙이다',
@@ -697,7 +751,9 @@ const NODES = [
     '시민불복종 — 거의 정의로운 사회에서 공유된 정의관에 근거해 다수자의 정의감에 호소하는, 공개적·비폭력적·양심적인 위법 행위. 요건은 명확성·최후수단성·일반성·실현가능성이다.',
     '관용의 역설 — 불관용 집단이 권력을 쟁취하려 하지 않는다면 관용해야 하고, 권력 장악을 지향하면 관용할 필요가 없다.',
     '해외원조 — 질서 정연한 사회가 고통받는 사회를 원조할 의무. 목적은 질서 정연한 사회의 달성이며 그 지점이 차단점(cut-off point)이다. 권고·충고만 허용되고 강제력은 불허된다.',
-    '차등 원칙을 국제 관계에 적용하지 않는다 — 세계시민주의가 아니라 국제주의(만민법).'
+    '차등 원칙을 국제 관계에 적용하지 않는다 — 세계시민주의가 아니라 국제주의(만민법).',
+    {lim:1,t:'제1원칙(평등한 자유의 원칙)에는 예외가 있다 — 소유물의 상속 및 증여의 자유.'},
+    {lim:1,t:'원초적 입장에서 합리적인 개인들은 자신이 가장 불리한 상황, 즉 최소 수혜자가 될 것을 우려하여 모든 사람에게 공정한 정의 원리에 합의하게 된다.'}
   ]},
 { id:'nozick', name:'노직', sub:'Robert Nozick', group:'just', school:'소유권리론', units:[1,3,6],
   tagline:'정의는 취득·양도·교정의 역사적 과정에 달렸다',
@@ -714,7 +770,8 @@ const NODES = [
   core:[
     '복합적(다원적) 평등 — 사회적 가치는 특수하고 다원적이므로 영역마다 고유한 분배 원칙이 있어야 한다. 핵심은 분배영역의 자율성이다.',
     '독점(한 영역의 지배적 가치를 소수가 소유)은 허용되지만, 지배(가진 가치의 전환으로 다른 가치를 장악)와 전제(지배적 가치로 다른 영역의 분배 기준을 침해)는 부당하다.',
-    '롤스의 단순평등 이론은 전제(專制)를 초래한다고 본다.'
+    '롤스의 단순평등 이론은 전제(專制)를 초래한다고 본다.',
+    {lim:1,t:'모든 사회에서 동일하게 중요하다고 인정되는 가치는 없으므로, 가치를 분배할 때는 공동체의 문화적 특수성과 차이를 고려해야 한다. 분배와 관련된 모든 가치는 사회적 가치다.'}
   ]},
 { id:'dworkin', name:'드워킨', sub:'Ronald Dworkin', group:'just', school:'법철학', units:[3],
   tagline:'헌법 정신에 반하는 법률에는 불복종할 수 있다',
@@ -727,7 +784,9 @@ const NODES = [
     '보편화 원칙(U) — 규범의 일반적 준수가 모든 개인의 이해관계에 미치는 결과와 부작용까지 비강제적으로 수용될 수 있어야 한다.',
     '이상적 담화 상황 — 언어·행위 능력을 갖춘 모든 사람이 평등하게 참여(개방성). 타당성 요구 4가지는 이해가능성·진리성·규범적 정당성·진실성이다.',
     '도구적 행위(성공 지향적·이해타산적)와 의사소통 행위(이해 지향적)를 구분하고, 체계가 생활세계에 침투하는 것을 생활세계의 식민화라 부른다.',
-    '유전자 조작 — 치료 목적은 배아의 동의가 예견되므로 허용되지만, 강화 목적은 부모의 프로그래밍대로 태어나게 하여 인간을 수단화한다.'
+    '유전자 조작 — 치료 목적은 배아의 동의가 예견되므로 허용되지만, 강화 목적은 부모의 프로그래밍대로 태어나게 하여 인간을 수단화한다.',
+    {lim:1,t:'이상적 담화의 조건 — 진리성 / 정당성 / 진실성 / 이해 가능성 / 호혜성 / 사실성.'},
+    {lim:1,t:'공론장은 사적 의견을 공적으로 협의하는 장으로 민주주의 발전에 중요한 의미를 가진다. 언어와 행위 능력을 갖춘 모든 주체는 담론에 참여할 수 있으며, 어느 누구도 상대방의 질문에서 벗어나는 특권을 누릴 수 없다.'}
   ]},
 { id:'apel', name:'아펠', sub:'Karl-Otto Apel', group:'just', school:'담론윤리', units:[6],
   tagline:'인간의 상호 인정이 소통의 기본 전제다',
@@ -741,7 +800,8 @@ const NODES = [
     '종차별주의 반대(동물해방론). 다만 지적으로 우월한 개체의 삶의 가치가 더 크다고 본다.',
     '시민불복종 — 거의 정의로운 사회라는 체제 조건도, 공유된 정의관도 요구하지 않고 이익·손해의 저울질로 판단한다.',
     '해외원조 — 세계시민주의 관점에서 타국의 절대 빈곤한 개인에 대한 원조 의무. 거리와 공동체 소속은 책무에 차이를 만들지 않는다.',
-    '원조 의무는 예외를 인정하는 조건부 의무이지 정언명령이 아니다 — 결과주의자이므로 원조의 효율성을 고려한다.'
+    '원조 의무는 예외를 인정하는 조건부 의무이지 정언명령이 아니다 — 결과주의자이므로 원조의 효율성을 고려한다.',
+    {lim:1,t:'해외 원조의 주체는 개인 중심이되 개인·국가·국제기구 모두가 적극적으로 원조에 임해야 한다고 보며, 원조의 목적은 인류의 고통을 감소시키고 쾌락을 증진하는 것이다.'}
   ]},
 { id:'regan', name:'레건', sub:'Tom Regan', group:'envi', school:'동물권리론', units:[2,4],
   tagline:'삶의 주체는 수단이 아니라 목적으로 대우해야 한다',
@@ -774,7 +834,8 @@ const NODES = [
     '"어떤 것이 생명공동체의 온전성, 안정성, 아름다움의 보전에 이바지한다면 그것은 옳고, 그렇지 않다면 그르다."',
     '인간은 자연(대지)에서 독립된 존재가 아니라 그 일부다(상호의존성). 대지를 살아 있는 존재로 다루어야 한다.',
     '생태계 자체에 도덕적 지위를 인정하는 전체론(holism) — 동물 "종"에 대한 직접적 의무를 인정한다.',
-    '생태계의 가치는 미적 가치(본래적)와 경제적 가치(도구적)를 함께 지닌다 — 생태계 균형 유지를 조건으로 사냥·목재 사용·휴양을 인정한다.'
+    '생태계의 가치는 미적 가치(본래적)와 경제적 가치(도구적)를 함께 지닌다 — 생태계 균형 유지를 조건으로 사냥·목재 사용·휴양을 인정한다.',
+    {lim:1,t:'인간은 정복자가 아닌 생명 공동체의 단순한 구성원 중 하나이며, 공동체의 범위를 식물·동물·무생물·토양·물 등 대지로 확장한다. 생태계의 안정성과 온전함을 개별 생명체보다 중시한다.'}
   ]},
 { id:'naess', name:'네스', sub:'Arne Naess', group:'envi', school:'심층생태학', units:[4],
   tagline:'큰 자아 실현과 생명중심적 평등',
@@ -782,7 +843,8 @@ const NODES = [
     '피상적 생태주의(인간중심적 자연보호론)를 비판하고 심층생태학을 제시한다.',
     '"큰 자아" 실현 — 자연의 모든 존재는 상호의존적이므로 나를 자연 전체로 확장해 이해해야 한다(게슈탈트적 관점).',
     '생명중심적 평등 — 모든 존재는 평등한 내재적 가치를 지니며, 여기서 "생명"에는 강·풍경·생태계도 포함된다.',
-    '환경위기 극복에는 세계관과 생활양식(문화)의 전환이 필요하다.'
+    '환경위기 극복에는 세계관과 생활양식(문화)의 전환이 필요하다.',
+    {lim:1,t:'심층 생태주의는 대지 윤리보다 더 강한 실천을 강조한다(세계관의 변혁). 모든 유기체는 생명의 연결망, 곧 "전체 장"으로 연결되어 있으며, 모든 자연적 존재가 상호 평등한 관계 속에서 살아갈 때 "큰 자아실현"이 가능하다.'}
   ]},
 { id:'jonas', name:'요나스', sub:'Hans Jonas', group:'envi', school:'책임 윤리', units:[1,4],
   tagline:'윤리적 공백 — 힘이 커진 만큼 책임도 커져야 한다',
@@ -791,7 +853,9 @@ const NODES = [
     '새로운 정언명법 — "너의 행위의 결과가 지구상에서의 진정한 인간 삶의 지속과 조화될 수 있도록 행위하라." 책임의 범위를 미래세대와 자연으로 확장한다.',
     '공포의 발견술 — 나쁜 예측에 우선권을 두어 미리 두려워함으로써 재앙을 예방한다. 기술 낙관주의를 비판한다.',
     '아리스토텔레스적 목적론을 되살려 자연에 목적을 인정하고, 존재(있음)로부터 당위(있어야 함)를 도출한다.',
-    '책임은 상호적·계약적인 것이 아니라 일방적·비상호적이다(부모가 자식에 대해 지는 책임의 모델).'
+    '책임은 상호적·계약적인 것이 아니라 일방적·비상호적이다(부모가 자식에 대해 지는 책임의 모델).',
+    {lim:1,t:'예견적 책임 — 과학 기술이 미래에 끼칠 영향까지 예측하여 책임을 져야 한다. 책임질 수 있는 능력은 오직 인간만이 지니며, 책임질 능력이 책임을 이행해야 한다는 당위로 연결된다.'},
+    {lim:1,t:'생태학적 정언 명령 — "너의 행위의 결과가 미래의 지구상에서 인간이 살아갈 수 있는 가능성을 파괴하지 않도록 행위하라."'}
   ]},
 { id:'norton', name:'노턴', sub:'Bryan Norton', group:'envi', school:'온건한 인간중심주의', units:[4],
   tagline:'영리한 인간중심주의 — 세대 간 정의로 환경을 지킨다',
@@ -813,7 +877,8 @@ const NODES = [
     '죽음의 자각은 삶의 종말이 아니라 삶이 시작되는 사건이며, 불안은 극복의 계기로 긍정된다.',
     '기술의 본질은 탈은폐(은폐된 것을 드러냄)다 — 기술이 수단이라는 도구적·인간학적 규정은 옳으나 본질은 아니다. 기술의 가치중립성을 부정한다.',
     '현대 기술은 자연을 에너지 저장소로 삼아 억지로 짜내며(수력 발전소), 인간은 부품 저장소로 전락해 존재를 망각한다.',
-    '기술에 대한 무관심·중립 태도는 무방비 상태라 가장 위험하다.'
+    '기술에 대한 무관심·중립 태도는 무방비 상태라 가장 위험하다.',
+    {lim:1,t:'주거 — 현대인은 안정된 고향으로서의 주거 공간을 상실했다.'}
   ]},
 { id:'jaspers', name:'야스퍼스', sub:'Karl Jaspers', group:'envi', school:'기술철학', units:[4],
   tagline:'기술은 가치중립적 수단이며 인간이 그 지도자여야 한다',
@@ -881,7 +946,8 @@ const NODES = [
     '성과 속은 대립적이지만 분리·단절된 것은 아니다 — 성은 반드시 속을 통해 드러난다.',
     '숭배 대상은 자연물 자체가 아니라 그 속에 드러났다고 믿는 성(聖)이다. "성스러운 돌은 돌로서 숭배되는 것이 아니다."',
     '성현은 보편성을 갖지 못한다 — 믿는 사람에게만 성현이며, 인공물(불상·성모상)도 성현이 될 수 있다.',
-    '비종교적 인간에게도 성현의 흔적이 남아 무의식적으로 종교적 행위를 한다(낙성식 고사, 집들이, 돌잔치).'
+    '비종교적 인간에게도 성현의 흔적이 남아 무의식적으로 종교적 행위를 한다(낙성식 고사, 집들이, 돌잔치).',
+    {lim:1,t:'인간의 본질은 종교적 인간이며, 비종교인도 특정 상황에서는 초월적 존재를 믿는다. 바람직한 종교인은 자신의 종교에 대한 비판도 겸허히 수용할 수 있어야 한다.'}
   ]},
 { id:'durkheim', name:'뒤르켐', sub:'Émile Durkheim', group:'cult', school:'종교사회학', units:[5],
   tagline:'종교는 사회 그 자체다',
@@ -921,14 +987,16 @@ const NODES = [
   core:[
     '삶에서 중요한 것은 남을 보살피고 배려하는 공동체적 관계다 — 옳고 그름을 따지는 것보다 역지사지의 태도가 중요하다.',
     '남성중심적 도덕(정의윤리)이 사회적 관계·배려·공감·동정심을 간과했다고 비판한다.',
-    '배려윤리는 정의윤리를 대체하는 것이 아니라 그것이 간과할 수 있는 도덕적 덕목을 보완하는 상호보완적 관계에 있다.'
+    '배려윤리는 정의윤리를 대체하는 것이 아니라 그것이 간과할 수 있는 도덕적 덕목을 보완하는 상호보완적 관계에 있다.',
+    {lim:1,t:'남성과 여성의 도덕 영역을 규정하는 방식이 다를 뿐, 여성의 도덕성과 남성의 도덕성 중 어느 것이 더 우월하다고 볼 수 없다.'}
   ]},
 { id:'noddings', name:'나딩스', sub:'Nel Noddings', group:'care', school:'배려윤리', units:[2],
   tagline:'배려는 배려자와 피배려자의 상호작용에서 이루어진다',
   core:[
     '구체적 맥락에 근거한 의사결정을 중시한다 — 보편적 도덕 원리의 적용이 아니다.',
     '배려는 배려자와 피배려자의 상호작용 속에서 이루어진다.',
-    '소외된 여성 등 소수자의 권리와 존엄성을 강조한다.'
+    '소외된 여성 등 소수자의 권리와 존엄성을 강조한다.',
+    {lim:1,t:'자연적 배려(어머니가 자식을 돌보듯 자연스럽게 우러나는 배려)가 윤리적 배려의 원천이 된다.'}
   ]},
 { id:'beauvoir', name:'보부아르', sub:'Simone de Beauvoir', group:'care', school:'여성주의', units:[2],
   tagline:'여성성은 사회적으로 만들어진 산물이다',
@@ -938,7 +1006,9 @@ const NODES = [
   core:[
     '폭력을 직접적 폭력(의도된 개인·집단의 행동), 구조적 폭력(제도화된 비의도적 폭력), 문화적 폭력(종교·이데올로기·언어·예술에 의한 폭력)으로 나눈다.',
     '소극적 평화는 직접적 폭력이 없는 상태이고, 적극적 평화는 구조적·문화적 폭력까지 제거된 상태다.',
-    '문화적 폭력은 직접적·구조적 폭력을 정당화하는 기능을 한다.'
+    '문화적 폭력은 직접적·구조적 폭력을 정당화하는 기능을 한다.',
+    {lim:1,t:'오늘날의 여성은 남성과 달리 타자로 만들어지고 객체로 살아가도록 강요받고 있다 — 여성 역시 남성과 마찬가지로 주체적으로 살아가야 함을 강조한다.'},
+    {lim:1,t:'평화의 개념을 국가 안보의 차원에서 인간 안보의 차원으로 확장하며, 평화는 반드시 평화적 수단에 의해서만 이루어져야 함을 강조한다.'}
   ]},
 { id:'thoreau', name:'소로', sub:'Henry David Thoreau', group:'care', school:'시민불복종', units:[3,6],
   tagline:'법보다 정의에 대한 존경심이 앞선다',
@@ -964,6 +1034,28 @@ const NODES = [
   core:[
     '베이츠의 지구적 평등 원칙에 동조한다 — 차등 원칙을 국제사회에 적용해야 한다.',
     '원조의 주체는 국가(정부)와 개인이며, 대상은 최소수혜자·최소수혜국가다.'
+  ]}
+,
+/* ── 보충(LIM IT) ─────────────────────────────────── */
+{ id:'cohen', name:'코헨', sub:'Carl Cohen', group:'envi', school:'동물실험 옹호', units:[2,4], lim:1,
+  tagline:'권리는 도덕 규범을 고안할 수 있는 존재에게만 있다',
+  core:[
+    {lim:1,t:'동물은 윤리 규범의 고안 능력이나 자율성 등이 없으므로 도덕적 권리가 없다.'},
+    {lim:1,t:'의학 발전과 인간의 수많은 업적은 동물 실험을 통해 얻을 수 있었다 — 동물 실험 찬성의 근거다.'},
+    {lim:1,t:'다만 동물도 쾌고 감수 능력을 지니므로 학대해서는 안 된다 — 권리를 부정하는 것과 학대를 허용하는 것은 다르다.'}
+  ]},
+{ id:'wilde', name:'와일드', sub:'Oscar Wilde', group:'cult', school:'심미주의(예술지상주의)', units:[5], lim:1,
+  tagline:'예술은 도덕적일 필요가 없다 — 예술을 위한 예술',
+  core:[
+    {lim:1,t:'예술이 도덕적일 필요는 없다 — 예술을 위한 예술을 추구한다.'},
+    {lim:1,t:'오직 내재적 가치(미적 가치)만을 강조하며, 예술의 자율성을 내세우는 순수 예술론의 대표 사상가다.'},
+    {lim:1,t:'도덕주의(플라톤·톨스토이)가 예술은 도덕적 교훈과 본보기를 제공해야 한다며 내재적 가치와 외재적 가치를 모두 강조하고 예술의 사회성을 내세우는 것과 정면으로 갈라진다.'}
+  ]},
+{ id:'bollnow', name:'볼노브', sub:'Otto F. Bollnow', group:'cult', school:'주거 윤리', units:[5], lim:1,
+  tagline:'집은 삶의 중심이며 그것을 세우는 것은 사람의 책임이다',
+  core:[
+    {lim:1,t:'자신의 공간을 자기 삶의 중심으로 형성해야 한다는 공간 책임론을 제시했다.'},
+    {lim:1,t:'주거 문화는 휴식 및 정서적 안정을 제공하고 유대감과 소속감을 형성하는 기능을 하며, 주거 불평등·이웃과의 소통 단절 등의 문제는 주거의 본질적 가치 회복으로 풀어야 한다.'}
   ]}
 ];
 const LINK_TYPES = [
@@ -1135,7 +1227,21 @@ const LINKS = [
 { s:'pogge',     t:'rawls',    type:'비판', label:'원조의 목적은 질서 정연한 사회의 달성이 아니라 최소수혜자의 복지 향상과 국가 간 불평등의 완화여야 한다.' },
 { s:'beitz',     t:'singer',   type:'비교', label:'둘 다 세계시민주의지만 원조의 근거가 다르다 — 자원 분포의 우연성과 지구적 차등 원칙(베이츠) vs 이익 평등 고려 원칙(싱어).' },
 { s:'galtung',   t:'niebuhr',  type:'비교', label:'평화의 조건 — 구조적 폭력의 제거를 말하는 갈퉁과, 집단 간 힘의 균형을 정의로 보고 국제정치를 항구적 무정부 상태로 보는 니부어.' },
-{ s:'stoics',    t:'kant',     type:'계승', infer:1, label:'세계시민주의 — 이성을 지닌 모든 인간이 평등하다는 전제가 세계시민법(방문권·환대권)으로 제도화된다.' }
+{ s:'stoics',    t:'kant',     type:'계승', infer:1, label:'세계시민주의 — 이성을 지닌 모든 인간이 평등하다는 전제가 세계시민법(방문권·환대권)으로 제도화된다.' },
+/* ── 보충(LIM IT) ─────────────────────────────────── */
+{ s:'cohen', t:'singer', type:'대립', lim:1, label:'동물 실험 — 싱어는 공리주의적 관점에서 동물이 느끼는 고통을 감소시켜야 한다며 반대하고, 코헨은 동물에게 도덕적 권리가 없으며 의학 발전이 동물 실험으로 가능했다며 찬성한다.' },
+{ s:'cohen', t:'regan', type:'대립', lim:1, label:'동물의 권리 — 레건은 삶의 주체인 동물이 내재적 가치와 도덕적 권리를 지닌다고 보지만, 코헨은 윤리 규범의 고안 능력과 자율성이 없으므로 권리가 없다고 본다.' },
+{ s:'cohen', t:'kant', type:'유사', lim:1, label:'동물의 도덕적 권리는 부정하되 학대는 반대한다는 결론이 같다 — 칸트는 인간의 인간성을 해치므로(간접적 의무), 코헨은 동물도 쾌고 감수 능력을 지니므로 학대를 금한다.' },
+{ s:'cohen', t:'descartes', type:'비교', lim:1, label:'둘 다 동물의 도덕적 권리를 부정하지만, 데카르트는 동물이 정신·영혼 없는 기계라 고통과 쾌락을 경험할 수 없다고 보고 코헨은 동물이 쾌고를 느낀다는 점 자체는 인정한다.' },
+{ s:'wilde', t:'tolstoy', type:'대립', lim:1, label:'예술과 윤리 — 톨스토이는 예술이 도덕적 교훈과 본보기를 제공해야 한다는 도덕주의의 대표이고, 와일드는 예술이 도덕적일 필요가 없다는 심미주의의 대표다.' },
+{ s:'wilde', t:'plato', type:'대립', lim:1, label:'플라톤은 예술의 사회성을 강조하는 사회 예술론(도덕주의)의 대표 사상가이고, 와일드는 예술의 자율성을 강조하는 순수 예술론(심미주의)의 대표 사상가다.' },
+{ s:'wilde', t:'kant', type:'비교', lim:1, label:'칸트는 미(美)와 선(善)이 유사하므로 미는 선의 상징이라 보되, 미와 예술이 도덕적 판단에 종속된 것은 아니라고 한다 — 도덕주의와 심미주의 사이에 놓인다.' },
+{ s:'bollnow', t:'heidegger', type:'비교', lim:1, label:'주거 윤리 — 하이데거는 현대인이 안정된 고향으로서의 주거 공간을 상실했다고 진단하고, 볼노브는 자신의 공간을 자기 삶의 중심으로 형성해야 한다는 공간 책임론으로 답한다.' },
+{ s:'aquinas', t:'kant', type:'유사', lim:1, label:'동물에 대한 간접적 배려 — 아퀴나스는 "인간이 동물에게 가지는 동정심이 동료 인간들에게 동정심을 가지게 하는 데 기여할 수 있다"고 보고, 칸트는 동물 학대 금지를 인간성 유지를 위한 간접적 의무로 본다.' },
+{ s:'hume', t:'locke', type:'대립', lim:1, label:'국가 권위의 정당성 — 로크는 시민의 동의(사회 계약)에서 찾지만, 흄은 국가로부터 받는 이익과 혜택에서 찾아 그 이익과 혜택이 사라진다면 정치적 의무를 다할 필요가 없다고 본다.' },
+{ s:'morgenthau', t:'kant', type:'대립', lim:1, label:'국제 관계 — 모겐소의 현실주의는 인간을 이기적 존재로 보아 세력 균형에서 답을 찾고, 칸트의 이상주의는 인간과 국가를 이성적·합리적 존재로 보아 국제법과 국제 규범의 개선에서 답을 찾는다.' },
+{ s:'mill', t:'beauvoir', type:'유사', lim:1, label:'양성평등 — 밀은 자유주의적 관점에서 성 역할이 타고나는 것이 아니라 사회적으로 길러진 것이라 비판하고, 보부아르는 오늘날 여성이 남성과 달리 타자로 만들어지고 객체로 살아가도록 강요받는다고 본다.' },
+{ s:'rousseau', t:'beccaria', type:'대립', lim:1, label:'사형 — 루소는 사회 계약의 목적이 계약 당사자의 안전 확보와 생명 보전이므로 계약을 파기한 살인범의 생명은 박탈할 수 있다고 보고, 베카리아는 생명권이 애초에 양도 불가능한 권리라고 본다.' },
 ];
 const TABLES = [
 {
@@ -2464,6 +2570,312 @@ const TABLES = [
    "인간의 본질은 이성이며 모든 인간은 이성을 지니므로 평등 — 자기와 다른 것을 있는 그대로 인정한다"
   ]
  ]
+},
+{
+ "id": "nature-scope",
+ "title": "도덕적 고려 대상의 범위 — 다섯 입장",
+ "unit": 4,
+ "lim": 1,
+ "members": [
+  "aquinas",
+  "kant",
+  "bacon",
+  "singer",
+  "regan",
+  "schweitzer",
+  "taylor",
+  "leopold",
+  "naess"
+ ],
+ "cols": [
+  "구분",
+  "인간 중심",
+  "동물 중심",
+  "생명 중심",
+  "생태 중심",
+  "심층 생태"
+ ],
+ "rows": [
+  [
+   "도덕적 고려 대상의 범위",
+   "인간",
+   "인간, 일부 동물",
+   "인간, 동물, 식물",
+   "인간, 동물, 식물, 무생물, 생태계",
+   "(생태 중심과 동일)"
+  ],
+  [
+   "대표 사상가",
+   "아퀴나스, 칸트, 베이컨",
+   "싱어, 레건",
+   "슈바이처, 테일러",
+   "레오폴드",
+   "네스"
+  ],
+  [
+   "개체주의 / 전일주의",
+   "개체주의",
+   "개체주의(탈인간 중심주의)",
+   "개체주의(탈인간 중심주의)",
+   "전일주의",
+   "전일주의"
+  ]
+ ]
+},
+{
+ "id": "animal-rights",
+ "title": "동물의 권리 — 부정하는 입장과 인정하는 입장",
+ "unit": 2,
+ "lim": 1,
+ "members": [
+  "descartes",
+  "cohen",
+  "aristotle",
+  "aquinas",
+  "kant",
+  "bentham",
+  "singer",
+  "regan"
+ ],
+ "cols": [
+  "입장",
+  "사상가",
+  "주장"
+ ],
+ "rows": [
+  [
+   "권리 부정",
+   "데카르트",
+   "동물은 인간과 달리 정신이나 영혼이 없는 기계에 불과함 → 고통과 쾌락을 경험할 수 없음"
+  ],
+  [
+   "권리 부정",
+   "코헨",
+   "동물은 윤리 규범의 고안 능력이나 자율성 등이 없으므로 도덕적 권리가 없음. 의학 발전과 인간의 수많은 업적은 동물 실험을 통해 얻을 수 있었음. 동물도 쾌고 감수 능력을 지니므로 학대해서는 안 됨"
+  ],
+  [
+   "권리 부정",
+   "아리스토텔레스",
+   "식물은 동물을 위해 존재하고, 동물은 인간을 위해 존재함"
+  ],
+  [
+   "권리 부정",
+   "아퀴나스",
+   "동물은 도덕적으로 고려 받을 권리를 갖고 있지 않음. 신의 섭리에 따라 동물은 인간의 이용을 위하여 운명지어짐"
+  ],
+  [
+   "권리 부정",
+   "칸트",
+   "동물은 인간과 달리 수단적 존재이며, 동물을 함부로 다루는 것은 인간의 인간성을 해치므로, 동물을 학대하지 않는 행위는 직접적인 의무가 아닌 간접적인 의무에 불과함"
+  ],
+  [
+   "권리 인정",
+   "벤담",
+   "공리주의 관점 — 동물도 고통을 느끼므로 도덕적으로 고려 받을 대상임"
+  ],
+  [
+   "권리 인정",
+   "싱어",
+   "동물 해방론 — 공리주의적 관점에서 동물이 느끼는 고통을 감소시켜야 한다고 주장. 이익 평등 고려 원칙: 쾌고 감수 능력을 지닌 존재들의 이익 관심을 동등하게 고려해야 함. 종 차별주의 반대"
+  ],
+  [
+   "권리 인정",
+   "레건",
+   "동물 권리론 — 의무론의 관점에서 동물도 도덕적 권리를 지닌다고 주장. 삶의 주체인 동물은 인간과 마찬가지로 내재적 가치를 지님"
+  ]
+ ]
+},
+{
+ "id": "value-neutrality",
+ "title": "과학 기술의 가치 중립성 — 네 갈래 대조",
+ "unit": 4,
+ "lim": 1,
+ "members": [
+  "oppenheimer",
+  "jaspers",
+  "heisenberg",
+  "heidegger"
+ ],
+ "cols": [
+  "구분",
+  "가치 중립적 태도",
+  "가치 비중립적 태도"
+ ],
+ "rows": [
+  [
+   "대표 사상가",
+   "오펜하이머, 야스퍼스",
+   "하이젠베르크, 하이데거"
+  ],
+  [
+   "과학 기술",
+   "선도 악도 아닌 수단일 뿐 / 가치 평가와 무관한 영역",
+   "윤리적 목적에 기여해야 함 / 인식론적 대상이자 가치 평가 대상"
+  ],
+  [
+   "연구자",
+   "연구 과정만 책임(학문, 윤리적) / 내적 책임만 지면 됨",
+   "연구 과정 + 결과 활용까지 책임 / 내적 책임과 외적 책임 모두 져야 함"
+  ],
+  [
+   "결과 활용의 책임",
+   "실제 활용하는 사람",
+   "이용자와 연구자·개발자"
+  ]
+ ]
+},
+{
+ "id": "modern-vs-virtue",
+ "title": "근대 윤리와 현대 덕 윤리",
+ "unit": 1,
+ "lim": 1,
+ "members": [
+  "kant",
+  "bentham",
+  "aristotle",
+  "macintyre"
+ ],
+ "cols": [
+  "근대 윤리",
+  "현대 덕 윤리"
+ ],
+ "rows": [
+  [
+   "객관적·보편적 원리 중시",
+   "행위 < 행위자의 성품"
+  ],
+  [
+   "이성 중시",
+   "이성 + 자발성 · 정서 · 실천 · 습관화"
+  ],
+  [
+   "개인주의",
+   "공동체주의"
+  ],
+  [
+   "전통·관습 간과",
+   "전통·관습 중시 (특수성 인정)"
+  ],
+  [
+   "보편성 중시",
+   "구체적 상황과 맥락 중시"
+  ]
+ ]
+},
+{
+ "id": "indiv-vs-social",
+ "title": "개인 윤리와 사회 윤리",
+ "unit": 3,
+ "lim": 1,
+ "members": [
+  "niebuhr"
+ ],
+ "cols": [
+  "구분",
+  "내용"
+ ],
+ "rows": [
+  [
+   "개인 윤리",
+   "개인의 양심 등 개인의 도덕성을 강조 / 행위 결과의 책임 주체는 개인"
+  ],
+  [
+   "사회 윤리",
+   "사회의 구조, 제도, 정책의 도덕성에 중점 / 개인 차원을 넘어서는 구조적 해결책 모색"
+  ],
+  [
+   "니부어의 진단",
+   "도덕적인 개인도 집단에 들어가면 집단의 이익을 위해 비도덕적이 될 수 있음. 개인 간 관계는 합리성·도덕성 문제이고 집단 간 관계는 힘의 비율 → 정치적 문제. 집단의 사회 부정의 문제는 집단 간 힘의 불균형에 의해서 발생"
+  ],
+  [
+   "니부어의 대책",
+   "사회 내 양심 있는 개인들이 도덕적으로 승인하지 않는 방법이 불가피함. 비합리적 수단(이기심·폭력·강제력)은 폭력의 악순환으로 일시적 방법에 그침. 강제력은 선의지의 통제를 받아야 하며 합리적·도덕적 요소에 부합해야 함. 합리적 설득·권고와 강제력의 사용을 병행"
+  ]
+ ]
+},
+{
+ "id": "state-authority",
+ "title": "국가 권위의 정당성 — 여섯 관점",
+ "unit": 3,
+ "lim": 1,
+ "members": [
+  "aristotle",
+  "locke",
+  "hobbes",
+  "rousseau",
+  "hume",
+  "bentham",
+  "confucius"
+ ],
+ "cols": [
+  "관점",
+  "내용"
+ ],
+ "rows": [
+  [
+   "인간 본성의 관점",
+   "아리스토텔레스 — 인간의 정치적 본성에 따라 자연스럽게 국가가 형성됨"
+  ],
+  [
+   "동의의 관점",
+   "시민이 국가의 권위에 동의한다는 전제하에서만 국가는 명령을 내릴 수 있음. 사회 계약론: 개인의 권리를 보호해준다는 조건하에 국가의 명령에 복종하기로 약속함"
+  ],
+  [
+   "공공재와 혜택의 관점",
+   "국가로부터 받는 이익과 혜택을 근거로 국가의 권위에 복종해야 함. 흄: 국가로부터 받는 이익과 혜택이 사라진다면 정치적 의무를 다할 필요가 없음"
+  ],
+  [
+   "공리주의의 관점",
+   "국가의 권위를 따를 때 최대 다수의 최대 행복을 실현할 수 있음"
+  ],
+  [
+   "천명의 관점",
+   "민의에 기초한 천명(天命)의 관점에서 국가의 권위를 정당화함. 유교: 군주의 통치권은 백성을 바르고 평안하게 살도록 하기 위해 하늘에서 부여한 것"
+  ],
+  [
+   "자연적 의무",
+   "국가는 공동선과 같은 도덕적 실현에 기여하므로 국가에 대한 복종은 시민의 자연적 의무"
+  ]
+ ]
+},
+{
+ "id": "art-ethics",
+ "title": "예술과 윤리 — 도덕주의와 심미주의",
+ "unit": 5,
+ "lim": 1,
+ "members": [
+  "plato",
+  "tolstoy",
+  "wilde",
+  "kant",
+  "mozi"
+ ],
+ "cols": [
+  "도덕주의",
+  "심미주의"
+ ],
+ "rows": [
+  [
+   "예술은 도덕적 교훈과 본보기를 제공",
+   "예술이 도덕적일 필요 없음"
+  ],
+  [
+   "내재적 가치(미적 가치)와 외재적 가치(도덕적 가치)를 모두 강조",
+   "예술을 위한 예술 추구"
+  ],
+  [
+   "사회 예술론 — 예술의 사회성을 강조",
+   "오직 내재적 가치만을 강조"
+  ],
+  [
+   "대표적 사상가 : 플라톤, 톨스토이",
+   "순수 예술론 — 예술의 자율성을 강조 / 대표적 사상가 : 와일드"
+  ],
+  [
+   "칸트 — 미(美)와 선(善)은 유사하므로 미는 선의 상징. 미는 도덕성의 실현에 기여하지만, 미와 예술이 도덕적 판단에 종속된 것은 아님",
+   "묵자 — 음악은 감정적 즐거움을 주지만 재물이 낭비되며 생산 활동에 방해가 되므로 금지해야 함"
+  ]
+ ]
 }
 ];
 
@@ -2507,6 +2919,7 @@ const state = {
   units: new Set(UNITS.map(u => u.n)),
   groups: new Set(GROUPS.map(g => g.id)),
   rels: new Set(LINK_TYPES.map(t => t.id)),
+  lim: true,
   view: { x:0, y:0, k:1 }
 };
 
@@ -2537,14 +2950,26 @@ TABLES.forEach(t => t.members.forEach(m => { if (tablesOf[m]) tablesOf[m].push(t
 
 const radius = n => 4.6 + Math.sqrt(n.deg) * 2.35;
 
+/* core 항목은 문자열이거나 {t, lim} 객체다 — 보충분만 객체로 들어온다 */
+const coreOf = n => n.core.map(c => (typeof c === 'string' ? { t:c } : c));
+const LIM_TITLE = '요약본에는 없고 『LIM IT 생활과 윤리 서브노트』에서 보충한 내용입니다.';
+const LIM_TAG = `<span class="lim-tag" title="${LIM_TITLE}">보충</span>`;
+const LIM_N = {
+  node: NODES.filter(n => n.lim).length,
+  link: LINKS.filter(l => l.lim).length,
+  table: TABLES.filter(t => t.lim).length,
+  core: NODES.reduce((a, n) => a + coreOf(n).filter(c => c.lim).length, 0)
+};
+
 /* ── SVG 레이어 ──────────────────────────────────────────────────── */
 const defs  = el('defs');
 const root  = el('g');
+const gWash = el('g', {'stroke-linecap':'round'});     // 보충 관계를 감싸는 형광 띠
 const gEdge = el('g', {'stroke-linecap':'round'});
 const gHit  = el('g');
 const gNode = el('g');
 const gText = el('g');
-root.append(gEdge, gHit, gNode, gText);
+root.append(gWash, gEdge, gHit, gNode, gText);
 svg.append(defs, root);
 
 /* 화살촉 — 관계 유형별로 색이 다르므로 유형마다 하나씩 */
@@ -2571,13 +2996,19 @@ sim.forEach(n => {
   const halo = el('circle', { r: radius(n) + 4, fill:'none', 'stroke-width':0 });
   const dot  = el('circle', { r: radius(n) });
   g.append(halo, dot);
+  let ring = null;
+  if (n.lim) {                                    // 보충으로 새로 들인 사상가
+    ring = el('circle', { class:'lim-ring', r: radius(n) + 3.4, fill:'none',
+                          'stroke-width':1.3, 'stroke-dasharray':'2.2 2.4' });
+    g.append(ring);
+  }
   g.addEventListener('keydown', ev => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(n.id); } });
   g.addEventListener('focus', () => hoverNode(n.id));
   g.addEventListener('blur', () => hoverNode(null));
   g.addEventListener('pointerenter', () => hoverNode(n.id));
   g.addEventListener('pointerleave', () => hoverNode(null));
   gNode.append(g);
-  nodeEls[n.id] = { g, dot, halo };
+  nodeEls[n.id] = { g, dot, halo, ring };
 
   const t = el('text', { class:'node-label', 'text-anchor':'middle' });
   t.textContent = n.name;
@@ -2585,10 +3016,16 @@ sim.forEach(n => {
   textEls[n.id] = t;
 });
 
+const washEls = {};
 edges.forEach(e => {
   const p = el('path', { class:'edge' });
   gEdge.append(p);
   edgeEls[e.i] = p;
+  if (e.lim) {
+    const wsh = el('path', { class:'edge-wash', fill:'none', 'stroke-linecap':'round' });
+    gWash.append(wsh);
+    washEls[e.i] = wsh;
+  }
   const h = el('path', { class:'edge-hit' });
   h.__edge = e;
   h.addEventListener('pointerenter', ev => showEdgeTip(e, ev));
@@ -2608,6 +3045,11 @@ function styleEdges() {
     p.removeAttribute('marker-end'); p.removeAttribute('marker-start');
     if (e.type === '계승' || e.type === '비판') p.setAttribute('marker-end', `url(#ar-${id}-end)`);
     if (e.type === '대립') { p.setAttribute('marker-end', `url(#ar-${id}-end)`); p.setAttribute('marker-start', `url(#ar-${id}-start)`); }
+    if (washEls[e.i]) {
+      washEls[e.i].setAttribute('stroke', css('--lim'));
+      washEls[e.i].setAttribute('stroke-width', REL_WIDTH[e.type] + 3.4);
+      washEls[e.i].setAttribute('stroke-opacity', .32);
+    }
   });
 }
 function styleNodes() {
@@ -2617,6 +3059,7 @@ function styleNodes() {
     nodeEls[n.id].dot.setAttribute('stroke', css('--paper'));
     nodeEls[n.id].dot.setAttribute('stroke-width', 1.5);
     nodeEls[n.id].halo.setAttribute('stroke', c);
+    if (nodeEls[n.id].ring) nodeEls[n.id].ring.setAttribute('stroke', css('--lim'));
     textEls[n.id].classList.toggle('lg', n.deg >= 8);
   });
 }
@@ -2693,6 +3136,7 @@ function render() {
     const path = `M${x1.toFixed(1)},${y1.toFixed(1)} Q${mx.toFixed(1)},${my.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}`;
     edgeEls[e.i].setAttribute('d', path);
     hitEls[e.i].setAttribute('d', path);
+    if (washEls[e.i]) washEls[e.i].setAttribute('d', path);
   });
 }
 
@@ -2828,7 +3272,7 @@ function showEdgeTip(e, ev) {
   const c = relColor(e.type);
   const dirMark = (e.type === '계승' || e.type === '비판') ? '→' : '↔';
   etip.innerHTML = `<div class="eh"><b>${esc(e.sn.name)}</b><span style="color:${c}">${dirMark}</span><b>${esc(e.tn.name)}</b>
-    <span class="rel" style="color:${c}">${esc(e.type)}</span>${e.infer ? '<span class="infer">엮음</span>' : ''}</div>${esc(e.label)}`;
+    <span class="rel" style="color:${c}">${esc(e.type)}</span>${e.infer ? '<span class="infer">엮음</span>' : ''}${e.lim ? LIM_TAG : ''}</div>${esc(e.label)}`;
   etip.classList.add('on');
   moveEdgeTip(ev);
 }
@@ -2854,6 +3298,7 @@ function paintFocus(id) {
     sim.forEach(n => textEls[n.id].classList.remove('dim'));
     edges.forEach(e => edgeEls[e.i].classList.remove('dim'));
     edges.forEach(e => edgeEls[e.i].setAttribute('stroke-opacity', .42));
+    edges.forEach(e => { if (washEls[e.i]) washEls[e.i].setAttribute('stroke-opacity', .32); });
     sim.forEach(n => nodeEls[n.id].halo.setAttribute('stroke-width', 0));
     return;
   }
@@ -2869,20 +3314,25 @@ function paintFocus(id) {
     const on = e.s === id || e.t === id;
     edgeEls[e.i].classList.toggle('dim', !on);
     edgeEls[e.i].setAttribute('stroke-opacity', on ? 1 : .42);
+    if (washEls[e.i]) {
+      washEls[e.i].classList.toggle('dim', !on);
+      washEls[e.i].setAttribute('stroke-opacity', on ? .55 : .18);
+    }
   });
 }
 
 /* ── 필터 ────────────────────────────────────────────────────────── */
 function applyFilters() {
   sim.forEach(n => {
-    n.on = state.groups.has(n.group) && n.units.some(u => state.units.has(u));
+    n.on = state.groups.has(n.group) && n.units.some(u => state.units.has(u)) && (state.lim || !n.lim);
     nodeEls[n.id].g.classList.toggle('hidden', !n.on);
     textEls[n.id].classList.toggle('hidden', !n.on);
   });
   edges.forEach(e => {
-    e.on = state.rels.has(e.type) && e.sn.on && e.tn.on;
+    e.on = state.rels.has(e.type) && e.sn.on && e.tn.on && (state.lim || !e.lim);
     edgeEls[e.i].classList.toggle('hidden', !e.on);
     hitEls[e.i].classList.toggle('hidden', !e.on);
+    if (washEls[e.i]) washEls[e.i].classList.toggle('hidden', !e.on);
   });
   document.getElementById('tally-n').textContent = sim.filter(n => n.on).length;
   document.getElementById('tally-l').textContent = edges.filter(e => e.on).length;
@@ -2916,6 +3366,18 @@ function buildFilters() {
     };
     rf.append(b);
   });
+  const sf = document.getElementById('src-filters');
+  const sb = document.createElement('button');
+  sb.type = 'button'; sb.className = 'chip rel srcchip'; sb.setAttribute('aria-pressed','true');
+  sb.title = `『LIM IT 생활과 윤리 서브노트』에서 보충한 사상가 ${LIM_N.node}인과 관계 ${LIM_N.link}건 — 켜고 끄기`;
+  sb.innerHTML = `<span class="swatch"></span>보충 ${LIM_N.node + LIM_N.link}`;
+  sb.onclick = () => {
+    state.lim = !state.lim;
+    sb.setAttribute('aria-pressed', String(state.lim));
+    applyFilters();
+  };
+  sf.append(sb);
+
   const gf = document.getElementById('group-filters');
   GROUPS.forEach(g => {
     const count = NODES.filter(n => n.group === g.id).length;
@@ -2935,6 +3397,7 @@ document.getElementById('reset').onclick = () => {
   state.units = new Set(UNITS.map(u => u.n));
   state.groups = new Set(GROUPS.map(g => g.id));
   state.rels = new Set(LINK_TYPES.map(t => t.id));
+  state.lim = true;
   document.querySelectorAll('.chip.unit, .chip.rel, #group-filters button')
     .forEach(b => b.setAttribute('aria-pressed','true'));
   select(null); applyFilters(); fit();
@@ -2970,8 +3433,8 @@ function renderNode(n) {
     const items = byType[t.id].map(e => {
       const other = e.s === n.id ? e.tn : e.sn;
       const flow = `${esc(e.sn.name)} ${t.dir ? '→' : '↔'} ${esc(e.tn.name)}`;
-      return `<button type="button" class="rel-item" data-go="${esc(other.id)}" style="border-left-color:${col}">
-        <span class="who">${esc(other.name)}<span class="arrow">${flow}</span>${e.infer ? '<span class="infer" title="교재가 두 사람을 직접 잇지는 않습니다. 각자에 대한 서술을 근거로 이어 붙인 연결입니다.">엮음</span>' : ''}</span>
+      return `<button type="button" class="rel-item${e.lim ? ' lim' : ''}" data-go="${esc(other.id)}" style="border-left-color:${col}">
+        <span class="who">${esc(other.name)}<span class="arrow">${flow}</span>${e.infer ? '<span class="infer" title="교재가 두 사람을 직접 잇지는 않습니다. 각자에 대한 서술을 근거로 이어 붙인 연결입니다.">엮음</span>' : ''}${e.lim ? LIM_TAG : ''}</span>
         <span class="why">${esc(e.label)}</span></button>`;
     }).join('');
     return `<div class="relgrp"><h4 style="color:${col}">
@@ -2981,8 +3444,8 @@ function renderNode(n) {
 
   const tbs = tablesOf[n.id];
   const tblHtml = tbs.length ? `<div class="sechead">원문 비교표</div><div class="tbtns">${
-    tbs.map(t => `<button type="button" class="tbtn" data-table="${esc(t.id)}">
-      <span class="ti">표</span>${esc(t.title)}<span class="tu">${UNIT_ROMAN[t.unit]}</span></button>`).join('')}</div>` : '';
+    tbs.map(t => `<button type="button" class="tbtn${t.lim ? ' lim' : ''}" data-table="${esc(t.id)}">
+      <span class="ti">${t.lim ? '보충' : '표'}</span>${esc(t.title)}<span class="tu">${UNIT_ROMAN[t.unit]}</span></button>`).join('')}</div>` : '';
 
   panel.innerHTML = `
     <div class="ph"><span class="mark" style="background:${c}"></span>
@@ -2992,10 +3455,11 @@ function renderNode(n) {
       ${GROUP_LABEL[n.group] === n.school ? '' : `<span class="badge">${esc(GROUP_LABEL[n.group])}</span>`}
       ${n.units.map(u => `<span class="badge unit" title="${esc(UNITS.find(x=>x.n===u).name)}">대단원 ${UNIT_ROMAN[u]}</span>`).join('')}
       <span class="badge unit" title="이 사상가가 맺은 전체 관계 수">관계 ${n.deg}</span>
+      ${n.lim ? `<span class="badge lim" title="${LIM_TITLE}">보충 · LIM IT</span>` : ''}
     </div>
     <p class="tagline">${esc(n.tagline)}</p>
     <div class="sechead">핵심 주장</div>
-    <ol class="core">${n.core.map(c2 => `<li>${esc(c2)}</li>`).join('')}</ol>
+    <ol class="core">${coreOf(n).map(c2 => `<li class="${c2.lim ? 'lim' : ''}">${esc(c2.t)}${c2.lim ? LIM_TAG : ''}</li>`).join('')}</ol>
     ${relHtml ? `<div class="sechead">관계 ${neighbours[n.id].filter(e=>e.on).length}</div><div class="rels">${relHtml}</div>` : ''}
     ${tblHtml}`;
 
@@ -3025,6 +3489,13 @@ function renderIntro() {
       <p style="font-size:.76rem; line-height:1.62; color:var(--ink-3); margin:.7rem 0 0">
         <span class="infer">엮음</span> 표시가 붙은 관계는 교재가 두 사람을 <b>직접 잇지는 않은</b> 연결이다.
         각자에 대한 서술을 근거로 이어 붙였으므로, 교재의 진술로 인용하지 말 것. ${LINKS.filter(l=>l.infer).length}건.</p>
+      <p class="limnote">
+        ${LIM_TAG} 표시가 붙은 것은 <b>요약본에 없거나 흐릿했던 대목</b>을 두 번째 교재
+        <b>『LIM IT 생활과 윤리 서브노트』</b>에서 메운 자리다.
+        도표에서는 <b>점선 고리를 두른 점</b>이 보충으로 새로 들인 사상가, <b>형광 띠를 깐 선</b>이 보충으로 새로 이은 관계다.
+        상세 패널에서는 보충한 문장에 바탕색이 깔린다.<br>
+        사상가 <b>${LIM_N.node}인</b> · 관계 <b>${LIM_N.link}건</b> · 핵심 주장 <b>${LIM_N.core}항</b> · 비교표 <b>${LIM_N.table}종</b>.
+        위쪽 <b>출처</b> 칩으로 통째로 껐다 켤 수 있다.</p>
       <div class="sechead">쓰는 법</div>
       <p>점을 <b>클릭</b>하면 핵심 주장과 그 사상가의 모든 관계가 이 자리에 펼쳐진다. 선 위에 <b>커서를 올리면</b> 두 사상가가 어떤 지점에서 만나고 갈라지는지가 뜬다.
       점은 <b>끌어서</b> 고정할 수 있고(고정 해제는 더블클릭), 배경을 끌면 화면이 움직이며 휠로 확대·축소된다.</p>
@@ -3032,7 +3503,15 @@ function renderIntro() {
       <div class="sechead">가장 많이 얽힌 사상가</div>
       <div class="hubs">${hubs.map(n => `<button type="button" data-go="${esc(n.id)}">${esc(n.name)}<span class="d">${n.deg}</span></button>`).join('')}</div>
       <div class="sechead">출처</div>
-      <p style="font-size:.76rem; color:var(--ink-3)">『생활과 윤리 전 범위 압축 요약본』 — 2027학년도 코드원 생활과 윤리 개념서, 대단원 Ⅰ~Ⅵ. 사상가 ${NODES.length}인, 관계 ${LINKS.length}건, 원문 비교표 ${TABLES.length}종을 옮겼다.</p>
+      <p style="font-size:.76rem; color:var(--ink-3); margin:0 0 .5rem">
+        <b>바탕</b> — 『생활과 윤리 전 범위 압축 요약본』(2027학년도 코드원 생활과 윤리 개념서, 대단원 Ⅰ~Ⅵ).
+        사상가 ${NODES.length - LIM_N.node}인, 관계 ${LINKS.length - LIM_N.link}건, 원문 비교표 ${TABLES.length - LIM_N.table}종을 옮겼다.</p>
+      <p style="font-size:.76rem; color:var(--ink-3); margin:0">
+        <b>보충</b> — 임정환 『LIM IT 생활과 윤리 서브노트』(대성 MIMAC, 2027학년도 수능 대비) p.10~55.
+        사상가 ${LIM_N.node}인, 관계 ${LIM_N.link}건, 핵심 주장 ${LIM_N.core}항, 비교표 ${LIM_N.table}종을 더했다.
+        모두 ${LIM_TAG} 로 구분해 두었다.</p>
+      <p style="font-size:.76rem; color:var(--ink-3); margin:.5rem 0 0">
+        합계 — 사상가 ${NODES.length}인 · 관계 ${LINKS.length}건 · 비교표 ${TABLES.length}종.</p>
     </div>`;
   panel.querySelectorAll('[data-go]').forEach(b => b.onclick = () => select(b.dataset.go));
 }
@@ -3043,6 +3522,8 @@ function openTable(id) {
   const t = TABLES.find(x => x.id === id);
   if (!t) return;
   document.getElementById('modal-title').textContent = t.title;
+  document.getElementById('modal-title').innerHTML =
+    esc(t.title) + (t.lim ? ` <span class="lim-tag" title="${LIM_TITLE}">보충</span>` : '');
   document.getElementById('modal-unit').textContent = `대단원 ${UNIT_ROMAN[t.unit]}`;
   const mem = document.getElementById('modal-members');
   mem.innerHTML = t.members.map(m => `<button type="button" data-go="${esc(m)}">${esc(NODE_BY_ID[m].name)}</button>`).join('');
@@ -3061,7 +3542,7 @@ scrim.addEventListener('click', ev => { if (ev.target === scrim) closeTable(); }
 const qi = document.getElementById('q'), hits = document.getElementById('hits');
 const HAYSTACK = NODES.map(n => ({
   id: n.id,
-  text: [n.name, n.sub, n.school, GROUP_LABEL[n.group], n.tagline, ...n.core].join(' ').toLowerCase()
+  text: [n.name, n.sub, n.school, GROUP_LABEL[n.group], n.tagline, ...coreOf(n).map(c => c.t)].join(' ').toLowerCase()
 }));
 let cursor = -1;
 
